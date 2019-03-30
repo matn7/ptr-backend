@@ -1,0 +1,10 @@
+ng new frontend
+ng serve
+ng g c days
+
+npm install --save-dev rimraf
+npm install --save-dev mkdirp
+npm install --save-dev copyfiles
+
+npm start
+# npm run build
