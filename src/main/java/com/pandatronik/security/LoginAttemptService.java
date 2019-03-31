@@ -12,12 +12,13 @@ import java.util.concurrent.TimeUnit;
 public class LoginAttemptService {
 
     private final int MAX_ATTEMPT = 3;
+    private final int BLOCK_DURATION = 1;
     private LoadingCache<String, Integer> attemptsCache;
 
     public LoginAttemptService() {
         super();
         attemptsCache = CacheBuilder.newBuilder().
-                expireAfterWrite(3, TimeUnit.MINUTES).build(new CacheLoader<String, Integer>() {
+                expireAfterWrite(BLOCK_DURATION, TimeUnit.MINUTES).build(new CacheLoader<String, Integer>() {
             public Integer load(String key) {
                 return 0;
             }

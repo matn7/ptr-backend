@@ -60,7 +60,7 @@ public class UserController {
 
         String ip = getClientIP();
         if (loginAttemptService.isBlocked(ip)) {
-            System.out.println("HERE");
+            LOG.error("MAX LOGIN attempts exceeded");
             return new ResponseEntity<String>("Login from IP " + ip + " was blocked for 3 minutes. Try again later.",
                     HttpStatus.UNAUTHORIZED);
         }
@@ -71,8 +71,6 @@ public class UserController {
             return errorMap;
         }
 
-        LOG.info("Execute authentication here 2");
-
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getUsername(),
@@ -80,9 +78,11 @@ public class UserController {
                 )
         );
 
-        LOG.info("Execute authentication here 3");
+        LOG.info("Login succeeded");
 
-       SecurityContextHolder.getContext().setAuthentication(authentication);
+        loginAttemptService.loginSucceeded(ip);
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = TOKEN_PREFIX + tokenProvider.generateToken(authentication);
 

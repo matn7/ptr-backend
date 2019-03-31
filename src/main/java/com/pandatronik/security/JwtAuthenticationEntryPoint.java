@@ -1,6 +1,7 @@
 package com.pandatronik.security;
 
 import com.google.gson.Gson;
+import com.pandatronik.enums.TokenEnum;
 import com.pandatronik.exceptions.InvalidLoginResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
@@ -12,6 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static com.pandatronik.enums.TokenEnum.TOKEN_EXPIRED;
+import static java.util.Objects.nonNull;
+
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
@@ -22,10 +26,14 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
                          AuthenticationException e) throws IOException, ServletException {
         InvalidLoginResponse loginResponse = new InvalidLoginResponse();
-        String jsonLoginResponse = new Gson().toJson(loginResponse);
+        if (nonNull(httpServletResponse.getHeader(TOKEN_EXPIRED.getId()))) {
+            loginResponse.setTokenExpired(TOKEN_EXPIRED.getMessage());
+        }
 
+        String jsonLoginResponse = new Gson().toJson(loginResponse);
         httpServletResponse.setContentType("application/json");
         httpServletResponse.setStatus(401);
+
         httpServletResponse.getWriter().print(jsonLoginResponse);
 
         // Max login attempts
