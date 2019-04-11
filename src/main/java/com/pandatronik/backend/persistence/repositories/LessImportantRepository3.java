@@ -12,14 +12,14 @@ import java.util.Optional;
 public interface LessImportantRepository3 extends CrudRepository<LessImportantEntity3, Long> {
 
     @Query("SELECT i FROM LessImportantEntity3 i WHERE i.userProfileId =:userProfileId AND i.id = :id")
-    Optional<LessImportantEntity3> getLessImportantByUidId(@Param("userProfileId") String userProfileId, @Param("id") Long id);
+    Optional<LessImportantEntity3> findById(@Param("userProfileId") String userProfileId, @Param("id") Long id);
 
     @Query("SELECT i FROM LessImportantEntity3 i WHERE DAYOFMONTH(i.startDate) = :day AND MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userProfileId = :userProfileId")
-    Optional<LessImportantEntity3> getLessImportantByUidDayMonthYeat(@Param("userProfileId") String userProfileId, @Param("day") int day,
+    Optional<LessImportantEntity3> findByDate(@Param("userProfileId") String userProfileId, @Param("day") int day,
                                                              @Param("month") int month, @Param("year") int year);
 
     @Query("UPDATE LessImportantEntity3 ie SET ie.title = :title, ie.body = :body, ie.made = :made WHERE ie.id = :id AND ie.userProfileId = :userProfileId")
-    Optional<LessImportantEntity3> updateLessImportantByUidId(@Param("title") String title, @Param("body") String body, @Param("made") int made,
+    Optional<LessImportantEntity3> update(@Param("title") String title, @Param("body") String body, @Param("made") int made,
                                                       @Param("userProfileId") String userProfileId, @Param("id") long id);
 
     @Query("SELECT COUNT(made) FROM LessImportantEntity3 i WHERE YEAR(i.startDate) = :year AND i.userProfileId = :userProfileId AND i.made = :made")

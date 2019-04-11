@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.stream.IntStream;
 
 @Service
-public class ImportantService2 {
+public class ImportantService2 implements CrudService<ImportantEntity2, Long> {
 
     private ImportantRepository2 importantRepository;
 
@@ -21,21 +21,25 @@ public class ImportantService2 {
         this.importantRepository = importantRepository;
     }
 
-    public Optional<ImportantEntity2> getImportantByUidId(String userProfileId, Long id) {
-        return importantRepository.getImportantByUidId(userProfileId, id);
+    @Override
+    public Optional<ImportantEntity2> findById(String userProfileId, Long id) {
+        return importantRepository.findById(userProfileId, id);
     }
 
-    public Optional<ImportantEntity2> getImportantByUidYearMonthDay(String userProfileId, int year, int month, int day) {
-        return importantRepository.getImportantByUidDayMonthYeat(userProfileId, day, month, year);
+    @Override
+    public Optional<ImportantEntity2> findByDate(String userProfileId, int year, int month, int day) {
+        return importantRepository.findByDate(userProfileId, day, month, year);
     }
 
-    public ImportantEntity2 insertImportantRecord(String userProfileId, ImportantEntity2 importantEntity) {
+    @Override
+    public ImportantEntity2 save(String userProfileId, ImportantEntity2 importantEntity) {
         return importantRepository.save(ImportantEntity2.newImportantRecord(userProfileId, importantEntity));
     }
 
-    public ImportantEntity2 updateImportantRecord(String userProfileId, long id, ImportantEntity2 importantEntity) {
+    @Override
+    public ImportantEntity2 update(String userProfileId, Long id, ImportantEntity2 importantEntity) {
 
-        Optional<ImportantEntity2> optionalImportantEntity = getImportantByUidId(userProfileId, id);
+        Optional<ImportantEntity2> optionalImportantEntity = findById(userProfileId, id);
         if (optionalImportantEntity.isPresent()) {
             return importantRepository.save(importantEntity);
         } else {
@@ -43,8 +47,9 @@ public class ImportantService2 {
         }
     }
 
-    public void deleteImportantRecord(String userProfileId, Long id) {
-        importantRepository.getImportantByUidId(userProfileId, id).ifPresent(important -> {
+    @Override
+    public void delete(String userProfileId, Long id) {
+        importantRepository.findById(userProfileId, id).ifPresent(important -> {
             importantRepository.delete(important);
         });
     }

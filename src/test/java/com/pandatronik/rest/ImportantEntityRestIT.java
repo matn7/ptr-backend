@@ -58,7 +58,7 @@ public class ImportantEntityRestIT {
         );
 
         ImportantEntity importantEntity = ImportantEntityProvider.getValidImportantEntity().build();
-        given(importantService.getImportantByUidId("admin", 7L))
+        given(importantService.findById("admin", 7L))
                 .willReturn(java.util.Optional.ofNullable(importantEntity));
 
         String token = jwtTokenProvider.generateToken(authentication);
@@ -78,7 +78,7 @@ public class ImportantEntityRestIT {
         );
 
         ImportantEntity importantEntity = ImportantEntityProvider.getValidImportantEntity().build();
-        given(importantService.getImportantByUidYearMonthDay("admin", 2018, 12, 30))
+        given(importantService.findByDate("admin", 2018, 12, 30))
                 .willReturn(java.util.Optional.ofNullable(importantEntity));
 
         String token = jwtTokenProvider.generateToken(authentication);
@@ -98,7 +98,7 @@ public class ImportantEntityRestIT {
         );
 
         ImportantEntity importantEntity = ImportantEntityProvider.getValidImportantEntity().build();
-        given(importantService.insertImportantRecord("admin", importantEntity))
+        given(importantService.save("admin", importantEntity))
                 .willReturn(importantEntity);
 
         String token = jwtTokenProvider.generateToken(authentication);

@@ -17,9 +17,9 @@ import java.util.Optional;
 import static com.pandatronik.utils.ApplicationUtils.API_VERSION;
 
 @Validated
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "${angular.api.url}")
 @RestController
-@RequestMapping(API_VERSION + "{userProfileId}/important/3")
+@RequestMapping("${api.version}/{userProfileId}/important/3")
 public class ImportantResource3 {
 
     private ImportantService3 importantService;
@@ -30,9 +30,9 @@ public class ImportantResource3 {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> fetchImportantById(@PathVariable("userProfileId") String userProfileId,
+    public ResponseEntity<?> findById(@PathVariable("userProfileId") String userProfileId,
                                                 @PathVariable("id") Long id) {
-        Optional<ImportantEntity3> importantById = importantService.getImportantByUidId(userProfileId, id);
+        Optional<ImportantEntity3> importantById = importantService.findById(userProfileId, id);
 
         if (importantById.isPresent()) {
             return ResponseEntity.ok(importantById.get());
@@ -43,9 +43,9 @@ public class ImportantResource3 {
     }
 
     @GetMapping("/{year}/{month}/{day}")
-    public ResponseEntity<?> findImportantByData(@PathVariable("userProfileId") String userProfileId,
-                                                 @PathVariable("year") int year, @PathVariable("month") int month, @PathVariable("day") int day) {
-        Optional<ImportantEntity3> importantByData = importantService.getImportantByUidYearMonthDay(userProfileId, year, month, day);
+    public ResponseEntity<?> findByDate(@PathVariable("userProfileId") String userProfileId,
+            @PathVariable("year") int year, @PathVariable("month") int month, @PathVariable("day") int day) {
+        Optional<ImportantEntity3> importantByData = importantService.findByDate(userProfileId, year, month, day);
 
         if (importantByData.isPresent()) {
             return ResponseEntity.ok(importantByData.get());
@@ -57,9 +57,9 @@ public class ImportantResource3 {
     }
 
     @PostMapping("")
-    public ResponseEntity<ImportantEntity3> insertNewImportantRecord(@PathVariable("userProfileId") String userProfileId,
-                                                                    @Valid @RequestBody ImportantEntity3 importantEntity) throws URISyntaxException {
-        ImportantEntity3 newImportantRecord = importantService.insertImportantRecord(userProfileId, importantEntity);
+    public ResponseEntity<ImportantEntity3> save(@PathVariable("userProfileId") String userProfileId,
+            @Valid @RequestBody ImportantEntity3 importantEntity) throws URISyntaxException {
+        ImportantEntity3 newImportantRecord = importantService.save(userProfileId, importantEntity);
         return ResponseEntity.created(new URI(API_VERSION + userProfileId+ "/important/3/" + +newImportantRecord.getId()))
                 .headers(HeaderUtil.createAlert( "A user is created with identifier " + newImportantRecord.getId(),
                         String.valueOf(newImportantRecord.getId())))
@@ -68,9 +68,9 @@ public class ImportantResource3 {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ImportantEntity3> updateImportant(@PathVariable("userProfileId") String userProfileId,
-                                                            @PathVariable("id") Long id, @Valid @RequestBody ImportantEntity3 importantEntity) throws URISyntaxException {
-        ImportantEntity3 newImportantRecord = importantService.updateImportantRecord(userProfileId, id, importantEntity);
+    public ResponseEntity<ImportantEntity3> update(@PathVariable("userProfileId") String userProfileId,
+            @PathVariable("id") Long id, @Valid @RequestBody ImportantEntity3 importantEntity) throws URISyntaxException {
+        ImportantEntity3 newImportantRecord = importantService.update(userProfileId, id, importantEntity);
         return ResponseEntity.created(new URI(API_VERSION + userProfileId+ "/important/3/" + +newImportantRecord.getId()))
                 .headers(HeaderUtil.createAlert( "A important with identifier " + newImportantRecord.getId()
                                 + " has been updated",
@@ -79,9 +79,9 @@ public class ImportantResource3 {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteImportant(@PathVariable("userProfileId") String userProfileId,
+    public ResponseEntity<Void> delete(@PathVariable("userProfileId") String userProfileId,
                                                 @PathVariable("id") Long id) {
-        importantService.deleteImportantRecord(userProfileId, id);
+        importantService.delete(userProfileId, id);
         return ResponseEntity.ok()
                 .headers(HeaderUtil.createAlert("A record with id: " + id + " has been deleted", String.valueOf(id))).build();
     }

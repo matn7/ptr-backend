@@ -2,6 +2,7 @@ package com.pandatronik.backend.service;
 
 import com.google.common.collect.Lists;
 import com.pandatronik.backend.persistence.domain.core.LessImportantEntity;
+import com.pandatronik.backend.persistence.domain.core.LessImportantEntity2;
 import com.pandatronik.backend.persistence.repositories.LessImportantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ import java.util.Optional;
 import java.util.stream.IntStream;
 
 @Service
-public class LessImportantService {
+public class LessImportantService implements CrudService<LessImportantEntity, Long>  {
 
     private LessImportantRepository lessImportantRepository;
 
@@ -21,21 +22,25 @@ public class LessImportantService {
         this.lessImportantRepository = lessImportantRepository;
     }
 
-    public Optional<LessImportantEntity> getLessImportantByUidId(String userProfileId, Long id) {
-        return lessImportantRepository.getLessImportantByUidId(userProfileId, id);
+    @Override
+    public Optional<LessImportantEntity> findById(String userProfileId, Long id) {
+        return lessImportantRepository.findById(userProfileId, id);
     }
 
-    public Optional<LessImportantEntity> getLessImportantByUidYearMonthDay(String userProfileId, int year, int month, int day) {
-        return lessImportantRepository.getLessImportantByUidDayMonthYeat(userProfileId, day, month, year);
+    @Override
+    public Optional<LessImportantEntity> findByDate(String userProfileId, int year, int month, int day) {
+        return lessImportantRepository.findByDate(userProfileId, day, month, year);
     }
 
-    public LessImportantEntity insertLessImportantRecord(String userProfileId, LessImportantEntity lessImportantEntity) {
+    @Override
+    public LessImportantEntity save(String userProfileId, LessImportantEntity lessImportantEntity) {
         return lessImportantRepository.save(LessImportantEntity.newLessImportantRecord(userProfileId, lessImportantEntity));
     }
 
-    public LessImportantEntity updateLessImportantRecord(String userProfileId, long id, LessImportantEntity lessImportantEntity) {
+    @Override
+    public LessImportantEntity update(String userProfileId, Long id, LessImportantEntity lessImportantEntity) {
 
-        Optional<LessImportantEntity> optionalLessImportantEntity = getLessImportantByUidId(userProfileId, id);
+        Optional<LessImportantEntity> optionalLessImportantEntity = findById(userProfileId, id);
         if (optionalLessImportantEntity.isPresent()) {
             return lessImportantRepository.save(lessImportantEntity);
         } else {
@@ -43,8 +48,9 @@ public class LessImportantService {
         }
     }
 
-    public void deleteLessImportantRecord(String userProfileId, Long id) {
-        lessImportantRepository.getLessImportantByUidId(userProfileId, id).ifPresent(important -> {
+    @Override
+    public void delete(String userProfileId, Long id) {
+        lessImportantRepository.findById(userProfileId, id).ifPresent(important -> {
             lessImportantRepository.delete(important);
         });
     }

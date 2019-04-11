@@ -9,7 +9,7 @@
 - not authorized used should not see header                                         [ok]
 - nice notification like you are not logged in, wrong credentials                   [ok]
 - cypher properties file                                                            [ok]
-- cypher webmaster credentials # Webmaster details
+- cypher webmaster credentials # Webmaster details                                  [ok]
 - after token expired logout                                                        [ok]
 - to delete user some super rest request used by super admin user or something
 - make sure that isEnabled for user is working if false shouldn't allow to log in   [ok]
@@ -17,7 +17,7 @@
 - javax validators does not work like size()                                        [ok]
 - all user management page [Angular + Java]
 - admin management page [Angular + Java other angular app]
-- is enabled confirmed by login to email and press activated link
+- is enabled confirmed by login to email and press activated link                   [ok]
 - tons of validators in all entities
 - security roles make sure they work
 - username should have column updated and created date
@@ -29,12 +29,13 @@
 - Bo?enka zamiast Bożenka in database ?
 - Handle 500 errors maybe
 - Max login attempts, simulate somehow
+- Recaptcha to login and signup
 
 [Angular]
-- We have January 5 2019 and i should'nt be allowed to navigate to this page
+- We have January 5 2019 and i should'nt be allowed to navigate to thislew page
 http://localhost:4200/important/1/2019/1/6/new using browser search bar             [ok]
 - activeLink in all child pages                                                     [ok]
 - manipulate log to not display endpoint only 401 unauthorized msg
 - all extraordinary component pagination
 - in login form adding question like 90 + 7 activate submit button
-- add lot of stuff to properties file like lpcalhost:4200 everything
+- add lot of stuff to properties file like localhost:4200 everything

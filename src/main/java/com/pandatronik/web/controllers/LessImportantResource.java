@@ -17,9 +17,9 @@ import java.util.Optional;
 import static com.pandatronik.utils.ApplicationUtils.API_VERSION;
 
 @Validated
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "${angular.api.url}")
 @RestController
-@RequestMapping(API_VERSION + "{userProfileId}/lessimportant/1")
+@RequestMapping("${api.version}/{userProfileId}/lessimportant/1")
 public class LessImportantResource {
 
     private LessImportantService lessImportantService;
@@ -30,9 +30,9 @@ public class LessImportantResource {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> fetchLessImportantById(@PathVariable("userProfileId") String userProfileId,
-                                                @PathVariable("id") Long id) {
-        Optional<LessImportantEntity> lessImportantById = lessImportantService.getLessImportantByUidId(userProfileId, id);
+    public ResponseEntity<?> findById(@PathVariable("userProfileId") String userProfileId,
+            @PathVariable("id") Long id) {
+        Optional<LessImportantEntity> lessImportantById = lessImportantService.findById(userProfileId, id);
 
         if (lessImportantById.isPresent()) {
             return ResponseEntity.ok(lessImportantById.get());
@@ -43,9 +43,9 @@ public class LessImportantResource {
     }
 
     @GetMapping("/{year}/{month}/{day}")
-    public ResponseEntity<?> findLessImportantByData(@PathVariable("userProfileId") String userProfileId,
-                                                 @PathVariable("year") int year, @PathVariable("month") int month, @PathVariable("day") int day) {
-        Optional<LessImportantEntity> lessImportantByData = lessImportantService.getLessImportantByUidYearMonthDay(userProfileId, year, month, day);
+    public ResponseEntity<?> findByDate(@PathVariable("userProfileId") String userProfileId,
+            @PathVariable("year") int year, @PathVariable("month") int month, @PathVariable("day") int day) {
+        Optional<LessImportantEntity> lessImportantByData = lessImportantService.findByDate(userProfileId, year, month, day);
 
         if (lessImportantByData.isPresent()) {
             return ResponseEntity.ok(lessImportantByData.get());
@@ -57,9 +57,9 @@ public class LessImportantResource {
     }
 
     @PostMapping("")
-    public ResponseEntity<LessImportantEntity> insertNewLessImportantRecord(@PathVariable("userProfileId") String userProfileId,
-                                                                     @Valid @RequestBody LessImportantEntity lessImportantEntity) throws URISyntaxException {
-        LessImportantEntity newLessImportantRecord = lessImportantService.insertLessImportantRecord(userProfileId, lessImportantEntity);
+    public ResponseEntity<LessImportantEntity> save(@PathVariable("userProfileId") String userProfileId,
+            @Valid @RequestBody LessImportantEntity lessImportantEntity) throws URISyntaxException {
+        LessImportantEntity newLessImportantRecord = lessImportantService.save(userProfileId, lessImportantEntity);
         return ResponseEntity.created(new URI(API_VERSION + userProfileId+ "/lessimportant/1/" + newLessImportantRecord.getId()))
                 .headers(HeaderUtil.createAlert( "A less important is created with identifier " + newLessImportantRecord.getId(),
                         String.valueOf(newLessImportantRecord.getId())))
@@ -67,10 +67,10 @@ public class LessImportantResource {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<LessImportantEntity> updateLessImportant(@PathVariable("userProfileId") String userProfileId,
+    public ResponseEntity<LessImportantEntity> update(@PathVariable("userProfileId") String userProfileId,
                                                 @PathVariable("id") Long id, @Valid @RequestBody LessImportantEntity lessImportantEntity) throws URISyntaxException {
 
-        LessImportantEntity newLessImportantRecord = lessImportantService.updateLessImportantRecord(userProfileId, id, lessImportantEntity);
+        LessImportantEntity newLessImportantRecord = lessImportantService.update(userProfileId, id, lessImportantEntity);
         return ResponseEntity.created(new URI(API_VERSION + userProfileId+ "/lessimportant/1/" + newLessImportantRecord.getId()))
                 .headers(HeaderUtil.createAlert( "A less important with identifier " + newLessImportantRecord.getId()
                                 + " has been updated",
@@ -79,9 +79,9 @@ public class LessImportantResource {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteLessImportant(@PathVariable("userProfileId") String userProfileId,
+    public ResponseEntity<Void> delete(@PathVariable("userProfileId") String userProfileId,
                                                 @PathVariable("id") Long id) {
-        lessImportantService.deleteLessImportantRecord(userProfileId, id);
+        lessImportantService.delete(userProfileId, id);
         return ResponseEntity.ok()
                 .headers(HeaderUtil.createAlert("A record with id: " + id + " has been deleted", String.valueOf(id))).build();
     }

@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.stream.IntStream;
 
 @Service
-public class LessImportantService2 {
+public class LessImportantService2 implements CrudService<LessImportantEntity2, Long> {
 
     private LessImportantRepository2 lessImportantRepository2;
 
@@ -21,21 +21,25 @@ public class LessImportantService2 {
         this.lessImportantRepository2 = lessImportantRepository2;
     }
 
-    public Optional<LessImportantEntity2> getLessImportantByUidId(String userProfileId, Long id) {
-        return lessImportantRepository2.getLessImportantByUidId(userProfileId, id);
+    @Override
+    public Optional<LessImportantEntity2> findById(String userProfileId, Long id) {
+        return lessImportantRepository2.findById(userProfileId, id);
     }
 
-    public Optional<LessImportantEntity2> getLessImportantByUidYearMonthDay(String userProfileId, int year, int month, int day) {
-        return lessImportantRepository2.getLessImportantByUidDayMonthYeat(userProfileId, day, month, year);
+    @Override
+    public Optional<LessImportantEntity2> findByDate(String userProfileId, int year, int month, int day) {
+        return lessImportantRepository2.findByDate(userProfileId, day, month, year);
     }
 
-    public LessImportantEntity2 insertLessImportantRecord(String userProfileId, LessImportantEntity2 lessImportantEntity2) {
+    @Override
+    public LessImportantEntity2 save(String userProfileId, LessImportantEntity2 lessImportantEntity2) {
         return lessImportantRepository2.save(LessImportantEntity2.newLessImportantRecord(userProfileId, lessImportantEntity2));
     }
 
-    public LessImportantEntity2 updateLessImportantRecord(String userProfileId, long id, LessImportantEntity2 lessImportantEntity2) {
+    @Override
+    public LessImportantEntity2 update(String userProfileId, Long id, LessImportantEntity2 lessImportantEntity2) {
 
-        Optional<LessImportantEntity2> optionalLessImportantEntity = getLessImportantByUidId(userProfileId, id);
+        Optional<LessImportantEntity2> optionalLessImportantEntity = findById(userProfileId, id);
         if (optionalLessImportantEntity.isPresent()) {
             return lessImportantRepository2.save(lessImportantEntity2);
         } else {
@@ -43,11 +47,12 @@ public class LessImportantService2 {
         }
     }
 
-    public void deleteLessImportantRecord(String userProfileId, Long id) {
-        lessImportantRepository2.getLessImportantByUidId(userProfileId, id).ifPresent(important -> {
+    public void delete(String userProfileId, Long id) {
+        lessImportantRepository2.findById(userProfileId, id).ifPresent(important -> {
             lessImportantRepository2.delete(important);
         });
     }
+
 
     public List<Integer> countTaskMadeInYear(String userProfileId, int year) {
         List<Integer> result = Lists.newArrayList();
