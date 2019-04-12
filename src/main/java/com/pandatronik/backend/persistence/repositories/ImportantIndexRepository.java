@@ -22,13 +22,6 @@ public interface ImportantIndexRepository extends CrudRepository<CalendarEntity,
 			+ " LEFT JOIN c.days d WITH d.userProfileId = :name"
 			+ " WHERE YEAR(c.calendarDate) = :year AND MONTH(c.calendarDate) = :month"
 			+ " ORDER BY c.calendarDate")
-	Optional<List<Object[]>> findImportantIndexData(@Param("year") int year, @Param("month") int month, @Param("name") String name);
-
-	@Query("SELECT d.rateDay "
-			+ " FROM CalendarEntity c"
-			+ " LEFT JOIN c.days d WITH d.userProfileId = :name"
-			+ " WHERE YEAR(c.calendarDate) = :year AND MONTH(c.calendarDate) = :month"
-			+ " ORDER BY c.calendarDate")
-	Optional<List<Integer>> findMonthlyDaysRateDay(@Param("name") String name, @Param("year") int year, @Param("month") int month);
-
+	Optional<List<Object[]>> findIndexData(@Param("name") String name,
+		@Param("year") int year, @Param("month") int month);
 }

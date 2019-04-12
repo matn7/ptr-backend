@@ -22,6 +22,7 @@ public interface LessImportantIndexRepository extends CrudRepository<CalendarEnt
 			+ " LEFT JOIN c.days d WITH d.userProfileId = :name"
 			+ " WHERE YEAR(c.calendarDate) = :year AND MONTH(c.calendarDate) = :month"
 			+ " ORDER BY c.calendarDate")
-	Optional<List<Object[]>> findLessImportantIndexData(@Param("year") int year, @Param("month") int month, @Param("name") String name);
+	Optional<List<Object[]>> findIndexData(@Param("name") String name,
+		@Param("year") int year, @Param("month") int month);
 
 }

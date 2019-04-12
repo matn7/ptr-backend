@@ -9,31 +9,34 @@ import javax.ws.rs.NotFoundException;
 import java.util.Optional;
 
 @Service
-public class ExtraordinaryService {
+public class ExtraordinaryService implements ExtraordinaryCrudService<ExtraordinaryEntity, Long> {
 
-    private ExtraordinaryRepository extraordinaryRepository;
+    private final ExtraordinaryRepository extraordinaryRepository;
 
     @Autowired
     public ExtraordinaryService(ExtraordinaryRepository extraordinaryRepository) {
         this.extraordinaryRepository = extraordinaryRepository;
     }
 
-
-    public Iterable<ExtraordinaryEntity> getAll(String username) {
+    @Override
+    public Iterable<ExtraordinaryEntity> findAll(String username) {
         Iterable<ExtraordinaryEntity> all = extraordinaryRepository.findAllByUserProfileId(username);
         return all;
     }
 
-    public Optional<ExtraordinaryEntity> getExtraordinaryByUidDayMonthYear(String userProfileId, int day, int month, int year) {
-        return extraordinaryRepository.getExtraordinaryByUidDayMonthYear(userProfileId, day, month, year);
+    @Override
+    public Optional<ExtraordinaryEntity> findByDate(String userProfileId, int year, int month, int day) {
+        return extraordinaryRepository.findByDate(userProfileId, year, month, day);
     }
 
-    public Optional<ExtraordinaryEntity> getExtraordinaryByUidId(String userProfileId, Long id) {
-        return extraordinaryRepository.getExtraordinaryByUidId(userProfileId, id);
+    @Override
+    public Optional<ExtraordinaryEntity> findById(String userProfileId, Long id) {
+        return extraordinaryRepository.findById(userProfileId, id);
     }
 
-    public ExtraordinaryEntity updateExtraordinary(ExtraordinaryEntity extraordinaryEntity) {
-        Optional<ExtraordinaryEntity> optionalExtraordinaryEntity = getExtraordinaryByUidId(extraordinaryEntity.getUserProfileId(), extraordinaryEntity.getId());
+    @Override
+    public ExtraordinaryEntity update(String userProfileId, Long id, ExtraordinaryEntity extraordinaryEntity) {
+        Optional<ExtraordinaryEntity> optionalExtraordinaryEntity = findById(userProfileId, id);
         if (optionalExtraordinaryEntity.isPresent()) {
             return extraordinaryRepository.save(extraordinaryEntity);
         } else {
@@ -42,14 +45,16 @@ public class ExtraordinaryService {
 
     }
 
-    public void removeExtraordinary(String userProfileId, Long id) {
-        Long ide = getExtraordinaryByUidId(userProfileId, id)
+    @Override
+    public void delete(String userProfileId, Long id) {
+        Long ide = findById(userProfileId, id)
                 .map(ExtraordinaryEntity::getId)
                 .orElseThrow(() -> new NotFoundException("Extraordinary day not found"));
         extraordinaryRepository.deleteById(ide);
     }
 
-    public ExtraordinaryEntity insertExtraordinary(String userProfileId, ExtraordinaryEntity extraordinaryEntity) {
+    @Override
+    public ExtraordinaryEntity save(String userProfileId, ExtraordinaryEntity extraordinaryEntity) {
         return extraordinaryRepository.save(ExtraordinaryEntity.newExtraordinary(userProfileId, extraordinaryEntity));
     }
 

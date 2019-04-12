@@ -1,6 +1,6 @@
 package com.pandatronik.web.controllers;
 
-import com.pandatronik.backend.service.ImportantIndexService;
+import com.pandatronik.backend.service.StatisticsImportantIndexService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,26 +9,23 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-import static com.pandatronik.utils.ApplicationUtils.API_VERSION;
-
 @Validated
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "${angular.api.url}")
 @RestController
-@RequestMapping(API_VERSION + "{userProfileId}/important")
+@RequestMapping("${api.version}/{userProfileId}/important")
 public class ImportantIndexResource {
 
-    private ImportantIndexService importantIndexService;
+    private final StatisticsImportantIndexService statisticsImportantIndexService;
 
     @Autowired
-    public ImportantIndexResource(ImportantIndexService importantIndexService) {
-        this.importantIndexService = importantIndexService;
+    public ImportantIndexResource(StatisticsImportantIndexService statisticsImportantIndexService) {
+        this.statisticsImportantIndexService = statisticsImportantIndexService;
     }
 
     @GetMapping("/{year}/{month}")
-    public ResponseEntity<?> findImportantByData(@PathVariable("userProfileId") String userProfileId,
-                                                 @PathVariable("year") int year, @PathVariable("month") int month) {
-
-        Optional<List<Object[]>> importantIndexData = importantIndexService.findImportantsIndexData(year, month, userProfileId);
+    public ResponseEntity<?> findIndexData(@PathVariable("userProfileId") String userProfileId,
+            @PathVariable("year") int year, @PathVariable("month") int month) {
+        Optional<List<Object[]>> importantIndexData = statisticsImportantIndexService.findIndexData(userProfileId, year, month);
         if (importantIndexData.isPresent()) {
             return ResponseEntity.ok(importantIndexData.get());
         } else {

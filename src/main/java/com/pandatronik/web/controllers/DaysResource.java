@@ -16,9 +16,9 @@ import java.util.Optional;
 import static com.pandatronik.utils.ApplicationUtils.API_VERSION;
 
 @Validated
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "${angular.api.url}")
 @RestController
-@RequestMapping(API_VERSION + "{userProfileId}/days")
+@RequestMapping("${api.version}/{userProfileId}/days")
 public class DaysResource {
 
     private DaysService daysService;
@@ -29,8 +29,8 @@ public class DaysResource {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<?> fetchDaysById(@PathVariable("userProfileId") String userProfileId, @PathVariable("id") Long id) {
-        Optional<DaysEntity> daysById = daysService.getDaysByUidId(userProfileId, id);
+    public ResponseEntity<?> findById(@PathVariable("userProfileId") String userProfileId, @PathVariable("id") Long id) {
+        Optional<DaysEntity> daysById = daysService.findById(userProfileId, id);
         if (daysById.isPresent()) {
             return ResponseEntity.ok(daysById.get());
         } else {
@@ -40,9 +40,9 @@ public class DaysResource {
     }
 
     @GetMapping("{year}/{month}/{day}")
-    public ResponseEntity<?> fetchDays(@PathVariable("userProfileId") String userProfileId, @PathVariable("year") int year,
-                                @PathVariable("month") int month, @PathVariable("day") int day) {
-        Optional<DaysEntity> daysByDayMonthYear = daysService.getDaysByUidDayMonthYear(userProfileId, day, month, year);
+    public ResponseEntity<?> findByDate(@PathVariable("userProfileId") String userProfileId, @PathVariable("year") int year,
+            @PathVariable("month") int month, @PathVariable("day") int day) {
+        Optional<DaysEntity> daysByDayMonthYear = daysService.findByDate(userProfileId, day, month, year);
 
         if (daysByDayMonthYear.isPresent()) {
             return ResponseEntity.ok(daysByDayMonthYear.get());
@@ -53,9 +53,9 @@ public class DaysResource {
     }
 
     @PostMapping("")
-    public ResponseEntity<DaysEntity> insertNewDay(@PathVariable("userProfileId") String userProfileId,
-                                                   @Valid @RequestBody DaysEntity daysEntity) throws URISyntaxException {
-        DaysEntity newDaysRecord = daysService.insertDay(userProfileId, daysEntity);
+    public ResponseEntity<DaysEntity> save(@PathVariable("userProfileId") String userProfileId,
+            @Valid @RequestBody DaysEntity daysEntity) throws URISyntaxException {
+        DaysEntity newDaysRecord = daysService.save(userProfileId, daysEntity);
         return ResponseEntity.created(new URI(API_VERSION + userProfileId+ "/days/" + newDaysRecord.getId()))
                 .headers(HeaderUtil.createAlert( "A Days is created with identifier " + newDaysRecord.getId(),
                         String.valueOf(newDaysRecord.getId())))
@@ -63,10 +63,9 @@ public class DaysResource {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DaysEntity> updateDay(@PathVariable("userProfileId") String userProfileId,
-                                          @PathVariable("id") Long id,
-                                          @Valid @RequestBody DaysEntity daysEntity) throws URISyntaxException {
-        DaysEntity updatedDaysRecord = daysService.updateDay(userProfileId, id, daysEntity);
+    public ResponseEntity<DaysEntity> update(@PathVariable("userProfileId") String userProfileId,
+            @PathVariable("id") Long id, @Valid @RequestBody DaysEntity daysEntity) throws URISyntaxException {
+        DaysEntity updatedDaysRecord = daysService.update(userProfileId, id, daysEntity);
         return ResponseEntity.created(new URI(API_VERSION + userProfileId+ "/days/" + updatedDaysRecord.getId()))
                 .headers(HeaderUtil.createAlert( "A Days has been updated with identifier " + updatedDaysRecord.getId(),
                         String.valueOf(updatedDaysRecord.getId())))
@@ -74,9 +73,10 @@ public class DaysResource {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteDay(@PathVariable("userProfileId") String userProfileId, @PathVariable("id") Long id) {
-        daysService.removeDay(userProfileId, id);
+    public ResponseEntity<Void> delete(@PathVariable("userProfileId") String userProfileId, @PathVariable("id") Long id) {
+        daysService.delete(userProfileId, id);
         return ResponseEntity.ok()
-                .headers(HeaderUtil.createAlert("A record with id: " + id + " has been deleted", String.valueOf(id))).build();
+                .headers(HeaderUtil.createAlert("A record with id: " + id + " has been deleted",
+                        String.valueOf(id))).build();
     }
 }

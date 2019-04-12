@@ -1,6 +1,7 @@
 package com.pandatronik.web.controllers;
 
 import com.pandatronik.backend.persistence.domain.core.ImportantEntity2;
+import com.pandatronik.backend.service.CrudService;
 import com.pandatronik.backend.service.ImportantService2;
 import com.pandatronik.utils.HeaderUtil;
 import org.springframework.beans.factory.annotation.Autowired;

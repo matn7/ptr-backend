@@ -20,12 +20,12 @@ import java.util.Optional;
 import static com.pandatronik.utils.ApplicationUtils.API_VERSION;
 
 @Validated
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "${angular.api.url}")
 @RestController
-@RequestMapping(API_VERSION + "{userProfileId}/extraordinary")
+@RequestMapping("${api.version}/{userProfileId}/extraordinary")
 public class ExtraordinaryResource {
 
-    private ExtraordinaryService extraordinaryService;
+    private final ExtraordinaryService extraordinaryService;
 
     @Autowired
     public ExtraordinaryResource(ExtraordinaryService extraordinaryService) {
@@ -33,14 +33,14 @@ public class ExtraordinaryResource {
     }
 
     @GetMapping("/all")
-    public Iterable<ExtraordinaryEntity> fetchAll(@PathVariable("userProfileId") String userProfileId) {
-        Iterable<ExtraordinaryEntity> all = extraordinaryService.getAll(userProfileId);
+    public Iterable<ExtraordinaryEntity> findAll(@PathVariable("userProfileId") String userProfileId) {
+        Iterable<ExtraordinaryEntity> all = extraordinaryService.findAll(userProfileId);
         return all;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> fetchExtraordinaryDaysById(@PathVariable("userProfileId") String userProfileId, @PathVariable("id") Long id) {
-        Optional<ExtraordinaryEntity> extraordinaryDaysById = extraordinaryService.getExtraordinaryByUidId(userProfileId, id);
+    public ResponseEntity<?> findById(@PathVariable("userProfileId") String userProfileId, @PathVariable("id") Long id) {
+        Optional<ExtraordinaryEntity> extraordinaryDaysById = extraordinaryService.findById(userProfileId, id);
 
         if (extraordinaryDaysById.isPresent()) {
             return ResponseEntity.ok(extraordinaryDaysById.get());
@@ -51,9 +51,10 @@ public class ExtraordinaryResource {
     }
 
     @GetMapping("/{year}/{month}/{day}")
-    public ResponseEntity<?> fetchExtraordinaryDays(@PathVariable("userProfileId") String userProfileId, @PathVariable("year") int year,
-                                                      @PathVariable("month") int month, @PathVariable("day") int day) {
-        Optional<ExtraordinaryEntity> extraordinaryDaysByDayMonthYear = extraordinaryService.getExtraordinaryByUidDayMonthYear(userProfileId, day, month, year);
+    public ResponseEntity<?> findByDate(@PathVariable("userProfileId") String userProfileId, @PathVariable("year") int year,
+            @PathVariable("month") int month, @PathVariable("day") int day) {
+        Optional<ExtraordinaryEntity> extraordinaryDaysByDayMonthYear =
+                extraordinaryService.findByDate(userProfileId, day, month, year);
 
         if (extraordinaryDaysByDayMonthYear.isPresent()) {
             return ResponseEntity.ok(extraordinaryDaysByDayMonthYear.get());
@@ -64,9 +65,9 @@ public class ExtraordinaryResource {
     }
 
     @PostMapping("")
-    public ResponseEntity<ExtraordinaryEntity> insertNewExtraordinaryDay(@PathVariable("userProfileId") String userProfileId,
-                                                                         @Valid @RequestBody ExtraordinaryEntity extraordinaryEntity) throws URISyntaxException {
-        ExtraordinaryEntity newExtraordinaryRecord = extraordinaryService.insertExtraordinary(userProfileId, extraordinaryEntity);
+    public ResponseEntity<ExtraordinaryEntity> save(@PathVariable("userProfileId") String userProfileId,
+            @Valid @RequestBody ExtraordinaryEntity extraordinaryEntity) throws URISyntaxException {
+        ExtraordinaryEntity newExtraordinaryRecord = extraordinaryService.save(userProfileId, extraordinaryEntity);
         return ResponseEntity.created(new URI(API_VERSION + userProfileId+ "/extraordinary/" + +newExtraordinaryRecord.getId()))
                 .headers(HeaderUtil.createAlert( "A extraordinary record is created with identifier " + newExtraordinaryRecord.getId(),
                         String.valueOf(newExtraordinaryRecord.getId())))
@@ -74,9 +75,9 @@ public class ExtraordinaryResource {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ExtraordinaryEntity> updateExtraordinaryDay(@PathVariable("userProfileId") String userProfileId,
-                                                       @PathVariable("id") Long id, @Valid @RequestBody ExtraordinaryEntity extraordinaryEntity) throws URISyntaxException {
-        ExtraordinaryEntity newExtraordinaryRecord = extraordinaryService.updateExtraordinary(extraordinaryEntity);
+    public ResponseEntity<ExtraordinaryEntity> update(@PathVariable("userProfileId") String userProfileId,
+            @PathVariable("id") Long id, @Valid @RequestBody ExtraordinaryEntity extraordinaryEntity) throws URISyntaxException {
+        ExtraordinaryEntity newExtraordinaryRecord = extraordinaryService.update(userProfileId, id, extraordinaryEntity);
         return ResponseEntity.created(new URI(API_VERSION + userProfileId+ "/extraordinary/" + +newExtraordinaryRecord.getId()))
                 .headers(HeaderUtil.createAlert( "A extraordinary with identifier " + newExtraordinaryRecord.getId()
                                 + " has been updated",
@@ -85,8 +86,8 @@ public class ExtraordinaryResource {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void>  deleteExtraordinaryDay(@PathVariable("userProfileId") String userProfileId, @PathVariable("id") Long id) {
-        extraordinaryService.removeExtraordinary(userProfileId, id);
+    public ResponseEntity<Void> delete(@PathVariable("userProfileId") String userProfileId, @PathVariable("id") Long id) {
+        extraordinaryService.delete(userProfileId, id);
         return ResponseEntity.ok()
                 .headers(HeaderUtil.createAlert("A record with id: " + id + " has been deleted", String.valueOf(id))).build();
     }

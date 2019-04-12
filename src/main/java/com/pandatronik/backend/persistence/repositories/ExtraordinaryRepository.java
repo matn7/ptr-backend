@@ -14,10 +14,10 @@ public interface ExtraordinaryRepository extends CrudRepository<ExtraordinaryEnt
     Iterable<ExtraordinaryEntity> findAllByUserProfileId(String userProfileId);
 
     @Query("SELECT i FROM ExtraordinaryEntity i WHERE DAYOFMONTH(i.startDate) = :day AND MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userProfileId = :userProfileId")
-    Optional<ExtraordinaryEntity> getExtraordinaryByUidDayMonthYear(@Param("userProfileId") String userProfileId, @Param("day") int day,
-                                                  @Param("month") int month, @Param("year") int year);
+    Optional<ExtraordinaryEntity> findByDate(@Param("userProfileId") String userProfileId,
+        @Param("year") int year, @Param("month") int month, @Param("day") int day);
 
     @Query("SELECT i FROM ExtraordinaryEntity i WHERE i.userProfileId =:userProfileId AND i.id = :id")
-    Optional<ExtraordinaryEntity> getExtraordinaryByUidId(@Param("userProfileId") String userProfileId, @Param("id") Long id);
+    Optional<ExtraordinaryEntity> findById(@Param("userProfileId") String userProfileId, @Param("id") Long id);
 
 }

@@ -8,16 +8,17 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class LessImportantIndexService {
+public class StatisticsLessImportantIndexService implements StatisticsIndexService {
     private LessImportantIndexRepository lessImportantIndexRepository;
 
     @Autowired
-    public LessImportantIndexService(LessImportantIndexRepository lessImportantIndexRepository) {
+    public StatisticsLessImportantIndexService(LessImportantIndexRepository lessImportantIndexRepository) {
         this.lessImportantIndexRepository = lessImportantIndexRepository;
     }
 
-    public Optional<List<Object[]>> findLessImportantsIndexData(int year, int month, String name) {
-        return lessImportantIndexRepository.findLessImportantIndexData(year, month, name);
+    @Override
+    public Optional<List<Object[]>> findIndexData(String name, int year, int month) {
+        return lessImportantIndexRepository.findIndexData(name, year, month);
     }
 
 }
