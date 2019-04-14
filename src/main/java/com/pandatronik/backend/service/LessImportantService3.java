@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.stream.IntStream;
 
 @Service
-public class LessImportantService3 implements CrudService<LessImportantEntity3, Long> {
+public class LessImportantService3 implements ImportantCrudService<LessImportantEntity3, Long> {
 
     private LessImportantRepository3 lessImportantRepository3;
 
@@ -55,27 +55,13 @@ public class LessImportantService3 implements CrudService<LessImportantEntity3, 
         });
     }
 
-    public List<Integer> countTaskMadeInYear(String userProfileId, int year) {
-        List<Integer> result = Lists.newArrayList();
-        int important_100 = lessImportantRepository3.countTaskMadeInYear(userProfileId, year, 100);
-        int important_75 = lessImportantRepository3.countTaskMadeInYear(userProfileId, year, 75);
-        int important_50 = lessImportantRepository3.countTaskMadeInYear(userProfileId, year, 50);
-        int important_25 = lessImportantRepository3.countTaskMadeInYear(userProfileId, year, 25);
-        int important_0 = lessImportantRepository3.countTaskMadeInYear(userProfileId, year, 0);
-
-        result.add(important_100);
-        result.add(important_75);
-        result.add(important_50);
-        result.add(important_25);
-        result.add(important_0);
-        return result;
+    @Override
+    public List<Object[]> findCountByYearStat(String userProfileId, int year) {
+        return lessImportantRepository3.findCountByYearStat(userProfileId, year);
     }
 
-    public List<Double> avgTaskMadeInMonthYear(String userProfileId, int year) {
-        List<Double> monthAvg = Lists.newArrayList();
-        IntStream.rangeClosed(1, 12).forEach(mon -> {
-            monthAvg.add(lessImportantRepository3.findAvgMadeByMonthYear(userProfileId, mon, year));
-        });
-        return monthAvg;
+    @Override
+    public List<Object[]> findAverageByYearStat(String userProfileId, int year) {
+        return lessImportantRepository3.findAverageByYearStat(userProfileId, year);
     }
 }

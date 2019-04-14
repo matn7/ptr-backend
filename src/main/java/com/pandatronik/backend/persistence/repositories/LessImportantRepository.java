@@ -6,6 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -22,10 +23,12 @@ public interface LessImportantRepository extends CrudRepository<LessImportantEnt
     Optional<LessImportantEntity> update(@Param("title") String title, @Param("body") String body, @Param("made") int made,
         @Param("userProfileId") String userProfileId, @Param("id") long id);
 
-    @Query("SELECT COUNT(made) FROM LessImportantEntity i WHERE YEAR(i.startDate) = :year AND i.userProfileId = :userProfileId AND i.made = :made")
-    Integer countTaskMadeInYear(@Param("userProfileId") String userProfileId, @Param("year") int year, @Param("made") int made);
+    // statistics
+    @Query("SELECT made, COUNT(made) FROM LessImportantEntity i WHERE YEAR(i.startDate) = :year " +
+            "AND i.userProfileId = :userProfileId GROUP BY i.made")
+    List<Object[]> findCountByYearStat(@Param("userProfileId") String userProfileId, @Param("year") int year);
 
-    @Query("SELECT AVG(made) FROM LessImportantEntity i WHERE MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userProfileId = :userProfileId ")
-    Double findAvgMadeByMonthYear(@Param("userProfileId") String userProfileId, @Param("month") int month, @Param("year") int year);
-
+    @Query("SELECT MONTH(i.startDate), AVG(made) FROM LessImportantEntity i WHERE YEAR(i.startDate) = :year " +
+            "AND i.userProfileId = :userProfileId GROUP BY MONTH(i.startDate)")
+    List<Object[]> findAverageByYearStat(@Param("userProfileId") String userProfileId, @Param("year") int year);
 }

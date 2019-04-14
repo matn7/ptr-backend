@@ -25,13 +25,6 @@ public interface DaysRepository extends CrudRepository<DaysEntity, Long> {
     Integer findByYearAndRateDay(@Param("userProfileId") String userProfileId, @Param("year") int year,
                                                     @Param("rateDay") int rateDay);
 
-    @Query("SELECT rateDay FROM DaysEntity i WHERE YEAR(i.startDate) = :year AND i.userProfileId = :userProfileId")
-    List<Integer> findByYearAndRateDay2(@Param("userProfileId") String userProfileId, @Param("year") int year);
-
-    @Query("SELECT COUNT(rateDay) FROM DaysEntity i WHERE MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.rateDay = :rateDay AND i.userProfileId = :userProfileId")
-    Integer findByMonthYearAndRateDay(@Param("userProfileId") String userProfileId, @Param("month") int month,
-                                               @Param("year") int year, @Param("rateDay") int rateDay);
-
     @Query("SELECT rateDay FROM DaysEntity i WHERE MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userProfileId = :userProfileId")
     List<Integer> findByMonthAndYear(@Param("userProfileId") String userProfileId, @Param("month") int month,
                                                @Param("year") int year);
@@ -39,11 +32,24 @@ public interface DaysRepository extends CrudRepository<DaysEntity, Long> {
     @Query("SELECT AVG(rateDay) FROM DaysEntity i WHERE MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userProfileId = :userProfileId ")
     Double findAverageByYear(@Param("userProfileId") String userProfileId, @Param("month") int month, @Param("year") int year);
 
+    // statistics
+    @Query("SELECT rateDay FROM DaysEntity i WHERE YEAR(i.startDate) = :year AND i.userProfileId = :userProfileId")
+    List<Integer> findByYearData(@Param("userProfileId") String userProfileId, @Param("year") int year);
+
+    @Query("SELECT MONTH(i.startDate), AVG(rateDay) FROM DaysEntity i WHERE YEAR(i.startDate) = :year " +
+    "AND i.userProfileId = :userProfileId GROUP BY MONTH(i.startDate)")
+    List<Object[]> findAverageByYearData(@Param("userProfileId") String userProfileId, @Param("year") int year);
+
+    @Query("SELECT rateDay, COUNT(rateDay) FROM DaysEntity i WHERE MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year " +
+            "AND i.userProfileId = :userProfileId GROUP BY i.rateDay")
+    List<Object[]> findByMonthAndYearData(@Param("userProfileId") String userProfileId, @Param("month") int month,
+                                             @Param("year") int year);
+
     @Query("SELECT d.rateDay "
             + " FROM CalendarEntity c"
             + " LEFT JOIN c.days d WITH d.userProfileId = :name"
             + " WHERE YEAR(c.calendarDate) = :year AND MONTH(c.calendarDate) = :month"
             + " ORDER BY c.calendarDate")
-    Optional<List<Integer>> findRateDayData(@Param("name") String name, @Param("year") int year, @Param("month") int month);
+    Optional<List<Integer>> findByMonthAndYearDailyData(@Param("name") String name, @Param("year") int year, @Param("month") int month);
 
 }

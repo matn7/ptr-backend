@@ -9,8 +9,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.pandatronik.utils.ApplicationUtils.API_VERSION;
+import static java.util.Objects.nonNull;
 
 @Component
 @CrossOrigin(origins = "http://localhost:4200")
@@ -31,11 +34,12 @@ public class LessImportantStatisticsResource {
     }
 
     @GetMapping("/1/count/{year}")
-    public ResponseEntity<?> countTask1MadeInYear(@PathVariable("userProfileId") String userProfileId,
+    public ResponseEntity<?> findCountByYearTask1(@PathVariable("userProfileId") String userProfileId,
                                                   @PathVariable("year") int year) {
-        List<Integer> result =  lessImportantService.countTaskMadeInYear(userProfileId, year);
-        if (result != null) {
-            return ResponseEntity.ok(result);
+        List<Object[]> result =  lessImportantService.findCountByYearStat(userProfileId, year);
+        Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
+        if (nonNull(collect)) {
+            return ResponseEntity.ok(collect);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorMessage("Record not found"));
@@ -43,11 +47,12 @@ public class LessImportantStatisticsResource {
     }
 
     @GetMapping("/2/count/{year}")
-    public ResponseEntity<?> countTask2MadeInYear(@PathVariable("userProfileId") String userProfileId,
+    public ResponseEntity<?> findCountByYearTask2(@PathVariable("userProfileId") String userProfileId,
                                               @PathVariable("year") int year) {
-        List<Integer> result =  lessImportantService2.countTaskMadeInYear(userProfileId, year);
-        if (result != null) {
-            return ResponseEntity.ok(result);
+        List<Object[]> result =  lessImportantService2.findCountByYearStat(userProfileId, year);
+        Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
+        if (nonNull(collect)) {
+            return ResponseEntity.ok(collect);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorMessage("Record not found"));
@@ -55,11 +60,12 @@ public class LessImportantStatisticsResource {
     }
 
     @GetMapping("/3/count/{year}")
-    public ResponseEntity<?> countTask3MadeInYear(@PathVariable("userProfileId") String userProfileId,
+    public ResponseEntity<?> findCountByYearTask3(@PathVariable("userProfileId") String userProfileId,
                                               @PathVariable("year") int year) {
-        List<Integer> result =  lessImportantService3.countTaskMadeInYear(userProfileId, year);
-        if (result != null) {
-            return ResponseEntity.ok(result);
+        List<Object[]> result =  lessImportantService3.findCountByYearStat(userProfileId, year);
+        Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
+        if (nonNull(collect)) {
+            return ResponseEntity.ok(collect);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorMessage("Record not found"));
@@ -67,10 +73,10 @@ public class LessImportantStatisticsResource {
     }
 
     @GetMapping("/1/avg/{year}")
-    public ResponseEntity<?> avgTask1MadeInMonthYear(@PathVariable("userProfileId") String userProfileId,
+    public ResponseEntity<?> findAverageByYearTask1(@PathVariable("userProfileId") String userProfileId,
                                             @PathVariable("year") int year) {
-        List<Double> result = lessImportantService.avgTaskMadeInMonthYear(userProfileId, year);
-        if (result != null) {
+        List<Object[]> result = lessImportantService.findAverageByYearStat(userProfileId, year);
+        if (nonNull(result)) {
             return ResponseEntity.ok(result);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -81,8 +87,8 @@ public class LessImportantStatisticsResource {
     @GetMapping("/2/avg/{year}")
     public ResponseEntity<?> avgTask2MadeInMonthYear(@PathVariable("userProfileId") String userProfileId,
                                                 @PathVariable("year") int year) {
-        List<Double> result = lessImportantService2.avgTaskMadeInMonthYear(userProfileId, year);
-        if (result != null) {
+        List<Object[]> result = lessImportantService2.findAverageByYearStat(userProfileId, year);
+        if (nonNull(result)) {
             return ResponseEntity.ok(result);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -93,8 +99,8 @@ public class LessImportantStatisticsResource {
     @GetMapping("/3/avg/{year}")
     public ResponseEntity<?> avgTask3MadeInMonthYear(@PathVariable("userProfileId") String userProfileId,
                                                 @PathVariable("year") int year) {
-        List<Double> result = lessImportantService3.avgTaskMadeInMonthYear(userProfileId, year);
-        if (result != null) {
+        List<Object[]> result = lessImportantService3.findAverageByYearStat(userProfileId, year);
+        if (nonNull(result)) {
             return ResponseEntity.ok(result);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)

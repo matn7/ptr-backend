@@ -9,10 +9,14 @@ public interface DaysCrudService<T, ID> extends CrudService<T, ID> {
 
     Integer findByYearAndRateDay(String name, int year, int rate);
 
-    Integer findByMonthYearAndRateDay(String name, int month, int year, int rateDay);
-
     List<Double> findAverageByYear(String name, int year);
 
-    Optional<List<Integer>> findRateDayData(String name, int year, int month);
+    Optional<List<Integer>> findByMonthAndYearDailyData(String name, int year, int month);
+
+    List<Integer> findByYearData(String userProfileId, int year);
+
+    List<Object[]> findAverageByYearData(String userProfileId, int year);
+
+    List<Object[]> findByMonthAndYearData(String name, int month, int year);
 
 }

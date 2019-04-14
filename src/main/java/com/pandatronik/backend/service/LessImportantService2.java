@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.stream.IntStream;
 
 @Service
-public class LessImportantService2 implements CrudService<LessImportantEntity2, Long> {
+public class LessImportantService2 implements ImportantCrudService<LessImportantEntity2, Long> {
 
     private LessImportantRepository2 lessImportantRepository2;
 
@@ -47,34 +47,20 @@ public class LessImportantService2 implements CrudService<LessImportantEntity2, 
         }
     }
 
+    @Override
     public void delete(String userProfileId, Long id) {
         lessImportantRepository2.findById(userProfileId, id).ifPresent(important -> {
             lessImportantRepository2.delete(important);
         });
     }
 
-
-    public List<Integer> countTaskMadeInYear(String userProfileId, int year) {
-        List<Integer> result = Lists.newArrayList();
-        int important_100 = lessImportantRepository2.countTaskMadeInYear(userProfileId, year, 100);
-        int important_75 = lessImportantRepository2.countTaskMadeInYear(userProfileId, year, 75);
-        int important_50 = lessImportantRepository2.countTaskMadeInYear(userProfileId, year, 50);
-        int important_25 = lessImportantRepository2.countTaskMadeInYear(userProfileId, year, 25);
-        int important_0 = lessImportantRepository2.countTaskMadeInYear(userProfileId, year, 0);
-
-        result.add(important_100);
-        result.add(important_75);
-        result.add(important_50);
-        result.add(important_25);
-        result.add(important_0);
-        return result;
+    @Override
+    public List<Object[]> findCountByYearStat(String userProfileId, int year) {
+        return lessImportantRepository2.findCountByYearStat(userProfileId, year);
     }
 
-    public List<Double> avgTaskMadeInMonthYear(String userProfileId, int year) {
-        List<Double> monthAvg = Lists.newArrayList();
-        IntStream.rangeClosed(1, 12).forEach(mon -> {
-            monthAvg.add(lessImportantRepository2.findAvgMadeByMonthYear(userProfileId, mon, year));
-        });
-        return monthAvg;
+    @Override
+    public List<Object[]> findAverageByYearStat(String userProfileId, int year) {
+        return lessImportantRepository2.findAverageByYearStat(userProfileId, year);
     }
 }
