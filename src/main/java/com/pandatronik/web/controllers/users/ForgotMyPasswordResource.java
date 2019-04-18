@@ -29,7 +29,7 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/v1")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "${angular.api.url}")
 public class ForgotMyPasswordResource {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ForgotMyPasswordResource.class);

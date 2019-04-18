@@ -25,7 +25,7 @@ import javax.validation.Valid;
 import static com.pandatronik.security.SecurityConstants.TOKEN_PREFIX;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("${api.version}")
 @CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 

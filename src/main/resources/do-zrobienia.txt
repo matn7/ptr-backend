@@ -28,8 +28,9 @@
 - Strange bug when type Bożenka. java.sql.SQLException: Incorrect string value: '\xC5\xBCenka' for column 'body' at row 1
 - Bo?enka zamiast Bożenka in database ?
 - Handle 500 errors maybe
-- Max login attempts, simulate somehow
+- Max login attempts, simulate somehow                                              [ok]
 - Recaptcha to login and signup
+- check and fix routes both in backend and frontend
 
 [Angular]
 - We have January 5 2019 and i should'nt be allowed to navigate to thislew page

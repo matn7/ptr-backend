@@ -37,8 +37,8 @@ import static com.pandatronik.utils.ApplicationUtils.API_VERSION;
 
 @Validated
 @RestController
-@RequestMapping(API_VERSION)
-@CrossOrigin(origins = "http://localhost:4200")
+@RequestMapping("${api.version}")
+@CrossOrigin(origins = "${angular.api.url}")
 public class SignupResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(SignupResource.class);
@@ -193,8 +193,13 @@ public class SignupResource {
     public ResponseEntity<?> readUserByUsername(@PathVariable("username") String username) {
         UserEntity userByUsername = userService.findByUserName(username);
 
+        UserDetailsResponse userDetailsResponse = new UserDetailsResponse(userByUsername.getEmail(),
+                userByUsername.getFirstName(), userByUsername.getLastName(),
+                userByUsername.getUsername(), userByUsername.isEnabled(), userByUsername.getPlan(),
+                userByUsername.getUserRoles());
+
         if (userByUsername != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(new Response(userByUsername.getId(), userByUsername.getUsername()));
+            return ResponseEntity.status(HttpStatus.OK).body(userDetailsResponse);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorMessage("Record not found"));
