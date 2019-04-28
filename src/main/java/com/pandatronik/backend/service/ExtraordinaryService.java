@@ -1,5 +1,6 @@
 package com.pandatronik.backend.service;
 
+import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.ExtraordinaryEntity;
 import com.pandatronik.backend.persistence.repositories.ExtraordinaryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,19 +26,25 @@ public class ExtraordinaryService implements ExtraordinaryCrudService<Extraordin
     }
 
     @Override
-    public Optional<ExtraordinaryEntity> findByDate(String userProfileId, int year, int month, int day) {
-        return extraordinaryRepository.findByDate(userProfileId, year, month, day);
+    public Optional<ExtraordinaryEntity> findById(UserEntity userEntity, Long id) {
+        return extraordinaryRepository.findById(userEntity, id);
     }
 
     @Override
-    public Optional<ExtraordinaryEntity> findById(String userProfileId, Long id) {
-        return extraordinaryRepository.findById(userProfileId, id);
+    public Optional<ExtraordinaryEntity> findByDate(UserEntity userEntity, int year, int month, int day) {
+        return extraordinaryRepository.findByDate(userEntity, year, month, day);
     }
 
     @Override
-    public ExtraordinaryEntity update(String userProfileId, Long id, ExtraordinaryEntity extraordinaryEntity) {
-        Optional<ExtraordinaryEntity> optionalExtraordinaryEntity = findById(userProfileId, id);
+    public ExtraordinaryEntity save(ExtraordinaryEntity extraordinaryEntity) {
+        return extraordinaryRepository.save(extraordinaryEntity);
+    }
+
+    @Override
+    public ExtraordinaryEntity update(UserEntity userEntity, Long id, ExtraordinaryEntity extraordinaryEntity) {
+        Optional<ExtraordinaryEntity> optionalExtraordinaryEntity = findById(userEntity, id);
         if (optionalExtraordinaryEntity.isPresent()) {
+            extraordinaryEntity.setUserEntity(userEntity);
             return extraordinaryRepository.save(extraordinaryEntity);
         } else {
             throw new NotFoundException("Extraordinary day not found");
@@ -46,17 +53,10 @@ public class ExtraordinaryService implements ExtraordinaryCrudService<Extraordin
     }
 
     @Override
-    public void delete(String userProfileId, Long id) {
-        Long ide = findById(userProfileId, id)
-                .map(ExtraordinaryEntity::getId)
-                .orElseThrow(() -> new NotFoundException("Extraordinary day not found"));
-        extraordinaryRepository.deleteById(ide);
+    public void delete(UserEntity userEntity, Long id) {
+        extraordinaryRepository.findById(userEntity, id).ifPresent(extraordinary -> {
+            extraordinaryRepository.delete(extraordinary);
+        });
     }
-
-    @Override
-    public ExtraordinaryEntity save(String userProfileId, ExtraordinaryEntity extraordinaryEntity) {
-        return extraordinaryRepository.save(ExtraordinaryEntity.newExtraordinary(userProfileId, extraordinaryEntity));
-    }
-
 
 }

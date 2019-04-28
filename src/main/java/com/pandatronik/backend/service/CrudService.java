@@ -1,16 +1,18 @@
 package com.pandatronik.backend.service;
 
+import com.pandatronik.backend.persistence.domain.UserEntity;
+
 import java.util.Optional;
 
 public interface CrudService<T, ID> {
 
-    Optional<T> findById(String name, ID id);
+    Optional<T> findById(UserEntity userEntity, ID id);
 
-    Optional<T> findByDate(String name, int year, int month, int day);
+    Optional<T> findByDate(UserEntity userEntity, int year, int month, int day);
 
-    T save(String name, T object);
+    T save(T object);
 
-    T update(String name, ID id, T object);
+    T update(UserEntity userEntity, ID id, T object);
 
-    void delete(String name, ID id);
+    void delete(UserEntity userEntity, ID id);
 }

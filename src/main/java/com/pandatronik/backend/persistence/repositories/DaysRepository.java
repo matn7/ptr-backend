@@ -1,5 +1,6 @@
 package com.pandatronik.backend.persistence.repositories;
 
+import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.DaysEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -14,12 +15,13 @@ public interface DaysRepository extends CrudRepository<DaysEntity, Long> {
 
     Iterable<DaysEntity> findAll();
 
-    @Query("SELECT i FROM DaysEntity i WHERE DAYOFMONTH(i.startDate) = :day AND MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userProfileId = :userProfileId")
-    Optional<DaysEntity> findByDate(@Param("userProfileId") String userProfileId, @Param("day") int day,
-                                               @Param("month") int month, @Param("year") int year);
+    @Query("SELECT i FROM DaysEntity i WHERE i.userEntity =:userEntity AND i.id = :id")
+    Optional<DaysEntity> findById(@Param("userEntity") UserEntity userEntity, @Param("id") Long id);
 
-    @Query("SELECT i FROM DaysEntity i WHERE i.userProfileId =:userProfileId AND i.id = :id")
-    Optional<DaysEntity> findById(@Param("userProfileId") String userProfileId, @Param("id") Long id);
+    @Query("SELECT i FROM DaysEntity i WHERE DAYOFMONTH(i.startDate) = :day AND " +
+            "MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userEntity = :userEntity")
+    Optional<DaysEntity> findByDate(@Param("userEntity") UserEntity userEntity, @Param("day") int day,
+        @Param("month") int month, @Param("year") int year);
 
     @Query("SELECT COUNT(rateDay) FROM DaysEntity i WHERE YEAR(i.startDate) = :year AND i.rateDay = :rateDay AND i.userProfileId = :userProfileId")
     Integer findByYearAndRateDay(@Param("userProfileId") String userProfileId, @Param("year") int year,

@@ -1,4 +1,5 @@
 package com.pandatronik.backend.persistence.domain.core;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -7,6 +8,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.pandatronik.backend.persistence.domain.UserEntity;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -54,6 +56,10 @@ public class ExtraordinaryEntity implements Serializable {
     @Size(min = 3, max = 30)
     @Column(name = "user_profile_id")
     private String userProfileId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    private UserEntity userEntity;
 
     public ExtraordinaryEntity() {
     }
@@ -125,4 +131,11 @@ public class ExtraordinaryEntity implements Serializable {
         this.startDate = startDate;
     }
 
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
+    }
 }

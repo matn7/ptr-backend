@@ -1,6 +1,7 @@
 package com.pandatronik.backend.service;
 
 import com.google.common.collect.Lists;
+import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.DaysEntity;
 import com.pandatronik.backend.persistence.repositories.DaysRepository;
 import com.pandatronik.enums.RateDayEnum;
@@ -23,40 +24,40 @@ public class DaysService implements DaysCrudService<DaysEntity, Long> {
     }
 
     @Override
-    public Optional<DaysEntity> findByDate(String userProfileId, int day, int month, int year) {
-        return daysRepository.findByDate(userProfileId, day, month, year);
+    public Optional<DaysEntity> findById(UserEntity userEntity, Long id) {
+        return daysRepository.findById(userEntity, id);
     }
 
     @Override
-    public Optional<DaysEntity> findById(String userProfileId, Long id) {
-        return daysRepository.findById(userProfileId, id);
+    public Optional<DaysEntity> findByDate(UserEntity userEntity, int day, int month, int year) {
+        return daysRepository.findByDate(userEntity, day, month, year);
     }
 
     @Override
-    public List<Integer> findByMonthAndYear(String userProfileId, int month, int year) {
-        return daysRepository.findByMonthAndYear(userProfileId, month, year);
+    public DaysEntity save(DaysEntity daysEntity) {
+        return daysRepository.save(daysEntity);
     }
 
     @Override
-    public DaysEntity update(String userProfileId, Long id, DaysEntity daysEntity) {
-        Optional<DaysEntity> optionalDaysEntity = findById(userProfileId, id);
+    public DaysEntity update(UserEntity userEntity, Long id, DaysEntity daysEntity) {
+        Optional<DaysEntity> optionalDaysEntity = findById(userEntity, id);
         if (optionalDaysEntity.isPresent()) {
+            daysEntity.setUserEntity(userEntity);
             return daysRepository.save(daysEntity);
         }
         throw new NotFoundException("days not found");
     }
 
     @Override
-    public void delete(String userProfileId, Long id) {
-        Long ide = findById(userProfileId, id)
-                .map(DaysEntity::getId)
-                .orElseThrow(() -> new NotFoundException("Day not found"));
-        daysRepository.deleteById(ide);
+    public void delete(UserEntity userEntity, Long id) {
+        daysRepository.findById(userEntity, id).ifPresent(days -> {
+            daysRepository.delete(days);
+        });
     }
 
     @Override
-    public DaysEntity save(String userProfileId, DaysEntity daysEntity) {
-        return daysRepository.save(DaysEntity.newDay(userProfileId, daysEntity));
+    public List<Integer> findByMonthAndYear(String userProfileId, int month, int year) {
+        return daysRepository.findByMonthAndYear(userProfileId, month, year);
     }
 
     @Override

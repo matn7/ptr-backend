@@ -1,6 +1,7 @@
 package com.pandatronik.backend.service;
 
 import com.google.common.collect.Lists;
+import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.ImportantEntity;
 import com.pandatronik.backend.persistence.repositories.ImportantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import java.util.stream.IntStream;
 @Service
 public class ImportantService implements ImportantCrudService<ImportantEntity, Long> {
 
-    private ImportantRepository importantRepository;
+    private final ImportantRepository importantRepository;
 
     @Autowired
     public ImportantService(ImportantRepository importantRepository) {
@@ -22,25 +23,26 @@ public class ImportantService implements ImportantCrudService<ImportantEntity, L
     }
 
     @Override
-    public Optional<ImportantEntity> findById(String userProfileId, Long id) {
-        return importantRepository.findById(userProfileId, id);
+    public Optional<ImportantEntity> findById(UserEntity userEntity, Long id) {
+        return importantRepository.findById(userEntity, id);
     }
 
     @Override
-    public Optional<ImportantEntity> findByDate(String userProfileId, int year, int month, int day) {
-        return importantRepository.findByDate(userProfileId, day, month, year);
+    public Optional<ImportantEntity> findByDate(UserEntity userEntity, int year, int month, int day) {
+        return importantRepository.findByDate(userEntity, day, month, year);
     }
 
     @Override
-    public ImportantEntity save(String userProfileId, ImportantEntity importantEntity) {
-        return importantRepository.save(ImportantEntity.newImportantRecord(userProfileId, importantEntity));
+    public ImportantEntity save(ImportantEntity importantEntity) {
+        return importantRepository.save(importantEntity);
     }
 
     @Override
-    public ImportantEntity update(String userProfileId, Long id, ImportantEntity importantEntity) {
+    public ImportantEntity update(UserEntity userEntity, Long id, ImportantEntity importantEntity) {
 
-        Optional<ImportantEntity> optionalImportantEntity = findById(userProfileId, id);
+        Optional<ImportantEntity> optionalImportantEntity = findById(userEntity, id);
         if (optionalImportantEntity.isPresent()) {
+            importantEntity.setUserEntity(userEntity);
             return importantRepository.save(importantEntity);
         } else {
             throw new NotFoundException("Important record not found");
@@ -48,8 +50,8 @@ public class ImportantService implements ImportantCrudService<ImportantEntity, L
     }
 
     @Override
-    public void delete(String userProfileId, Long id) {
-        importantRepository.findById(userProfileId, id).ifPresent(important -> {
+    public void delete(UserEntity userEntity, Long id) {
+        importantRepository.findById(userEntity, id).ifPresent(important -> {
             importantRepository.delete(important);
         });
     }

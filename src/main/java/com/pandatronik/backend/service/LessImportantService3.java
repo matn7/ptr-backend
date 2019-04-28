@@ -1,6 +1,7 @@
 package com.pandatronik.backend.service;
 
 import com.google.common.collect.Lists;
+import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.LessImportantEntity2;
 import com.pandatronik.backend.persistence.domain.core.LessImportantEntity3;
 import com.pandatronik.backend.persistence.repositories.LessImportantRepository3;
@@ -23,25 +24,26 @@ public class LessImportantService3 implements ImportantCrudService<LessImportant
     }
 
     @Override
-    public Optional<LessImportantEntity3> findById(String userProfileId, Long id) {
-        return lessImportantRepository3.findById(userProfileId, id);
+    public Optional<LessImportantEntity3> findById(UserEntity userEntity, Long id) {
+        return lessImportantRepository3.findById(userEntity, id);
     }
 
     @Override
-    public Optional<LessImportantEntity3> findByDate(String userProfileId, int year, int month, int day) {
-        return lessImportantRepository3.findByDate(userProfileId, day, month, year);
+    public Optional<LessImportantEntity3> findByDate(UserEntity userEntity, int year, int month, int day) {
+        return lessImportantRepository3.findByDate(userEntity, day, month, year);
     }
 
     @Override
-    public LessImportantEntity3 save(String userProfileId, LessImportantEntity3 lessImportantEntity3) {
-        return lessImportantRepository3.save(LessImportantEntity3.newLessImportantRecord(userProfileId, lessImportantEntity3));
+    public LessImportantEntity3 save(LessImportantEntity3 lessImportantEntity3) {
+        return lessImportantRepository3.save(lessImportantEntity3);
     }
 
     @Override
-    public LessImportantEntity3 update(String userProfileId, Long id, LessImportantEntity3 lessImportantEntity3) {
+    public LessImportantEntity3 update(UserEntity userEntity, Long id, LessImportantEntity3 lessImportantEntity3) {
 
-        Optional<LessImportantEntity3> optionalLessImportantEntity = findById(userProfileId, id);
+        Optional<LessImportantEntity3> optionalLessImportantEntity = findById(userEntity, id);
         if (optionalLessImportantEntity.isPresent()) {
+            lessImportantEntity3.setUserEntity(userEntity);
             return lessImportantRepository3.save(lessImportantEntity3);
         } else {
             throw new NotFoundException("Less important record not found");
@@ -49,8 +51,8 @@ public class LessImportantService3 implements ImportantCrudService<LessImportant
     }
 
     @Override
-    public void delete(String userProfileId, Long id) {
-        lessImportantRepository3.findById(userProfileId, id).ifPresent(important -> {
+    public void delete(UserEntity userEntity, Long id) {
+        lessImportantRepository3.findById(userEntity, id).ifPresent(important -> {
             lessImportantRepository3.delete(important);
         });
     }

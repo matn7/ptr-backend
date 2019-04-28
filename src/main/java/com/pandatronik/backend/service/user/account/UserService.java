@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -128,5 +129,9 @@ public class UserService {
 		Preconditions.checkNotNull(email, "email must not be null");
     	userRepository.updateUserEmail(userId, email);
     	LOG.debug("Email updated successfully for user id {} ", userId);	
+    }
+
+    public Optional<UserEntity> findById(Long userId) {
+		return userRepository.findById(userId);
     }
 }
