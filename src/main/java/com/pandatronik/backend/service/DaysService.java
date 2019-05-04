@@ -56,42 +56,22 @@ public class DaysService implements DaysCrudService<DaysEntity, Long> {
     }
 
     @Override
-    public List<Integer> findByMonthAndYear(String userProfileId, int month, int year) {
-        return daysRepository.findByMonthAndYear(userProfileId, month, year);
+    public List<Integer> findByYearData(UserEntity userEntity, int year) {
+        return  daysRepository.findByYearData(userEntity, year);
     }
 
     @Override
-    public Integer findByYearAndRateDay(String userProfileId, int year, int rateDayEnum) {
-        return  daysRepository.findByYearAndRateDay(userProfileId, year, rateDayEnum);
+    public List<Object[]> findAverageByYearData(UserEntity userEntity, int year) {
+        return  daysRepository.findAverageByYearData(userEntity, year);
     }
 
     @Override
-    public List<Integer> findByYearData(String userProfileId, int year) {
-        return  daysRepository.findByYearData(userProfileId, year);
+    public List<Object[]> findByMonthAndYearData(UserEntity userEntity, int month, int year) {
+        return daysRepository.findByMonthAndYearData(userEntity, month, year);
     }
 
     @Override
-    public List<Object[]> findAverageByYearData(String userProfileId, int year) {
-        return  daysRepository.findAverageByYearData(userProfileId, year);
-    }
-
-    @Override
-    public List<Object[]> findByMonthAndYearData(String name, int month, int year) {
-        return daysRepository.findByMonthAndYearData(name, month, year);
-    }
-
-    @Override
-    public List<Double> findAverageByYear(String userProfileId, int year) {
-        List<Double> monthAvg = Lists.newArrayList();
-        IntStream.rangeClosed(1, 12).forEach(mon -> {
-            monthAvg.add(daysRepository.findAverageByYear(userProfileId, mon, year));
-        });
-        return monthAvg;
-    }
-
-
-    @Override
-    public Optional<List<Integer>> findByMonthAndYearDailyData(String name, int year, int month) {
-        return daysRepository.findByMonthAndYearDailyData(name, year, month);
+    public Optional<List<Integer>> findByMonthAndYearDailyData(UserEntity userEntity, int year, int month) {
+        return daysRepository.findByMonthAndYearDailyData(userEntity, year, month);
     }
 }

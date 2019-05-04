@@ -57,12 +57,12 @@ public class ImportantService implements ImportantCrudService<ImportantEntity, L
     }
 
     @Override
-    public List<Object[]> findCountByYearStat(String userProfileId, int year) {
-        return importantRepository.findCountByYearStat(userProfileId, year);
+    public List<Object[]> findCountByYearStat(UserEntity userEntity, int year) {
+        return importantRepository.findCountByYearStat(userEntity, year);
     }
 
     @Override
-    public List<Object[]> findAverageByYearStat(String userProfileId, int year) {
-        return importantRepository.findAverageByYearStat(userProfileId, year);
+    public List<Object[]> findAverageByYearStat(UserEntity userEntity, int year) {
+        return importantRepository.findAverageByYearStat(userEntity, year);
     }
 }

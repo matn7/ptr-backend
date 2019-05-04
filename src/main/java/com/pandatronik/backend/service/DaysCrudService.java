@@ -1,22 +1,18 @@
 package com.pandatronik.backend.service;
 
+import com.pandatronik.backend.persistence.domain.UserEntity;
+
 import java.util.List;
 import java.util.Optional;
 
 public interface DaysCrudService<T, ID> extends CrudService<T, ID> {
 
-    List<Integer> findByMonthAndYear(String name, int month, int year);
+    Optional<List<Integer>> findByMonthAndYearDailyData(UserEntity userEntity, int year, int month);
 
-    Integer findByYearAndRateDay(String name, int year, int rate);
+    List<Integer> findByYearData(UserEntity userEntity, int year);
 
-    List<Double> findAverageByYear(String name, int year);
+    List<Object[]> findAverageByYearData(UserEntity userEntity, int year);
 
-    Optional<List<Integer>> findByMonthAndYearDailyData(String name, int year, int month);
-
-    List<Integer> findByYearData(String userProfileId, int year);
-
-    List<Object[]> findAverageByYearData(String userProfileId, int year);
-
-    List<Object[]> findByMonthAndYearData(String name, int month, int year);
+    List<Object[]> findByMonthAndYearData(UserEntity userEntity, int month, int year);
 
 }

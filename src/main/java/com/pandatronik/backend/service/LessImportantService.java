@@ -58,12 +58,12 @@ public class LessImportantService implements ImportantCrudService<LessImportantE
     }
 
     @Override
-    public List<Object[]> findCountByYearStat(String userProfileId, int year) {
-        return lessImportantRepository.findCountByYearStat(userProfileId, year);
+    public List<Object[]> findCountByYearStat(UserEntity userEntity, int year) {
+        return lessImportantRepository.findCountByYearStat(userEntity, year);
     }
 
     @Override
-    public List<Object[]> findAverageByYearStat(String userProfileId, int year) {
-        return lessImportantRepository.findAverageByYearStat(userProfileId, year);
+    public List<Object[]> findAverageByYearStat(UserEntity userEntity, int year) {
+        return lessImportantRepository.findAverageByYearStat(userEntity, year);
     }
 }

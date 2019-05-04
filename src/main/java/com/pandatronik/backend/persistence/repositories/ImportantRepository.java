@@ -26,12 +26,12 @@ public interface ImportantRepository extends CrudRepository<ImportantEntity, Lon
                                                      @Param("userProfileId") String userProfileId, @Param("id") long id);
     // statistics
     @Query("SELECT made, COUNT(made) FROM ImportantEntity i WHERE YEAR(i.startDate) = :year " +
-            "AND i.userProfileId = :userProfileId GROUP BY i.made")
-    List<Object[]> findCountByYearStat(@Param("userProfileId") String userProfileId, @Param("year") int year);
+            "AND i.userEntity =:userEntity GROUP BY i.made")
+    List<Object[]> findCountByYearStat(@Param("userEntity") UserEntity userEntity, @Param("year") int year);
 
     @Query("SELECT MONTH(i.startDate), AVG(made) FROM ImportantEntity i WHERE YEAR(i.startDate) = :year " +
-            "AND i.userProfileId = :userProfileId GROUP BY MONTH(i.startDate)")
-    List<Object[]> findAverageByYearStat(@Param("userProfileId") String userProfileId, @Param("year") int year);
+            "AND i.userEntity =:userEntity GROUP BY MONTH(i.startDate)")
+    List<Object[]> findAverageByYearStat(@Param("userEntity") UserEntity userEntity, @Param("year") int year);
 
 
 }
