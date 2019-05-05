@@ -21,10 +21,6 @@ public interface ImportantRepository3 extends CrudRepository<ImportantEntity3, L
     Optional<ImportantEntity3> findByDate(@Param("userEntity") UserEntity userEntity, @Param("day") int day,
         @Param("month") int month, @Param("year") int year);
 
-    @Query("UPDATE ImportantEntity3 ie SET ie.title = :title, ie.body = :body, ie.made = :made WHERE ie.id = :id AND ie.userProfileId = :userProfileId")
-    Optional<ImportantEntity3> update(@Param("title") String title, @Param("body") String body, @Param("made") int made,
-                                                      @Param("userProfileId") String userProfileId, @Param("id") long id);
-
     // statistics
     @Query("SELECT made, COUNT(made) FROM ImportantEntity3 i WHERE YEAR(i.startDate) = :year " +
             "AND i.userEntity =:userEntity GROUP BY i.made")

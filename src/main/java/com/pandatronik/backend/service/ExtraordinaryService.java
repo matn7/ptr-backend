@@ -20,8 +20,8 @@ public class ExtraordinaryService implements ExtraordinaryCrudService<Extraordin
     }
 
     @Override
-    public Iterable<ExtraordinaryEntity> findAll(String username) {
-        Iterable<ExtraordinaryEntity> all = extraordinaryRepository.findAllByUserProfileId(username);
+    public Iterable<ExtraordinaryEntity> findAll(UserEntity userEntity) {
+        Iterable<ExtraordinaryEntity> all = extraordinaryRepository.findAllByUserEntity(userEntity);
         return all;
     }
 

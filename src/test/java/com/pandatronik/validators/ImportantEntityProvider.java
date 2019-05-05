@@ -13,8 +13,7 @@ public class ImportantEntityProvider {
                 .withBody("Super")
                 .withMade(75)
                 .withPostedOn(LocalDateTime.now())
-                .withStartDate(LocalDate.now())
-                .withUserProfileId(leftPad("p", 30, "p"));
+                .withStartDate(LocalDate.now());
 
         return importantEntityBuilder;
     }

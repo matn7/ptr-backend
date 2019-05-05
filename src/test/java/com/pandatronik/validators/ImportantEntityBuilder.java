@@ -37,11 +37,6 @@ public class ImportantEntityBuilder {
         return this;
     }
 
-    public ImportantEntityBuilder withUserProfileId(String userProfileId) {
-        importantEntity.setUserProfileId(userProfileId);
-        return this;
-    }
-
 
     public ImportantEntity build() {
         return importantEntity;

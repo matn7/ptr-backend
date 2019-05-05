@@ -139,13 +139,6 @@ public class LessImportantResource {
                 .headers(HeaderUtil.createAlert("A record with id: " + id + " has been deleted", String.valueOf(id))).build();
     }
 
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Void> delete(@PathVariable("userProfileId") String userProfileId,
-//                                                @PathVariable("id") Long id) {
-//        lessImportantService.delete(userProfileId, id);
-//        return ResponseEntity.ok()
-//                .headers(HeaderUtil.createAlert("A record with id: " + id + " has been deleted", String.valueOf(id))).build();
-//    }
 }
 
 

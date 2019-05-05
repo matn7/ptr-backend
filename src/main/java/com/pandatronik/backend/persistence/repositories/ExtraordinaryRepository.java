@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface ExtraordinaryRepository extends CrudRepository<ExtraordinaryEntity, Long> {
 
-    Iterable<ExtraordinaryEntity> findAllByUserProfileId(String userProfileId);
+    Iterable<ExtraordinaryEntity> findAllByUserEntity(UserEntity userEntity);
 
     @Query("SELECT i FROM ExtraordinaryEntity i WHERE i.userEntity =:userEntity AND i.id = :id")
     Optional<ExtraordinaryEntity> findById(@Param("userEntity") UserEntity userEntity, @Param("id") Long id);

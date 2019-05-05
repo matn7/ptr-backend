@@ -57,11 +57,6 @@ public class LessImportantEntity implements Serializable {
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDate startDate;
 
-    @NotNull
-    @Size(min = 3, max = 30)
-    @Column(name = "user_profile_id")
-    private String userProfileId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private UserEntity userEntity;
@@ -75,15 +70,13 @@ public class LessImportantEntity implements Serializable {
             @JsonProperty("body") String body,
             @JsonProperty("made") Integer made,
             @JsonProperty("postedOn") LocalDateTime postedOn,
-            @JsonProperty("startDate") LocalDate startDate,
-            @JsonProperty("userProfileId") String userProfileId) {
+            @JsonProperty("startDate") LocalDate startDate) {
         this.id = id;
         this.title = title;
         this.body = body;
         this.made = made;
         this.postedOn = postedOn;
         this.startDate = startDate;
-        this.userProfileId = userProfileId;
     }
 
     public LessImportantEntity(
@@ -91,25 +84,18 @@ public class LessImportantEntity implements Serializable {
             @JsonProperty("body") String body,
             @JsonProperty("made") Integer made,
             @JsonProperty("postedOn") LocalDateTime postedOn,
-            @JsonProperty("startDate") LocalDate startDate,
-            @JsonProperty("userProfileId") String userProfileId) {
+            @JsonProperty("startDate") LocalDate startDate) {
         this.title = title;
         this.body = body;
         this.made = made;
         this.postedOn = postedOn;
         this.startDate = startDate;
-        this.userProfileId = userProfileId;
     }
 
     public static LessImportantEntity newLessImportantRecord(LessImportantEntity lessImportantEntity) {
         return new LessImportantEntity(lessImportantEntity.getId(), lessImportantEntity.getTitle(),
                 lessImportantEntity.getBody(), lessImportantEntity.getMade(),
-                lessImportantEntity.getPostedOn(), lessImportantEntity.getStartDate(), lessImportantEntity.getUserProfileId());
-    }
-
-    public static LessImportantEntity newLessImportantRecord(String userProfileId, LessImportantEntity lessImportantEntity) {
-        return new LessImportantEntity(lessImportantEntity.getTitle(), lessImportantEntity.getBody(), lessImportantEntity.getMade(),
-                lessImportantEntity.getPostedOn(), lessImportantEntity.getStartDate(), userProfileId);
+                lessImportantEntity.getPostedOn(), lessImportantEntity.getStartDate());
     }
 
     public Long getId() {
@@ -137,11 +123,6 @@ public class LessImportantEntity implements Serializable {
 
     public LocalDate getStartDate() {
         return startDate;
-    }
-
-    @NotNull
-    public String getUserProfileId() {
-        return userProfileId;
     }
 
     public void setPostedOn(LocalDateTime postedOn) {

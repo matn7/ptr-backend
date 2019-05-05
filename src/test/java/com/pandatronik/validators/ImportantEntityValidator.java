@@ -142,7 +142,7 @@ public class ImportantEntityValidator {
 
     @Test
     public void shouldValidateNullUserProfileId() {
-        ImportantEntity entity = ImportantEntityProvider.getValidImportantEntity().withUserProfileId(null).build();
+        ImportantEntity entity = ImportantEntityProvider.getValidImportantEntity().build();
 
         Set<ConstraintViolation<ImportantEntity>> violations = validator.validate(entity);
 
@@ -154,7 +154,7 @@ public class ImportantEntityValidator {
     @Test
     @Ignore("Fix when make sure upid must have 30 chars")
     public void shouldValidateToLongUserProfileId() {
-        ImportantEntity entity = ImportantEntityProvider.getValidImportantEntity().withUserProfileId(leftPad("a", 31)).build();
+        ImportantEntity entity = ImportantEntityProvider.getValidImportantEntity().build();
 
         Set<ConstraintViolation<ImportantEntity>> violations = validator.validate(entity);
 
@@ -166,7 +166,7 @@ public class ImportantEntityValidator {
     @Test
     @Ignore
     public void shouldValidateToShortUserProfileId() {
-        ImportantEntity entity = ImportantEntityProvider.getValidImportantEntity().withUserProfileId(leftPad("a", 29)).build();
+        ImportantEntity entity = ImportantEntityProvider.getValidImportantEntity().build();
 
         Set<ConstraintViolation<ImportantEntity>> violations = validator.validate(entity);
 
@@ -177,7 +177,7 @@ public class ImportantEntityValidator {
 
     @Test
     public void shouldValidateBlankUserProfileId() {
-        ImportantEntity entity = ImportantEntityProvider.getValidImportantEntity().withUserProfileId(leftPad(" ", 30)).build();
+        ImportantEntity entity = ImportantEntityProvider.getValidImportantEntity().build();
 
         Set<ConstraintViolation<ImportantEntity>> violations = validator.validate(entity);
 

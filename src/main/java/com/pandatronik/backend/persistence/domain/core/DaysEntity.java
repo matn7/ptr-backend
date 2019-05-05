@@ -53,11 +53,6 @@ public class DaysEntity implements Serializable {
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDate startDate;
 
-    @NotNull
-    @Size(min = 3, max = 30)
-    @Column(name = "user_profile_id")
-    private String userProfileId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private UserEntity userEntity;
@@ -70,36 +65,27 @@ public class DaysEntity implements Serializable {
             @JsonProperty("body") String body,
             @JsonProperty("rateDay") Integer rateDay,
             @JsonProperty("postedOn") LocalDateTime postedOn,
-            @JsonProperty("startDate") LocalDate startDate,
-            @JsonProperty("userProfileId") String userProfileId) {
+            @JsonProperty("startDate") LocalDate startDate) {
         this.id = id;
         this.body = body;
         this.rateDay = rateDay;
         this.postedOn = postedOn;
         this.startDate = startDate;
-        this.userProfileId = userProfileId;
     }
 
     public DaysEntity(
             @JsonProperty("body") String body,
             @JsonProperty("rateDay") Integer rateDay,
             @JsonProperty("postedOn") LocalDateTime postedOn,
-            @JsonProperty("startDate") LocalDate startDate,
-            @JsonProperty("userProfileId") String userProfileId) {
+            @JsonProperty("startDate") LocalDate startDate) {
         this.body = body;
         this.rateDay = rateDay;
         this.postedOn = postedOn;
         this.startDate = startDate;
-        this.userProfileId = userProfileId;
     }
 
     public static DaysEntity newDay(DaysEntity daysEntity) {
-        return new DaysEntity(daysEntity.getBody(), daysEntity.getRateDay(), daysEntity.getPostedOn(), daysEntity.getStartDate(),
-                daysEntity.getUserProfileId());
-    }
-
-    public static DaysEntity newDay(String userProfileId, DaysEntity daysEntity) {
-        return new DaysEntity(daysEntity.getBody(), daysEntity.getRateDay(), daysEntity.getPostedOn(), daysEntity.getStartDate(), userProfileId);
+        return new DaysEntity(daysEntity.getBody(), daysEntity.getRateDay(), daysEntity.getPostedOn(), daysEntity.getStartDate());
     }
 
     public Long getId() {
@@ -120,14 +106,6 @@ public class DaysEntity implements Serializable {
 
     public LocalDate getStartDate() {
         return startDate;
-    }
-
-    public String getUserProfileId() {
-        return userProfileId;
-    }
-
-    public void setPostedOn(LocalDateTime postedOn) {
-        this.postedOn = postedOn;
     }
 
     public void setStartDate(LocalDate startDate) {

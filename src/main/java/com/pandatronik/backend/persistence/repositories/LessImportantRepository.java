@@ -21,10 +21,6 @@ public interface LessImportantRepository extends CrudRepository<LessImportantEnt
     Optional<LessImportantEntity> findByDate(@Param("userEntity") UserEntity userEntity, @Param("day") int day,
         @Param("month") int month, @Param("year") int year);
 
-    @Query("UPDATE LessImportantEntity ie SET ie.title = :title, ie.body = :body, ie.made = :made WHERE ie.id = :id AND ie.userProfileId = :userProfileId")
-    Optional<LessImportantEntity> update(@Param("title") String title, @Param("body") String body, @Param("made") int made,
-        @Param("userProfileId") String userProfileId, @Param("id") long id);
-
     // statistics
     @Query("SELECT made, COUNT(made) FROM LessImportantEntity i WHERE YEAR(i.startDate) = :year " +
             "AND i.userEntity = :userEntity GROUP BY i.made")

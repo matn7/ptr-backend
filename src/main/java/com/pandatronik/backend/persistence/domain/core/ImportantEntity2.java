@@ -57,11 +57,6 @@ public class ImportantEntity2 implements Serializable {
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDate startDate;
 
-    @NotNull
-    @Size(min = 3, max = 30)
-    @Column(name = "user_profile_id")
-    private String userProfileId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private UserEntity userEntity;
@@ -75,15 +70,13 @@ public class ImportantEntity2 implements Serializable {
             @JsonProperty("body") String body,
             @JsonProperty("made") Integer made,
             @JsonProperty("postedOn") LocalDateTime postedOn,
-            @JsonProperty("startDate") LocalDate startDate,
-            @JsonProperty("userProfileId") String userProfileId) {
+            @JsonProperty("startDate") LocalDate startDate) {
         this.id = id;
         this.title = title;
         this.body = body;
         this.made = made;
         this.postedOn = postedOn;
         this.startDate = startDate;
-        this.userProfileId = userProfileId;
     }
 
     public ImportantEntity2(
@@ -91,24 +84,17 @@ public class ImportantEntity2 implements Serializable {
             @JsonProperty("body") String body,
             @JsonProperty("made") Integer made,
             @JsonProperty("postedOn") LocalDateTime postedOn,
-            @JsonProperty("startDate") LocalDate startDate,
-            @JsonProperty("userProfileId") String userProfileId) {
+            @JsonProperty("startDate") LocalDate startDate) {
         this.title = title;
         this.body = body;
         this.made = made;
         this.postedOn = postedOn;
         this.startDate = startDate;
-        this.userProfileId = userProfileId;
     }
 
     public static ImportantEntity2 newImportantRecord(ImportantEntity2 importantEntity) {
         return new ImportantEntity2(importantEntity.getId(), importantEntity.getTitle(), importantEntity.getBody(), importantEntity.getMade(),
-                importantEntity.getPostedOn(), importantEntity.getStartDate(), importantEntity.getUserProfileId());
-    }
-
-    public static ImportantEntity2 newImportantRecord(String userProfileId, ImportantEntity2 importantEntity) {
-        return new ImportantEntity2(importantEntity.getTitle(), importantEntity.getBody(), importantEntity.getMade(),
-                importantEntity.getPostedOn(), importantEntity.getStartDate(), userProfileId);
+                importantEntity.getPostedOn(), importantEntity.getStartDate());
     }
 
     public Long getId() {
@@ -136,11 +122,6 @@ public class ImportantEntity2 implements Serializable {
 
     public LocalDate getStartDate() {
         return startDate;
-    }
-
-    @NotNull
-    public String getUserProfileId() {
-        return userProfileId;
     }
 
     public void setPostedOn(LocalDateTime postedOn) {

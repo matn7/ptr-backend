@@ -1,5 +1,6 @@
 package com.pandatronik.backend.service;
 
+import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.repositories.ImportantIndexRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class StatisticsImportantIndexService implements StatisticsIndexService {
     }
 
     @Override
-    public Optional<List<Object[]>> findIndexData(String name, int year, int month) {
-        return importantIndexRepository.findIndexData(name, year, month);
+    public Optional<List<Object[]>> findIndexData(UserEntity userEntity, int year, int month) {
+        return importantIndexRepository.findIndexData(userEntity, year, month);
     }
 }

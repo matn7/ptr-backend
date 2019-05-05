@@ -41,8 +41,15 @@ public class ExtraordinaryResource {
     }
 
     @GetMapping("/all")
-    public Iterable<ExtraordinaryEntity> findAll(@PathVariable("userProfileId") String userProfileId) {
-        Iterable<ExtraordinaryEntity> all = extraordinaryService.findAll(userProfileId);
+    public Iterable<ExtraordinaryEntity> findAll(@PathVariable("username") String username) {
+
+        UserEntity userEntity = userService.findByUserName(username);
+
+        if (isNull(userEntity)) {
+            return null;
+        }
+
+        Iterable<ExtraordinaryEntity> all = extraordinaryService.findAll(userEntity);
         return all;
     }
 

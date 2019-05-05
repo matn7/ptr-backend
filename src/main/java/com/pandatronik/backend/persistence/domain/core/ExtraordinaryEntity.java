@@ -52,11 +52,6 @@ public class ExtraordinaryEntity implements Serializable {
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDate startDate;
 
-    @NotNull
-    @Size(min = 3, max = 30)
-    @Column(name = "user_profile_id")
-    private String userProfileId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private UserEntity userEntity;
@@ -69,39 +64,30 @@ public class ExtraordinaryEntity implements Serializable {
             @JsonProperty("title") String title,
             @JsonProperty("body") String body,
             @JsonProperty("postedOn") LocalDateTime postedOn,
-            @JsonProperty("startDate") LocalDate startDate,
-            @JsonProperty("userProfileId") String userProfileId) {
+            @JsonProperty("startDate") LocalDate startDate) {
         this.id = id;
         this.title = title;
         this.body = body;
         this.postedOn = postedOn;
         this.startDate = startDate;
-        this.userProfileId = userProfileId;
     }
 
     public ExtraordinaryEntity(
             @JsonProperty("title") String title,
             @JsonProperty("body") String body,
             @JsonProperty("postedOn") LocalDateTime postedOn,
-            @JsonProperty("startDate") LocalDate startDate,
-            @JsonProperty("userProfileId") String userProfileId) {
+            @JsonProperty("startDate") LocalDate startDate) {
         this.title = title;
         this.body = body;
         this.postedOn = postedOn;
         this.startDate = startDate;
-        this.userProfileId = userProfileId;
     }
 
     public static ExtraordinaryEntity newExtraordinary(ExtraordinaryEntity extraordinaryEntity) {
         return new ExtraordinaryEntity(extraordinaryEntity.getTitle(),
-                extraordinaryEntity.getBody(), extraordinaryEntity.getPostedOn(), extraordinaryEntity.getStartDate(),
-                extraordinaryEntity.getUserProfileId());
+                extraordinaryEntity.getBody(), extraordinaryEntity.getPostedOn(), extraordinaryEntity.getStartDate());
     }
 
-    public static ExtraordinaryEntity newExtraordinary(String userProfileId, ExtraordinaryEntity extraordinaryEntity) {
-        return new ExtraordinaryEntity(extraordinaryEntity.getTitle(),
-                extraordinaryEntity.getBody(), extraordinaryEntity.getPostedOn(), extraordinaryEntity.getStartDate(), userProfileId);
-    }
 
     public Long getId() {
         return id;
@@ -117,10 +103,6 @@ public class ExtraordinaryEntity implements Serializable {
 
     public LocalDate getStartDate() {
         return startDate;
-    }
-
-    public String getUserProfileId() {
-        return userProfileId;
     }
 
     public void setPostedOn(LocalDateTime postedOn) {

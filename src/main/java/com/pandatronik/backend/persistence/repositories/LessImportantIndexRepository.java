@@ -1,5 +1,6 @@
 package com.pandatronik.backend.persistence.repositories;
 
+import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.CalendarEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -15,14 +16,14 @@ public interface LessImportantIndexRepository extends CrudRepository<CalendarEnt
 	@Query("SELECT r.id, r.title, i.id, i.made, i.title, "
 			+ "	i2.id, i2.made, i2.title, i3.id, i3.made, i3.title, d.id, d.rateDay"
 			+ " FROM CalendarEntity c"
-			+ " LEFT JOIN c.extraordinary r WITH r.userProfileId = :name"
-			+ " LEFT JOIN c.lessImportant i WITH i.userProfileId = :name"
-			+ " LEFT JOIN c.lessImportant2 i2 WITH i2.userProfileId = :name"
-			+ " LEFT JOIN c.lessImportant3 i3 WITH i3.userProfileId = :name"
-			+ " LEFT JOIN c.days d WITH d.userProfileId = :name"
+			+ " LEFT JOIN c.extraordinary r WITH r.userEntity =:userEntity"
+			+ " LEFT JOIN c.lessImportant i WITH i.userEntity =:userEntity"
+			+ " LEFT JOIN c.lessImportant2 i2 WITH i2.userEntity =:userEntity"
+			+ " LEFT JOIN c.lessImportant3 i3 WITH i3.userEntity =:userEntity"
+			+ " LEFT JOIN c.days d WITH d.userEntity =:userEntity"
 			+ " WHERE YEAR(c.calendarDate) = :year AND MONTH(c.calendarDate) = :month"
 			+ " ORDER BY c.calendarDate")
-	Optional<List<Object[]>> findIndexData(@Param("name") String name,
+	Optional<List<Object[]>> findIndexData(@Param("userEntity") UserEntity userEntity,
 		@Param("year") int year, @Param("month") int month);
 
 }

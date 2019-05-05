@@ -45,7 +45,8 @@ public class ImportantResource {
         UserEntity userEntity = userService.findByUserName(username);
 
         if (isNull(userEntity)) {
-            return null;
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorMessage("Record not found"));
         }
 
         Optional<ImportantEntity> importantById = importantService.findById(userEntity, id);
