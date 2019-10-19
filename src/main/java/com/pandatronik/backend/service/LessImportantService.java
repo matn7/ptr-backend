@@ -1,27 +1,22 @@
 package com.pandatronik.backend.service;
 
-import com.google.common.collect.Lists;
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.LessImportantEntity;
-import com.pandatronik.backend.persistence.domain.core.LessImportantEntity2;
 import com.pandatronik.backend.persistence.repositories.LessImportantRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
-
 import javax.ws.rs.NotFoundException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.IntStream;
 
 @Service
+@AllArgsConstructor
 public class LessImportantService implements ImportantCrudService<LessImportantEntity, Long>  {
 
-    private LessImportantRepository lessImportantRepository;
-
-    @Autowired
-    public LessImportantService(LessImportantRepository lessImportantRepository) {
-        this.lessImportantRepository = lessImportantRepository;
-    }
+    private final LessImportantRepository lessImportantRepository;
+    private final MessageSource messageSource;
 
     @Override
     public Optional<LessImportantEntity> findById(UserEntity userEntity, Long id) {
@@ -46,7 +41,8 @@ public class LessImportantService implements ImportantCrudService<LessImportantE
             lessImportantEntity.setUserEntity(userEntity);
             return lessImportantRepository.save(lessImportantEntity);
         } else {
-            throw new NotFoundException("Less important record not found");
+            throw new NotFoundException(messageSource.getMessage("not.important.not.found.message", null
+                    , LocaleContextHolder.getLocale()));
         }
     }
 

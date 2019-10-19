@@ -1,6 +1,7 @@
 package com.pandatronik.web.controllers;
 
 public class ErrorMessage {
+
     String errorMessage;
 
     public ErrorMessage(String errorMessage) {

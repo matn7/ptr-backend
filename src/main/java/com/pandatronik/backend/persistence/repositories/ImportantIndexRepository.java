@@ -2,11 +2,13 @@ package com.pandatronik.backend.persistence.repositories;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.CalendarEntity;
+import com.pandatronik.backend.persistence.domain.core.ImportantEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,4 +27,9 @@ public interface ImportantIndexRepository extends CrudRepository<CalendarEntity,
 			+ " ORDER BY c.calendarDate")
 	Optional<List<Object[]>> findIndexData(@Param("userEntity") UserEntity userEntity,
 		@Param("year") int year, @Param("month") int month);
+
+//	@Query("SELECT made FROM ImportantEntity i WHERE i.startDate >= :startDate and i.startDate <= :endDate"
+//			+ " AND i.userEntity = :userEntity")
+//	List<List<Object[]>> findCountMadeByStartEnd(@Param("name") String name, @Param("startDate") Calendar startDate,
+//                                                  @Param("endDate") Calendar endDate);
 }

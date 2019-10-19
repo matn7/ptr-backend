@@ -2,23 +2,22 @@ package com.pandatronik.web.controllers;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.LessImportantEntity;
-import com.pandatronik.backend.persistence.domain.core.LessImportantEntity2;
 import com.pandatronik.backend.service.LessImportantService;
 import com.pandatronik.backend.service.user.account.UserService;
+import com.pandatronik.exceptions.UserNotFoundException;
 import com.pandatronik.utils.HeaderUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
-
-import static com.pandatronik.utils.ApplicationUtils.API_VERSION;
 import static java.util.Objects.isNull;
 
 @Validated
@@ -28,14 +27,14 @@ import static java.util.Objects.isNull;
 public class LessImportantResource {
 
     private final LessImportantService lessImportantService;
-
     private final UserService userService;
-
+    private final MessageSource messageSource;
 
     @Autowired
-    public LessImportantResource(LessImportantService lessImportantService, UserService userService) {
+    public LessImportantResource(LessImportantService lessImportantService, UserService userService, MessageSource messageSource) {
         this.lessImportantService = lessImportantService;
         this.userService = userService;
+        this.messageSource = messageSource;
     }
 
     @GetMapping("/{id}")
@@ -44,9 +43,7 @@ public class LessImportantResource {
 
         UserEntity userEntity = userService.findByUserName(username);
 
-        if (isNull(userEntity)) {
-            return null;
-        }
+        checkUser(userEntity);
 
         Optional<LessImportantEntity> lessImportantById = lessImportantService.findById(userEntity, id);
 
@@ -54,7 +51,8 @@ public class LessImportantResource {
             return ResponseEntity.ok(lessImportantById.get());
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorMessage("Record not found"));
+                    .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
+                            , LocaleContextHolder.getLocale())));
         }
     }
 
@@ -64,9 +62,7 @@ public class LessImportantResource {
 
         UserEntity userEntity = userService.findByUserName(username);
 
-        if (isNull(userEntity)) {
-            return null;
-        }
+        checkUser(userEntity);
 
         Optional<LessImportantEntity> lessImportantByData = lessImportantService.findByDate(userEntity, year, month, day);
 
@@ -74,7 +70,8 @@ public class LessImportantResource {
             return ResponseEntity.ok(lessImportantByData.get());
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorMessage("Record not found"));
+                    .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
+                            , LocaleContextHolder.getLocale())));
         }
     }
 
@@ -84,9 +81,7 @@ public class LessImportantResource {
 
         UserEntity userEntity = userService.findByUserName(username);
 
-        if (isNull(userEntity)) {
-            return null;
-        }
+        checkUser(userEntity);
 
         lessImportantEntity.setUserEntity(userEntity);
 
@@ -107,9 +102,7 @@ public class LessImportantResource {
 
         UserEntity userEntity = userService.findByUserName(username);
 
-        if (isNull(userEntity)) {
-            return null;
-        }
+        checkUser(userEntity);
 
         LessImportantEntity newLessImportantRecord = lessImportantService.update(userEntity, id, lessImportantEntity);
 
@@ -128,17 +121,19 @@ public class LessImportantResource {
                                        @PathVariable("id") Long id) {
         UserEntity userEntity = userService.findByUserName(username);
 
-        System.out.println("DELETE");
-
-        if (isNull(userEntity)) {
-            return null;
-        }
+        checkUser(userEntity);
 
         lessImportantService.delete(userEntity, id);
         return ResponseEntity.ok()
                 .headers(HeaderUtil.createAlert("A record with id: " + id + " has been deleted", String.valueOf(id))).build();
     }
 
+    private void checkUser(UserEntity userEntity) {
+        if (isNull(userEntity)) {
+            throw new UserNotFoundException(messageSource.getMessage("user.not.found.message", null
+                    , LocaleContextHolder.getLocale()));
+        }
+    }
 }
 
 

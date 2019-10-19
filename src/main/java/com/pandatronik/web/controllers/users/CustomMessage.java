@@ -1,6 +1,7 @@
 package com.pandatronik.web.controllers.users;
 
 public class CustomMessage {
+
     String message;
 
     public CustomMessage(String message) {

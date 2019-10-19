@@ -2,43 +2,33 @@ package com.pandatronik.web.controllers;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.ImportantEntity2;
-import com.pandatronik.backend.persistence.domain.core.LessImportantEntity2;
-import com.pandatronik.backend.service.CrudService;
 import com.pandatronik.backend.service.ImportantService2;
 import com.pandatronik.backend.service.user.account.UserService;
+import com.pandatronik.exceptions.UserNotFoundException;
 import com.pandatronik.utils.HeaderUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import javax.validation.Valid;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Optional;
-
-import static com.pandatronik.utils.ApplicationUtils.API_VERSION;
 import static java.util.Objects.isNull;
 
 @Validated
 @CrossOrigin(origins = "${angular.api.url}")
 @RestController
 @RequestMapping("${api.version}/users/{username}/important/2")
+@AllArgsConstructor
 public class ImportantResource2 {
 
     private final ImportantService2 importantService;
     private final UserService userService;
-
-    @Autowired
-    public ImportantResource2(ImportantService2 importantService, UserService userService) {
-        this.importantService = importantService;
-        this.userService = userService;
-    }
+    private final MessageSource messageSource;
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable("username") String username,
@@ -46,10 +36,7 @@ public class ImportantResource2 {
 
         UserEntity userEntity = userService.findByUserName(username);
 
-        if (isNull(userEntity)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorMessage("User not found"));
-        }
+        checkUser(userEntity);
 
         Optional<ImportantEntity2> importantById = importantService.findById(userEntity, id);
 
@@ -57,7 +44,8 @@ public class ImportantResource2 {
             return ResponseEntity.ok(importantById.get());
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorMessage("Record not found"));
+                    .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
+                            , LocaleContextHolder.getLocale())));
         }
     }
 
@@ -67,10 +55,7 @@ public class ImportantResource2 {
 
         UserEntity userEntity = userService.findByUserName(username);
 
-        if (isNull(userEntity)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorMessage("User not found"));
-        }
+        checkUser(userEntity);
 
         Optional<ImportantEntity2> importantByData = importantService.findByDate(userEntity, year, month, day);
 
@@ -78,7 +63,8 @@ public class ImportantResource2 {
             return ResponseEntity.ok(importantByData.get());
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorMessage("Record not found"));
+                    .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
+                            , LocaleContextHolder.getLocale())));
         }
     }
 
@@ -88,9 +74,7 @@ public class ImportantResource2 {
 
         UserEntity userEntity = userService.findByUserName(username);
 
-        if (isNull(userEntity)) {
-            return null;
-        }
+        checkUser(userEntity);
 
         importantEntity2.setUserEntity(userEntity);
 
@@ -107,13 +91,11 @@ public class ImportantResource2 {
 
     @PutMapping("/{id}")
     public ResponseEntity<ImportantEntity2> update(@PathVariable("username") String username,
-            @PathVariable("id") Long id, @Valid @RequestBody ImportantEntity2 importantEntity2) throws URISyntaxException {
+            @PathVariable("id") Long id, @Valid @RequestBody ImportantEntity2 importantEntity2) {
 
         UserEntity userEntity = userService.findByUserName(username);
 
-        if (isNull(userEntity)) {
-            return null;
-        }
+        checkUser(userEntity);
 
         ImportantEntity2 newImportantRecord = importantService.update(userEntity, id, importantEntity2);
 
@@ -132,13 +114,18 @@ public class ImportantResource2 {
                                        @PathVariable("id") Long id) {
         UserEntity userEntity = userService.findByUserName(username);
 
-        if (isNull(userEntity)) {
-            return null;
-        }
+        checkUser(userEntity);
 
         importantService.delete(userEntity, id);
         return ResponseEntity.ok()
                 .headers(HeaderUtil.createAlert("A record with id: " + id + " has been deleted", String.valueOf(id))).build();
+    }
+
+    private void checkUser(UserEntity userEntity) {
+        if (isNull(userEntity)) {
+            throw new UserNotFoundException(messageSource.getMessage("user.not.found.message", null
+                    , LocaleContextHolder.getLocale()));
+        }
     }
 
 }

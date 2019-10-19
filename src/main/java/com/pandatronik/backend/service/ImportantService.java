@@ -1,26 +1,22 @@
 package com.pandatronik.backend.service;
 
-import com.google.common.collect.Lists;
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.ImportantEntity;
 import com.pandatronik.backend.persistence.repositories.ImportantRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
-
 import javax.ws.rs.NotFoundException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.IntStream;
 
 @Service
+@AllArgsConstructor
 public class ImportantService implements ImportantCrudService<ImportantEntity, Long> {
 
     private final ImportantRepository importantRepository;
-
-    @Autowired
-    public ImportantService(ImportantRepository importantRepository) {
-        this.importantRepository = importantRepository;
-    }
+    private final MessageSource messageSource;
 
     @Override
     public Optional<ImportantEntity> findById(UserEntity userEntity, Long id) {
@@ -45,7 +41,8 @@ public class ImportantService implements ImportantCrudService<ImportantEntity, L
             importantEntity.setUserEntity(userEntity);
             return importantRepository.save(importantEntity);
         } else {
-            throw new NotFoundException("Important record not found");
+            throw new NotFoundException(messageSource.getMessage("important.not.found.message", null
+                    , LocaleContextHolder.getLocale()));
         }
     }
 

@@ -2,11 +2,12 @@ package com.pandatronik.web.controllers;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.ImportantEntity;
-import com.pandatronik.backend.persistence.domain.core.LessImportantEntity2;
 import com.pandatronik.backend.service.ImportantService;
 import com.pandatronik.backend.service.user.account.UserService;
+import com.pandatronik.exceptions.UserNotFoundException;
 import com.pandatronik.utils.HeaderUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -17,26 +18,19 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
-
-import static com.pandatronik.utils.ApplicationUtils.ANGULAR_ORIGIN;
-import static com.pandatronik.utils.ApplicationUtils.API_VERSION;
+import org.springframework.context.MessageSource;
 import static java.util.Objects.isNull;
 
 @Validated
 @CrossOrigin(origins = "${angular.api.url}")
 @RestController
 @RequestMapping("${api.version}/users/{username}/important/1")
+@AllArgsConstructor
 public class ImportantResource {
 
     private final ImportantService importantService;
-
     private final UserService userService;
-
-    @Autowired
-    public ImportantResource(ImportantService importantService, UserService userService) {
-        this.importantService = importantService;
-        this.userService = userService;
-    }
+    private final MessageSource messageSource;
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable("username") String username,
@@ -44,10 +38,7 @@ public class ImportantResource {
 
         UserEntity userEntity = userService.findByUserName(username);
 
-        if (isNull(userEntity)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorMessage("Record not found"));
-        }
+        checkUser(userEntity);
 
         Optional<ImportantEntity> importantById = importantService.findById(userEntity, id);
 
@@ -55,7 +46,8 @@ public class ImportantResource {
             return ResponseEntity.ok(importantById.get());
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorMessage("Record not found"));
+                    .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
+                            , LocaleContextHolder.getLocale())));
         }
     }
 
@@ -65,9 +57,7 @@ public class ImportantResource {
 
         UserEntity userEntity = userService.findByUserName(username);
 
-        if (isNull(userEntity)) {
-            return null;
-        }
+        checkUser(userEntity);
 
         Optional<ImportantEntity> importantByData = importantService.findByDate(userEntity, year, month, day);
 
@@ -75,19 +65,18 @@ public class ImportantResource {
             return ResponseEntity.ok(importantByData.get());
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorMessage("Record not found"));
+                    .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
+                            , LocaleContextHolder.getLocale())));
         }
     }
 
     @PostMapping("")
     public ResponseEntity<ImportantEntity> save(@PathVariable("username") String username,
-            @Valid @RequestBody ImportantEntity importantEntity){
+                                             @Valid @RequestBody ImportantEntity importantEntity){
 
         UserEntity userEntity = userService.findByUserName(username);
 
-        if (isNull(userEntity)) {
-            return null;
-        }
+        checkUser(userEntity);
 
         importantEntity.setUserEntity(userEntity);
 
@@ -108,9 +97,7 @@ public class ImportantResource {
 
         UserEntity userEntity = userService.findByUserName(username);
 
-        if (isNull(userEntity)) {
-            return null;
-        }
+        checkUser(userEntity);
         ImportantEntity newImportantRecord = importantService.update(userEntity, id, importantEntity);
 
 
@@ -128,13 +115,18 @@ public class ImportantResource {
             @PathVariable("id") Long id) {
         UserEntity userEntity = userService.findByUserName(username);
 
-        if (isNull(userEntity)) {
-            return null;
-        }
+        checkUser(userEntity);
 
         importantService.delete(userEntity, id);
         return ResponseEntity.ok()
                 .headers(HeaderUtil.createAlert("A record with id: " + id + " has been deleted", String.valueOf(id))).build();
+    }
+
+    private void checkUser(UserEntity userEntity) {
+        if (isNull(userEntity)) {
+            throw new UserNotFoundException(messageSource.getMessage("user.not.found.message", null
+                    , LocaleContextHolder.getLocale()));
+        }
     }
 
 }

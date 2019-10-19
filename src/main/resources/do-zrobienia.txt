@@ -25,12 +25,19 @@
 - salt to bcrypt ?
 - reasonable length of field for example username with 50 chars is too much
 - Confirm pwd logic both for ui and backend
-- Strange bug when type Bożenka. java.sql.SQLException: Incorrect string value: '\xC5\xBCenka' for column 'body' at row 1
-- Bo?enka zamiast Bożenka in database ?
+- Strange bug when type Bożenka. java.sql.SQLException:
+Incorrect string value: '\xC5\xBCenka' for column 'body' at row 1                   [ok]
+- Bo?enka zamiast Bożenka in database ?                                             [ok]
 - Handle 500 errors maybe
 - Max login attempts, simulate somehow                                              [ok]
 - Recaptcha to login and signup
 - check and fix routes both in backend and frontend
+- exceptions general handling @ExceptionHandler
+- refresh sessions token button
+- Use spring reactive   ??
+- Constants move to properties                                                      [ok]
+- Change less important to not important ?? not sure good idea
+- bug in localdate saved day -1 in db
 
 [Angular]
 - We have January 5 2019 and i should'nt be allowed to navigate to thislew page

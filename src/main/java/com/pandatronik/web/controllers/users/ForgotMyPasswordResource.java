@@ -28,7 +28,7 @@ import java.time.Clock;
 import java.time.LocalDateTime;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("${api.version}")
 @CrossOrigin(origins = "${angular.api.url}")
 public class ForgotMyPasswordResource {
 

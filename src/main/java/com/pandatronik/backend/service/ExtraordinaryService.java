@@ -3,26 +3,23 @@ package com.pandatronik.backend.service;
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.ExtraordinaryEntity;
 import com.pandatronik.backend.persistence.repositories.ExtraordinaryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
-
 import javax.ws.rs.NotFoundException;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class ExtraordinaryService implements ExtraordinaryCrudService<ExtraordinaryEntity, Long> {
 
     private final ExtraordinaryRepository extraordinaryRepository;
-
-    @Autowired
-    public ExtraordinaryService(ExtraordinaryRepository extraordinaryRepository) {
-        this.extraordinaryRepository = extraordinaryRepository;
-    }
+    private final MessageSource messageSource;
 
     @Override
     public Iterable<ExtraordinaryEntity> findAll(UserEntity userEntity) {
-        Iterable<ExtraordinaryEntity> all = extraordinaryRepository.findAllByUserEntity(userEntity);
-        return all;
+        return extraordinaryRepository.findAllByUserEntity(userEntity);
     }
 
     @Override
@@ -47,7 +44,8 @@ public class ExtraordinaryService implements ExtraordinaryCrudService<Extraordin
             extraordinaryEntity.setUserEntity(userEntity);
             return extraordinaryRepository.save(extraordinaryEntity);
         } else {
-            throw new NotFoundException("Extraordinary day not found");
+            throw new NotFoundException(messageSource.getMessage("extraordinary.not.found.messages", null
+                    , LocaleContextHolder.getLocale()));
         }
 
     }

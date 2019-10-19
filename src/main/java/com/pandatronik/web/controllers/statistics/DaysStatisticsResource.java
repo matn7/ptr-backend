@@ -4,9 +4,13 @@ import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.service.DaysService;
 import com.pandatronik.backend.service.user.account.UserService;
 import com.pandatronik.enums.RateDayEnum;
+import com.pandatronik.exceptions.UserNotFoundException;
 import com.pandatronik.payload.DateRequest;
 import com.pandatronik.web.controllers.ErrorMessage;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -24,16 +28,12 @@ import static java.util.Objects.nonNull;
 @CrossOrigin(origins = "${angular.api.url}")
 @RestController
 @RequestMapping("${api.version}/users/{username}/statistics/days")
+@AllArgsConstructor
 public class DaysStatisticsResource {
 
     private final UserService userService;
     private final DaysService daysService;
-
-    @Autowired
-    public DaysStatisticsResource(DaysService daysService, UserService userService) {
-        this.daysService = daysService;
-        this.userService = userService;
-    }
+    private final MessageSource messageSource;
 
     @PostMapping("/yearData")
     public ResponseEntity<?> findByYearData(@PathVariable("username") String username,
@@ -41,10 +41,7 @@ public class DaysStatisticsResource {
 
         UserEntity userEntity = userService.findByUserName(username);
 
-        if (isNull(userEntity)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorMessage("User not found"));
-        }
+        checkUser(userEntity);
 
         List<Integer> res = daysService.findByYearData(userEntity, dateRequest.getYear());
 
@@ -55,7 +52,8 @@ public class DaysStatisticsResource {
             return ResponseEntity.ok(collect);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorMessage("Record not found"));
+                    .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
+                            , LocaleContextHolder.getLocale())));
         }
     }
 
@@ -65,11 +63,7 @@ public class DaysStatisticsResource {
 
         UserEntity userEntity = userService.findByUserName(username);
 
-        if (isNull(userEntity)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorMessage("User not found"));
-        }
-
+        checkUser(userEntity);
 
         List<Object[]> res = daysService.findAverageByYearData(userEntity, dateRequest.getYear());
 
@@ -77,7 +71,8 @@ public class DaysStatisticsResource {
             return ResponseEntity.ok(res);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorMessage("Record not found"));
+                    .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
+                            , LocaleContextHolder.getLocale())));
         }
     }
 
@@ -87,11 +82,7 @@ public class DaysStatisticsResource {
 
         UserEntity userEntity = userService.findByUserName(username);
 
-        if (isNull(userEntity)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorMessage("User not found"));
-        }
-
+        checkUser(userEntity);
 
         List<Object[]> res = daysService.findByMonthAndYearData(userEntity, dateRequest.getMonth(),
                 dateRequest.getYear());
@@ -101,7 +92,8 @@ public class DaysStatisticsResource {
             return ResponseEntity.ok(collect);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorMessage("Record not found"));
+                    .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
+                            , LocaleContextHolder.getLocale())));
         }
     }
 
@@ -111,11 +103,7 @@ public class DaysStatisticsResource {
 
         UserEntity userEntity = userService.findByUserName(username);
 
-        if (isNull(userEntity)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorMessage("User not found"));
-        }
-
+        checkUser(userEntity);
 
         List<Integer> result = daysService.findByMonthAndYearDailyData(userEntity, dateRequest.getYear(),
                 dateRequest.getMonth()).get();
@@ -124,7 +112,15 @@ public class DaysStatisticsResource {
             return ResponseEntity.ok(result);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorMessage("Record not found"));
+                    .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
+                            , LocaleContextHolder.getLocale())));
+        }
+    }
+
+    private void checkUser(UserEntity userEntity) {
+        if (isNull(userEntity)) {
+            throw new UserNotFoundException(messageSource.getMessage("user.not.found.message", null
+                    , LocaleContextHolder.getLocale()));
         }
     }
 

@@ -4,50 +4,39 @@ import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.ExtraordinaryEntity;
 import com.pandatronik.backend.service.ExtraordinaryService;
 import com.pandatronik.backend.service.user.account.UserService;
+import com.pandatronik.exceptions.UserNotFoundException;
 import com.pandatronik.utils.HeaderUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import javax.validation.Valid;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
-
-import static com.pandatronik.utils.ApplicationUtils.API_VERSION;
 import static java.util.Objects.isNull;
 
 @Validated
 @CrossOrigin(origins = "${angular.api.url}")
 @RestController
 @RequestMapping("${api.version}/users/{username}/extraordinary")
+@AllArgsConstructor
 public class ExtraordinaryResource {
 
     private final ExtraordinaryService extraordinaryService;
-
     private final UserService userService;
-
-
-    @Autowired
-    public ExtraordinaryResource(ExtraordinaryService extraordinaryService, UserService userService) {
-        this.extraordinaryService = extraordinaryService;
-        this.userService = userService;
-    }
+    private final MessageSource messageSource;
 
     @GetMapping("/all")
     public Iterable<ExtraordinaryEntity> findAll(@PathVariable("username") String username) {
 
         UserEntity userEntity = userService.findByUserName(username);
 
-        if (isNull(userEntity)) {
-            return null;
-        }
+        checkUser(userEntity);
 
         Iterable<ExtraordinaryEntity> all = extraordinaryService.findAll(userEntity);
         return all;
@@ -58,10 +47,7 @@ public class ExtraordinaryResource {
 
         UserEntity userEntity = userService.findByUserName(username);
 
-        if (isNull(userEntity)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorMessage("User not found"));
-        }
+        checkUser(userEntity);
 
         Optional<ExtraordinaryEntity> extraordinaryDaysById = extraordinaryService.findById(userEntity, id);
 
@@ -79,11 +65,7 @@ public class ExtraordinaryResource {
 
         UserEntity userEntity = userService.findByUserName(username);
 
-        if (isNull(userEntity)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorMessage("User not found"));
-        }
-
+        checkUser(userEntity);
 
         Optional<ExtraordinaryEntity> extraordinaryDaysByDayMonthYear =
                 extraordinaryService.findByDate(userEntity, day, month, year);
@@ -102,9 +84,7 @@ public class ExtraordinaryResource {
 
         UserEntity userEntity = userService.findByUserName(username);
 
-        if (isNull(userEntity)) {
-            return null;
-        }
+        checkUser(userEntity);
 
         extraordinaryEntity.setUserEntity(userEntity);
 
@@ -124,9 +104,7 @@ public class ExtraordinaryResource {
 
         UserEntity userEntity = userService.findByUserName(username);
 
-        if (isNull(userEntity)) {
-            return null;
-        }
+        checkUser(userEntity);
 
         ExtraordinaryEntity newExtraordinaryRecord = extraordinaryService.update(userEntity, id, extraordinaryEntity);
 
@@ -143,12 +121,17 @@ public class ExtraordinaryResource {
 
         UserEntity userEntity = userService.findByUserName(username);
 
-        if (isNull(userEntity)) {
-            return null;
-        }
+        checkUser(userEntity);
 
         extraordinaryService.delete(userEntity, id);
         return ResponseEntity.ok()
                 .headers(HeaderUtil.createAlert("A record with id: " + id + " has been deleted", String.valueOf(id))).build();
+    }
+
+    private void checkUser(UserEntity userEntity) {
+        if (isNull(userEntity)) {
+            throw new UserNotFoundException(messageSource.getMessage("user.not.found.message", null
+                    , LocaleContextHolder.getLocale()));
+        }
     }
 }
