@@ -36,8 +36,8 @@ Incorrect string value: '\xC5\xBCenka' for column 'body' at row 1               
 - refresh sessions token button
 - Use spring reactive   ??
 - Constants move to properties                                                      [ok]
-- Change less important to not important ?? not sure good idea
-- bug in localdate saved day -1 in db
+- Change less important to not important ?? not sure good idea                      [??]
+- bug in localdate saved day -1 in db [BUG-1]
 
 [Angular]
 - We have January 5 2019 and i should'nt be allowed to navigate to thislew page

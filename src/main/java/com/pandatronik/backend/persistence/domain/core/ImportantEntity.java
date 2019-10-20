@@ -63,6 +63,7 @@ public class ImportantEntity implements Serializable {
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @DateTimeFormat(pattern = "yyyy/MM/dd")
+//    @Column(name = "start_date", columnDefinition = "DATE")
     private LocalDate startDate;
 
     @ManyToOne(fetch = FetchType.LAZY)

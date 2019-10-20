@@ -13,7 +13,9 @@ import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 
+import javax.annotation.PostConstruct;
 import java.util.Locale;
+import java.util.TimeZone;
 
 @SpringBootApplication
 public class PandatronikRestApplication { //  implements CommandLineRunner
@@ -28,6 +30,12 @@ public class PandatronikRestApplication { //  implements CommandLineRunner
 
     @Value("${webmaster.email}")
     private String webmasterEmail;
+
+    // BUG-1
+    @PostConstruct
+    public void started() {
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+    }
 
     @Bean
     BCryptPasswordEncoder bCryptPasswordEncoder() {
