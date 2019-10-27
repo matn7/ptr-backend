@@ -4,7 +4,8 @@ import com.pandatronik.backend.persistence.domain.*;
 import com.pandatronik.backend.service.user.account.*;
 import com.pandatronik.enums.PlansEnum;
 import com.pandatronik.enums.RolesEnum;
-import com.pandatronik.payload.LoginRequest;
+import com.pandatronik.enums.TokenEnum;
+import com.pandatronik.enums.TokenNotFoundEnum;
 import com.pandatronik.utils.HeaderUtil;
 import com.pandatronik.utils.UserUtils;
 import com.pandatronik.web.controllers.ErrorMessage;
@@ -32,8 +33,6 @@ import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
-
-import static com.pandatronik.utils.ApplicationUtils.API_VERSION;
 
 @Validated
 @RestController
@@ -142,7 +141,7 @@ public class SignupResource {
 
         if (null == activateToken) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorMessage("Token not found"));
+                    .body(new ErrorMessage(TokenNotFoundEnum.TOKEN_NOT_FOUND.getMessage()));
         }
 
         UserEntity user = activateToken.getUser();
@@ -154,7 +153,7 @@ public class SignupResource {
 
         if (LocalDateTime.now(Clock.systemUTC()).isAfter(activateToken.getExpiryDate())) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorMessage("Token has expired"));
+                    .body(new ErrorMessage(TokenEnum.TOKEN_EXPIRED.getMessage()));
         }
 
         Authentication auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());

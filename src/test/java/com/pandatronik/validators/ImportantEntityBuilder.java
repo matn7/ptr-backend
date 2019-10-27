@@ -1,10 +1,12 @@
 package com.pandatronik.validators;
 
 import com.pandatronik.backend.persistence.domain.core.ImportantEntity;
+import com.pandatronik.enums.MadeEnum;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+// TODO: to delete change with lombock builder
 public class ImportantEntityBuilder {
     ImportantEntity importantEntity = new ImportantEntity();
 
@@ -22,7 +24,7 @@ public class ImportantEntityBuilder {
         return this;
     }
 
-    public ImportantEntityBuilder withMade(Integer made) {
+    public ImportantEntityBuilder withMade(MadeEnum made) {
         importantEntity.setMade(made);
         return this;
     }

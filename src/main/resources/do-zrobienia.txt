@@ -34,10 +34,10 @@ Incorrect string value: '\xC5\xBCenka' for column 'body' at row 1               
 - check and fix routes both in backend and frontend
 - exceptions general handling @ExceptionHandler
 - refresh sessions token button
-- Use spring reactive   ??
+- Use spring reactive                                                               [??]
 - Constants move to properties                                                      [ok]
 - Change less important to not important ?? not sure good idea                      [??]
-- bug in localdate saved day -1 in db [BUG-1]
+- bug in localdate saved day -1 in db [BUG-1]                                       [ok]
 
 [Angular]
 - We have January 5 2019 and i should'nt be allowed to navigate to thislew page
@@ -47,3 +47,4 @@ http://localhost:4200/important/1/2019/1/6/new using browser search bar         
 - all extraordinary component pagination
 - in login form adding question like 90 + 7 activate submit button
 - add lot of stuff to properties file like localhost:4200 everything
+- looks like auth interceptor does not work ?

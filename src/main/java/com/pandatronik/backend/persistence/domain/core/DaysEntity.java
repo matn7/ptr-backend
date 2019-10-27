@@ -2,7 +2,6 @@ package com.pandatronik.backend.persistence.domain.core;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -10,6 +9,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.pandatronik.backend.persistence.domain.UserEntity;
+import com.pandatronik.enums.MadeEnum;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -28,6 +28,8 @@ import java.time.LocalDateTime;
 @Cacheable(false)
 @ToString
 @EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
 public class DaysEntity implements Serializable {
 
     private static final long serialVersionUID = -7331168481516668701L;
@@ -41,7 +43,7 @@ public class DaysEntity implements Serializable {
     private String body;
 
     @NotNull
-    private Integer rateDay;
+    private MadeEnum rateDay;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -57,66 +59,4 @@ public class DaysEntity implements Serializable {
     @JsonIgnore
     private UserEntity userEntity;
 
-    public DaysEntity() {
-    }
-
-    public DaysEntity(
-            @JsonProperty("id") Long id,
-            @JsonProperty("body") String body,
-            @JsonProperty("rateDay") Integer rateDay,
-            @JsonProperty("postedOn") LocalDateTime postedOn,
-            @JsonProperty("startDate") LocalDate startDate) {
-        this.id = id;
-        this.body = body;
-        this.rateDay = rateDay;
-        this.postedOn = postedOn;
-        this.startDate = startDate;
-    }
-
-    public DaysEntity(
-            @JsonProperty("body") String body,
-            @JsonProperty("rateDay") Integer rateDay,
-            @JsonProperty("postedOn") LocalDateTime postedOn,
-            @JsonProperty("startDate") LocalDate startDate) {
-        this.body = body;
-        this.rateDay = rateDay;
-        this.postedOn = postedOn;
-        this.startDate = startDate;
-    }
-
-    public static DaysEntity newDay(DaysEntity daysEntity) {
-        return new DaysEntity(daysEntity.getBody(), daysEntity.getRateDay(), daysEntity.getPostedOn(), daysEntity.getStartDate());
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getBody() {
-        return body;
-    }
-
-    public Integer getRateDay() {
-        return rateDay;
-    }
-
-    public LocalDateTime getPostedOn() {
-        return postedOn;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public UserEntity getUserEntity() {
-        return userEntity;
-    }
-
-    public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = userEntity;
-    }
 }

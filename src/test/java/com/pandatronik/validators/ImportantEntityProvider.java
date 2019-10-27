@@ -1,5 +1,7 @@
 package com.pandatronik.validators;
 
+import com.pandatronik.enums.MadeEnum;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -11,7 +13,7 @@ public class ImportantEntityProvider {
         ImportantEntityBuilder importantEntityBuilder = ImportantEntityBuilder.defaultImportantEntity()
                 .withTitle(leftPad("a", 40, "a"))
                 .withBody("Super")
-                .withMade(75)
+                .withMade(MadeEnum.SEVENTY_FIVE)
                 .withPostedOn(LocalDateTime.now())
                 .withStartDate(LocalDate.now());
 

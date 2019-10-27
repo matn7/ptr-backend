@@ -2,7 +2,6 @@ package com.pandatronik.backend.persistence.domain.core;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -10,6 +9,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.pandatronik.backend.persistence.domain.UserEntity;
+import com.pandatronik.enums.MadeEnum;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -28,6 +28,8 @@ import java.time.LocalDateTime;
 @ToString
 @Cacheable(false)
 @EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
 public class LessImportantEntity3 implements Serializable {
 
     private static final long serialVersionUID = -8916349599502114268L;
@@ -45,7 +47,7 @@ public class LessImportantEntity3 implements Serializable {
     private String body;
 
     @NotNull
-    private Integer made;
+    private MadeEnum made;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -60,84 +62,4 @@ public class LessImportantEntity3 implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private UserEntity userEntity;
-
-    public LessImportantEntity3() {
-    }
-
-    public LessImportantEntity3(
-            @JsonProperty("id") Long id,
-            @JsonProperty("title") String title,
-            @JsonProperty("body") String body,
-            @JsonProperty("made") Integer made,
-            @JsonProperty("postedOn") LocalDateTime postedOn,
-            @JsonProperty("startDate") LocalDate startDate) {
-        this.id = id;
-        this.title = title;
-        this.body = body;
-        this.made = made;
-        this.postedOn = postedOn;
-        this.startDate = startDate;
-    }
-
-    public LessImportantEntity3(
-            @JsonProperty("title") String title,
-            @JsonProperty("body") String body,
-            @JsonProperty("made") Integer made,
-            @JsonProperty("postedOn") LocalDateTime postedOn,
-            @JsonProperty("startDate") LocalDate startDate) {
-        this.title = title;
-        this.body = body;
-        this.made = made;
-        this.postedOn = postedOn;
-        this.startDate = startDate;
-    }
-
-    public static LessImportantEntity3 newLessImportantRecord(LessImportantEntity3 lessImportantEntity) {
-        return new LessImportantEntity3(lessImportantEntity.getId(), lessImportantEntity.getTitle(),
-                lessImportantEntity.getBody(), lessImportantEntity.getMade(),
-                lessImportantEntity.getPostedOn(), lessImportantEntity.getStartDate());
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    @NotNull
-    public String getTitle() {
-        return title;
-    }
-
-    @NotNull
-    public String getBody() {
-        return body;
-    }
-
-    @NotNull
-    public Integer getMade() {
-        return made;
-    }
-
-    public LocalDateTime getPostedOn() {
-        return postedOn;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public void setPostedOn(LocalDateTime postedOn) {
-        this.postedOn = postedOn;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public UserEntity getUserEntity() {
-        return userEntity;
-    }
-
-    public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = userEntity;
-    }
 }

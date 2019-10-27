@@ -1,7 +1,6 @@
 package com.pandatronik.backend.persistence.domain.core;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -26,6 +25,8 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
 public class ExtraordinaryEntity implements Serializable {
 
     private static final long serialVersionUID = 6121746520492498519L;
@@ -56,68 +57,4 @@ public class ExtraordinaryEntity implements Serializable {
     @JsonIgnore
     private UserEntity userEntity;
 
-    public ExtraordinaryEntity() {
-    }
-
-    public ExtraordinaryEntity(
-            @JsonProperty("id") Long id,
-            @JsonProperty("title") String title,
-            @JsonProperty("body") String body,
-            @JsonProperty("postedOn") LocalDateTime postedOn,
-            @JsonProperty("startDate") LocalDate startDate) {
-        this.id = id;
-        this.title = title;
-        this.body = body;
-        this.postedOn = postedOn;
-        this.startDate = startDate;
-    }
-
-    public ExtraordinaryEntity(
-            @JsonProperty("title") String title,
-            @JsonProperty("body") String body,
-            @JsonProperty("postedOn") LocalDateTime postedOn,
-            @JsonProperty("startDate") LocalDate startDate) {
-        this.title = title;
-        this.body = body;
-        this.postedOn = postedOn;
-        this.startDate = startDate;
-    }
-
-    public static ExtraordinaryEntity newExtraordinary(ExtraordinaryEntity extraordinaryEntity) {
-        return new ExtraordinaryEntity(extraordinaryEntity.getTitle(),
-                extraordinaryEntity.getBody(), extraordinaryEntity.getPostedOn(), extraordinaryEntity.getStartDate());
-    }
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getBody() {
-        return body;
-    }
-
-    public LocalDateTime getPostedOn() {
-        return postedOn;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public void setPostedOn(LocalDateTime postedOn) {
-        this.postedOn = postedOn;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public UserEntity getUserEntity() {
-        return userEntity;
-    }
-
-    public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = userEntity;
-    }
 }

@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/api/v1/users")
-@CrossOrigin(origins="http://localhost:4200")
+@RequestMapping("${api.version}/users")
+@CrossOrigin(origins = "${angular.api.url}")
 public class JwtAuthenticationRestController {
 
     private String tokenHeader = SecurityConstants.HEADER_STRING;
