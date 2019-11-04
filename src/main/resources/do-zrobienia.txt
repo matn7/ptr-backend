@@ -1,6 +1,7 @@
 [Java]
-- restrictions to user names, not allowed like: [admin, panda, username, password]
-- add rules to password like number + special character required
+- restrictions to user names, not allowed like: [admin, panda, username, password]  [ok]
+- add rules to password like number + special character required                    [ok]
+- username cannot starts with panda                                                 [ok]
 - https
 - delete record confirmation
 - max login attempts                                                                [ok]
@@ -37,14 +38,20 @@ Incorrect string value: '\xC5\xBCenka' for column 'body' at row 1               
 - Use spring reactive                                                               [??]
 - Constants move to properties                                                      [ok]
 - Change less important to not important ?? not sure good idea                      [??]
-- bug in localdate saved day -1 in db [BUG-1]                                       [ok]
+- bug in localdate saved day -1 in db                                               [ok] [BUG-1]
+- think about way displaying data tables, fancy charts etc
+- Add to user field createdAt, modifiedAt
+- Use project lombok in all entities
+- check pom for un needed dependencies
+- Pandatronik documentation 
 
 [Angular]
-- We have January 5 2019 and i should'nt be allowed to navigate to thislew page
-http://localhost:4200/important/1/2019/1/6/new using browser search bar             [ok]
+- We have January 5 2019 and i should'nt be allowed to navigate to this lew page http://localhost:4200/important/1/2019/1/6/new using browser search bar             [ok]
 - activeLink in all child pages                                                     [ok]
 - manipulate log to not display endpoint only 401 unauthorized msg
 - all extraordinary component pagination
 - in login form adding question like 90 + 7 activate submit button
 - add lot of stuff to properties file like localhost:4200 everything
 - looks like auth interceptor does not work ?
+
+[Deployment]

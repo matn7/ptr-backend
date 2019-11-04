@@ -28,8 +28,8 @@ public interface ImportantIndexRepository extends CrudRepository<CalendarEntity,
 	Optional<List<Object[]>> findIndexData(@Param("userEntity") UserEntity userEntity,
 		@Param("year") int year, @Param("month") int month);
 
-//	@Query("SELECT made FROM ImportantEntity i WHERE i.startDate >= :startDate and i.startDate <= :endDate"
-//			+ " AND i.userEntity = :userEntity")
-//	List<List<Object[]>> findCountMadeByStartEnd(@Param("name") String name, @Param("startDate") Calendar startDate,
-//                                                  @Param("endDate") Calendar endDate);
+	@Query("SELECT made FROM ImportantEntity i WHERE i.startDate >= :startDate and i.startDate <= :endDate"
+			+ " AND i.userEntity = :userEntity")
+	List<Object[]> findCountMadeByStartEnd(@Param("userEntity") String userEntity, @Param("startDate") Calendar startDate,
+                                                  @Param("endDate") Calendar endDate);
 }
