@@ -6,6 +6,7 @@ import com.pandatronik.backend.service.ImportantService2;
 import com.pandatronik.backend.service.ImportantService3;
 import com.pandatronik.backend.service.user.account.UserService;
 import com.pandatronik.exceptions.UserNotFoundException;
+import com.pandatronik.payload.StartEndRequest;
 import com.pandatronik.web.controllers.ErrorMessage;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -139,6 +141,29 @@ public class ImportantStatisticsResource {
                     .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
                             , LocaleContextHolder.getLocale())));
         }
+    }
+
+    @PostMapping("/1/startEnd")
+    public ResponseEntity<?> findCountMadeByStartEnd(@PathVariable("username") String username,
+            @RequestBody StartEndRequest startEndRequest) {
+        UserEntity userEntity = userService.findByUserName(username);
+
+        checkUser(userEntity);
+
+        List<Integer> countMadeByStartEnd = importantService.findCountMadeByStartEnd(userEntity,
+                startEndRequest.getStartDate(), startEndRequest.getEndDate());
+
+        Map<Integer, Long> collect = countMadeByStartEnd.stream()
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+        // 0 - 100
+        // 1 - 75
+        // 2 - 50
+        // 3 - 25
+        // 4 - 0
+
+        return ResponseEntity.ok(collect);
+
     }
 
     private void checkUser(UserEntity userEntity) {

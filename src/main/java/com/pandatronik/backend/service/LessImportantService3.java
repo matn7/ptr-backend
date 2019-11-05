@@ -8,6 +8,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import javax.ws.rs.NotFoundException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,5 +62,10 @@ public class LessImportantService3 implements ImportantCrudService<LessImportant
     @Override
     public List<Object[]> findAverageByYearStat(UserEntity userEntity, int year) {
         return lessImportantRepository3.findAverageByYearStat(userEntity, year);
+    }
+
+    @Override
+    public List<Integer> findCountMadeByStartEnd(UserEntity userEntity, LocalDate startDate, LocalDate endDate) {
+        return null;
     }
 }

@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,5 +29,10 @@ public interface ImportantRepository3 extends CrudRepository<ImportantEntity3, L
     @Query("SELECT MONTH(i.startDate), AVG(made) FROM ImportantEntity3 i WHERE YEAR(i.startDate) = :year " +
             "AND i.userEntity =:userEntity GROUP BY MONTH(i.startDate)")
     List<Object[]> findAverageByYearStat(@Param("userEntity") UserEntity userEntity, @Param("year") int year);
+
+    @Query("SELECT made FROM ImportantEntity3 i WHERE i.startDate >= :startDate and i.startDate <= :endDate"
+            + " AND i.userEntity = :userEntity")
+    List<Integer> findCountMadeByStartEnd(@Param("userEntity") UserEntity userEntity, @Param("startDate") LocalDate startDate,
+                                          @Param("endDate") LocalDate endDate);
 
 }

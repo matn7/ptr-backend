@@ -43,7 +43,7 @@ Incorrect string value: '\xC5\xBCenka' for column 'body' at row 1               
 - Add to user field createdAt, modifiedAt
 - Use project lombok in all entities
 - check pom for un needed dependencies
-- Pandatronik documentation 
+- Pandatronik documentation
 
 [Angular]
 - We have January 5 2019 and i should'nt be allowed to navigate to this lew page http://localhost:4200/important/1/2019/1/6/new using browser search bar             [ok]
