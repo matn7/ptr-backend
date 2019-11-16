@@ -108,7 +108,12 @@ selected month and year
 
 
 
+## Angular
 
+```console
+cd /home/matikomp/pandatronik/ptr-ui/src/app
+ng g c statistics/statistics-start-end --module app
+```
 
 
 

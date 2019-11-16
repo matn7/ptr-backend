@@ -4,6 +4,7 @@ import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.service.*;
 import com.pandatronik.backend.service.user.account.UserService;
 import com.pandatronik.exceptions.UserNotFoundException;
+import com.pandatronik.payload.StartEndRequest;
 import com.pandatronik.web.controllers.ErrorMessage;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -137,6 +139,74 @@ public class LessImportantStatisticsResource {
                     .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
                             , LocaleContextHolder.getLocale())));
         }
+    }
+
+    @PostMapping("/1/startEnd")
+    public ResponseEntity<?> findCountMadeByStartEnd(@PathVariable("username") String username,
+                                                      @RequestBody StartEndRequest startEndRequest) {
+        UserEntity userEntity = userService.findByUserName(username);
+
+        checkUser(userEntity);
+
+        List<Integer> countMadeByStartEnd = lessImportantService.findCountMadeByStartEnd(userEntity,
+                startEndRequest.getStartDate(), startEndRequest.getEndDate());
+
+        Map<Integer, Long> collect = countMadeByStartEnd.stream()
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+        if (nonNull(collect)) {
+            return ResponseEntity.ok(collect);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
+                            , LocaleContextHolder.getLocale())));
+        }
+    }
+
+    @PostMapping("/2/startEnd")
+    public ResponseEntity<?> findCountMadeByStartEnd2(@PathVariable("username") String username,
+                                                      @RequestBody StartEndRequest startEndRequest) {
+        UserEntity userEntity = userService.findByUserName(username);
+
+        checkUser(userEntity);
+
+        List<Integer> countMadeByStartEnd = lessImportantService2.findCountMadeByStartEnd(userEntity,
+                startEndRequest.getStartDate(), startEndRequest.getEndDate());
+
+        Map<Integer, Long> collect = countMadeByStartEnd.stream()
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+        if (nonNull(collect)) {
+            return ResponseEntity.ok(collect);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
+                            , LocaleContextHolder.getLocale())));
+        }
+
+    }
+
+    @PostMapping("/3/startEnd")
+    public ResponseEntity<?> findCountMadeByStartEnd3(@PathVariable("username") String username,
+                                                      @RequestBody StartEndRequest startEndRequest) {
+        UserEntity userEntity = userService.findByUserName(username);
+
+        checkUser(userEntity);
+
+        List<Integer> countMadeByStartEnd = lessImportantService3.findCountMadeByStartEnd(userEntity,
+                startEndRequest.getStartDate(), startEndRequest.getEndDate());
+
+        Map<Integer, Long> collect = countMadeByStartEnd.stream()
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+        if (nonNull(collect)) {
+            return ResponseEntity.ok(collect);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
+                            , LocaleContextHolder.getLocale())));
+        }
+
     }
 
     private void checkUser(UserEntity userEntity) {

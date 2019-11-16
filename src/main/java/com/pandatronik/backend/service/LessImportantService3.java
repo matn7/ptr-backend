@@ -66,6 +66,6 @@ public class LessImportantService3 implements ImportantCrudService<LessImportant
 
     @Override
     public List<Integer> findCountMadeByStartEnd(UserEntity userEntity, LocalDate startDate, LocalDate endDate) {
-        return null;
+        return lessImportantRepository3.findCountMadeByStartEnd(userEntity, startDate, endDate);
     }
 }

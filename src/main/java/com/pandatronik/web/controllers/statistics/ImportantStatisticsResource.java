@@ -162,9 +162,63 @@ public class ImportantStatisticsResource {
         // 3 - 25
         // 4 - 0
 
-        return ResponseEntity.ok(collect);
+        if (nonNull(collect)) {
+            return ResponseEntity.ok(collect);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
+                            , LocaleContextHolder.getLocale())));
+        }
 
     }
+
+    @PostMapping("/2/startEnd")
+    public ResponseEntity<?> findCountMadeByStartEnd2(@PathVariable("username") String username,
+                                                     @RequestBody StartEndRequest startEndRequest) {
+        UserEntity userEntity = userService.findByUserName(username);
+
+        checkUser(userEntity);
+
+        List<Integer> countMadeByStartEnd = importantService2.findCountMadeByStartEnd(userEntity,
+                startEndRequest.getStartDate(), startEndRequest.getEndDate());
+
+        Map<Integer, Long> collect = countMadeByStartEnd.stream()
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+        if (nonNull(collect)) {
+            return ResponseEntity.ok(collect);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
+                            , LocaleContextHolder.getLocale())));
+        }
+
+    }
+
+    @PostMapping("/3/startEnd")
+    public ResponseEntity<?> findCountMadeByStartEnd3(@PathVariable("username") String username,
+                                                     @RequestBody StartEndRequest startEndRequest) {
+        UserEntity userEntity = userService.findByUserName(username);
+
+        checkUser(userEntity);
+
+        List<Integer> countMadeByStartEnd = importantService3.findCountMadeByStartEnd(userEntity,
+                startEndRequest.getStartDate(), startEndRequest.getEndDate());
+
+        Map<Integer, Long> collect = countMadeByStartEnd.stream()
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+        if (nonNull(collect)) {
+            return ResponseEntity.ok(collect);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
+                            , LocaleContextHolder.getLocale())));
+        }
+
+    }
+
+
 
     private void checkUser(UserEntity userEntity) {
         if (isNull(userEntity)) {
