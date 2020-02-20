@@ -8,3 +8,15 @@ npm install --save-dev copyfiles
 
 npm start
 # npm run build
+
+```console
+ng add @angular/materialon mr
+
+npm uninstall -g typescript
+npm i typescript@3.4.5 --save-dev --save-exact
+
+ng new matrial-demo
+ng g c material-demo --module app
+npm i --save @angular/cdk
+npm i --save @angular/material @angular/animations hammerjs
+```

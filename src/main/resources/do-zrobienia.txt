@@ -53,5 +53,6 @@ Incorrect string value: '\xC5\xBCenka' for column 'body' at row 1               
 - in login form adding question like 90 + 7 activate submit button
 - add lot of stuff to properties file like localhost:4200 everything
 - looks like auth interceptor does not work ?
+- angular material
 
 [Deployment]
