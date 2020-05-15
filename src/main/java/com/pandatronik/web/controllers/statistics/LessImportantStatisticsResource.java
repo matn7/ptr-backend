@@ -209,6 +209,7 @@ public class LessImportantStatisticsResource {
 
     }
 
+    // TODO: make annotation
     private void checkUser(UserEntity userEntity) {
         if (isNull(userEntity)) {
             throw new UserNotFoundException(messageSource.getMessage("user.not.found.message", null

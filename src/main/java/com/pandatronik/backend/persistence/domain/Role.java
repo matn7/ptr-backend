@@ -2,7 +2,11 @@ package com.pandatronik.backend.persistence.domain;
 
 import com.pandatronik.enums.RolesEnum;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;

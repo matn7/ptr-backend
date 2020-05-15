@@ -82,6 +82,8 @@ public class ImportantStatisticsResource {
         List<Object[]> result =  importantService3.findCountByYearStat(userEntity, year);
         Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(collect)) {
+            // "SEVENTY_FIVE" -> "1"
+            // "HUNDRED" -> "2"
             return ResponseEntity.ok(collect);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -99,8 +101,9 @@ public class ImportantStatisticsResource {
         checkUser(userEntity);
 
         List<Object[]> result = importantService.findAverageByYearStat(userEntity, year);
+        Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(result)) {
-            return ResponseEntity.ok(result);
+            return ResponseEntity.ok(collect);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
@@ -116,8 +119,9 @@ public class ImportantStatisticsResource {
         checkUser(userEntity);
 
         List<Object[]> result = importantService2.findAverageByYearStat(userEntity, year);
+        Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(result)) {
-            return ResponseEntity.ok(result);
+            return ResponseEntity.ok(collect);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
@@ -134,8 +138,11 @@ public class ImportantStatisticsResource {
         checkUser(userEntity);
 
         List<Object[]> result = importantService3.findAverageByYearStat(userEntity, year);
+        Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(result)) {
-            return ResponseEntity.ok(result);
+            // "2" -> "0.0"
+            // "5" -> "0.5"
+            return ResponseEntity.ok(collect);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
