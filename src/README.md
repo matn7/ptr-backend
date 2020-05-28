@@ -115,6 +115,20 @@ cd /home/matikomp/pandatronik/ptr-ui/src/app
 ng g c statistics/statistics-start-end --module app
 ```
 
+### Angular Material
+
+```console
+ng add @angular/material
+```
+
+**update package.json**
+
+- Modify package.json.
+
+```console
+ng update
+```
+
 
 
 

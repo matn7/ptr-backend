@@ -26,7 +26,7 @@ import static com.pandatronik.security.SecurityConstants.TOKEN_PREFIX;
 
 @RestController
 @RequestMapping("${api.version}")
-@CrossOrigin(origins = "${angular.api.url}")
+@CrossOrigin(origins = {"${angular.api.url}", "${angular.api.admin.url}"})
 public class UserController {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserController.class);

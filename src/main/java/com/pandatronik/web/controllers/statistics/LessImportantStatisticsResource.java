@@ -97,8 +97,9 @@ public class LessImportantStatisticsResource {
         checkUser(userEntity);
 
         List<Object[]> result = lessImportantService.findAverageByYearStat(userEntity, year);
+        Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(result)) {
-            return ResponseEntity.ok(result);
+            return ResponseEntity.ok(collect);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
@@ -114,8 +115,9 @@ public class LessImportantStatisticsResource {
         checkUser(userEntity);
 
         List<Object[]> result = lessImportantService2.findAverageByYearStat(userEntity, year);
+        Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(result)) {
-            return ResponseEntity.ok(result);
+            return ResponseEntity.ok(collect);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
@@ -132,8 +134,9 @@ public class LessImportantStatisticsResource {
         checkUser(userEntity);
 
         List<Object[]> result = lessImportantService3.findAverageByYearStat(userEntity, year);
+        Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(result)) {
-            return ResponseEntity.ok(result);
+            return ResponseEntity.ok(collect);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null

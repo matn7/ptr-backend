@@ -66,9 +66,9 @@ public class DaysStatisticsResource {
         checkUser(userEntity);
 
         List<Object[]> res = daysService.findAverageByYearData(userEntity, dateRequest.getYear());
-
+        Map<Object, Object> collect = res.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(res)) {
-            return ResponseEntity.ok(res);
+            return ResponseEntity.ok(collect);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null

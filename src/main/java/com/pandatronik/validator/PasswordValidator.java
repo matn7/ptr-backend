@@ -10,8 +10,7 @@ public class PasswordValidator implements ConstraintValidator<PasswordConstraint
     @Override
     public boolean isValid(UserEntity userEntity, ConstraintValidatorContext constraintValidatorContext) {
 
-        String regex = "^(?=.*?\\p{Lu})(?=.*?\\p{Ll})(?=.*?\\d)" +
-                "(?=.*?[`~!@#$%^&*()\\-_=+\\\\|\\[{\\]};:'\",<.>/?]).*$";
+        String regex = "^(?=.*?\\p{Lu})(?=.*?\\p{Ll})(?=.*?\\d)(?=.*?[`~!@#$%^&*()\\-_=+\\\\|\\[{\\]};:'\",<.>/?]).*$";
 
         boolean matches = Pattern.compile(regex).matcher(userEntity.getPassword()).matches();
         return matches;
