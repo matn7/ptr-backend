@@ -49,7 +49,7 @@ public class LessImportantEntity2 implements Serializable {
     private static final long serialVersionUID = -4757677094121428220L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull

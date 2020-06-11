@@ -7,20 +7,16 @@ package com.pandatronik.config;
 //import com.amazonaws.services.s3.AmazonS3Client;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
 @EnableJpaRepositories(basePackages = "com.pandatronik.backend.persistence.repositories")
 @EntityScan(basePackages = "com.pandatronik.backend.persistence.domain")
-@PropertySource("file:///${user.home}/.pandatronik_properties/application-common.properties")
-@PropertySource("file:///${user.home}/.pandatronik_properties/stripe.properties")
+@PropertySource("file:///${user.home}/.pandatronik/application-common.properties")
+@PropertySource("file:///${user.home}/.pandatronik/stripe.properties")
 @EnableTransactionManagement
 public class ApplicationConfig {
 

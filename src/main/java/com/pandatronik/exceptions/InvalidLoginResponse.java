@@ -7,7 +7,7 @@ public class InvalidLoginResponse {
     private String tokenExpired;
 
     public InvalidLoginResponse() {
-        this.username = "Invalid Username panda";
+        this.username = "Invalid Username";
         this.password = "Invalid Password";
     }
 

@@ -49,7 +49,7 @@ public class ImportantEntity3 implements Serializable {
     private static final long serialVersionUID = -8916349599502114268L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
