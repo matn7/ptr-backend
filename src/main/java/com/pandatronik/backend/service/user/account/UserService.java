@@ -1,17 +1,25 @@
 package com.pandatronik.backend.service.user.account;
 
 import com.google.common.base.Preconditions;
-import com.pandatronik.backend.persistence.domain.*;
-import com.pandatronik.backend.persistence.repositories.user.account.*;
+import com.pandatronik.backend.persistence.domain.PasswordResetToken;
+import com.pandatronik.backend.persistence.domain.Plan;
+import com.pandatronik.backend.persistence.domain.TokenEntity;
+import com.pandatronik.backend.persistence.domain.UserEntity;
+import com.pandatronik.backend.persistence.domain.UserRole;
+import com.pandatronik.backend.persistence.repositories.user.account.PasswordResetTokenRepository;
+import com.pandatronik.backend.persistence.repositories.user.account.PlanRepository;
+import com.pandatronik.backend.persistence.repositories.user.account.RoleRepository;
+import com.pandatronik.backend.persistence.repositories.user.account.TokenRepository;
+import com.pandatronik.backend.persistence.repositories.user.account.UserRepository;
 import com.pandatronik.enums.PlansEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -69,8 +77,8 @@ public class UserService {
 	}
 	
 	public UserEntity findByUserName(String username) {
-		Preconditions.checkNotNull(username, "username must not be null");
-		return userRepository.findByUsername(username);
+		return userRepository.findByUsername(username)
+				.orElseThrow(() -> new UsernameNotFoundException("Username " + username + " no found"));
 	}
 
 	public UserEntity findByEmail(String email) {
@@ -89,7 +97,7 @@ public class UserService {
 
 	@Transactional
 	public void deleteUser(String username, long userId) {
-		UserEntity byUsername = userRepository.findByUsername(username);
+		UserEntity byUsername = findByUserName(username);
 		if (byUsername != null) {
 			userRepository.deleteById(userId);
 		} else {

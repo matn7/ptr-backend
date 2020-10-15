@@ -50,7 +50,7 @@ public class ImportantResource extends Resource<ImportantEntity> {
         UserEntity userEntity = userService.findByUserName(username);
 
         checkUser(userEntity);
-        ImportantEntity newImportantRecord = taskService.update(userEntity, id, importantEntity);
+        ImportantEntity newImportantRecord = taskService.update(id, importantEntity);
 
 
         URI location = ServletUriComponentsBuilder

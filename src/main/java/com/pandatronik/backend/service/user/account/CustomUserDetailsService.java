@@ -2,8 +2,7 @@ package com.pandatronik.backend.service.user.account;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.repositories.user.account.UserRepository;
-import com.pandatronik.security.LoginAttemptService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,20 +10,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
-	@Autowired
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
+	private final UserService userService;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-		UserEntity user = userRepository.findByUsername(username);
-		if (null == user) {
-			throw new UsernameNotFoundException("Username " + username + " not found");
-		}
+//		UserEntity user = userService.findByUserName(username);
+//		if (null == user) {
+//			throw new UsernameNotFoundException("Username " + username + " not found");
+//		}
 
-		return user;
+		return userService.findByUserName(username);
 	}
 
 	@Transactional

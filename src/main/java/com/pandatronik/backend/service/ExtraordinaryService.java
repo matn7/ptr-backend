@@ -5,10 +5,8 @@ import com.pandatronik.backend.persistence.domain.core.ExtraordinaryEntity;
 import com.pandatronik.backend.persistence.repositories.ExtraordinaryRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
-import javax.ws.rs.NotFoundException;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -23,13 +21,13 @@ public class ExtraordinaryService implements ExtraordinaryCrudService<Extraordin
     }
 
     @Override
-    public Optional<ExtraordinaryEntity> findById(UserEntity userEntity, Long id) {
-        return extraordinaryRepository.findById(userEntity, id);
+    public ExtraordinaryEntity findById(UserEntity userEntity, Long id) {
+        return extraordinaryRepository.findById(userEntity, id).orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
-    public Optional<ExtraordinaryEntity> findByDate(UserEntity userEntity, int year, int month, int day) {
-        return extraordinaryRepository.findByDate(userEntity, year, month, day);
+    public ExtraordinaryEntity findByDate(UserEntity userEntity, int year, int month, int day) {
+        return extraordinaryRepository.findByDate(userEntity, year, month, day).orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
@@ -38,15 +36,15 @@ public class ExtraordinaryService implements ExtraordinaryCrudService<Extraordin
     }
 
     @Override
-    public ExtraordinaryEntity update(UserEntity userEntity, Long id, ExtraordinaryEntity extraordinaryEntity) {
-        Optional<ExtraordinaryEntity> optionalExtraordinaryEntity = findById(userEntity, id);
-        if (optionalExtraordinaryEntity.isPresent()) {
-            extraordinaryEntity.setUserEntity(userEntity);
+    public ExtraordinaryEntity update(Long id, ExtraordinaryEntity extraordinaryEntity) {
+//        Optional<ExtraordinaryEntity> optionalExtraordinaryEntity = findById(userEntity, id);
+//        if (optionalExtraordinaryEntity.isPresent()) {
+//            extraordinaryEntity.setUserEntity(userEntity);
             return extraordinaryRepository.save(extraordinaryEntity);
-        } else {
-            throw new NotFoundException(messageSource.getMessage("extraordinary.not.found.messages", null
-                    , LocaleContextHolder.getLocale()));
-        }
+//        } else {
+//            throw new NotFoundException(messageSource.getMessage("extraordinary.not.found.messages", null
+//                    , LocaleContextHolder.getLocale()));
+//        }
 
     }
 

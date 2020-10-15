@@ -24,9 +24,11 @@ import javax.validation.Valid;
 
 import static com.pandatronik.security.SecurityConstants.TOKEN_PREFIX;
 
+// todo: cors origin as a bean
 @RestController
 @RequestMapping("${api.version}")
-@CrossOrigin(origins = {"${angular.api.url}", "${angular.api.admin.url}"})
+//@CrossOrigin(origins = {"${angular.api.url}", "${angular.api.admin.url}"})
+@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserController.class);

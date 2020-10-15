@@ -5,13 +5,11 @@ import com.pandatronik.backend.persistence.domain.core.ImportantEntity3;
 import com.pandatronik.backend.persistence.repositories.ImportantRepository3;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
-import javax.ws.rs.NotFoundException;
+
 import java.time.LocalDate;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -21,13 +19,13 @@ public class ImportantService3 implements ImportantCrudService<ImportantEntity3,
     private final MessageSource messageSource;
 
     @Override
-    public Optional<ImportantEntity3> findById(UserEntity userEntity, Long id) {
-        return importantRepository.findById(userEntity, id);
+    public ImportantEntity3 findById(UserEntity userEntity, Long id) {
+        return importantRepository.findById(userEntity, id).orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
-    public Optional<ImportantEntity3> findByDate(UserEntity userEntity, int year, int month, int day) {
-        return importantRepository.findByDate(userEntity, day, month, year);
+    public ImportantEntity3 findByDate(UserEntity userEntity, int year, int month, int day) {
+        return importantRepository.findByDate(userEntity, day, month, year).orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
@@ -36,15 +34,15 @@ public class ImportantService3 implements ImportantCrudService<ImportantEntity3,
     }
 
     @Override
-    public ImportantEntity3 update(UserEntity userEntity, Long id, ImportantEntity3 importantEntity) {
-        Optional<ImportantEntity3> optionalImportantEntity = findById(userEntity, id);
-        if (optionalImportantEntity.isPresent()) {
-            importantEntity.setUserEntity(userEntity);
+    public ImportantEntity3 update(Long id, ImportantEntity3 importantEntity) {
+//        Optional<ImportantEntity3> optionalImportantEntity = findById(userEntity, id);
+//        if (optionalImportantEntity.isPresent()) {
+//            importantEntity.setUserEntity(userEntity);
             return importantRepository.save(importantEntity);
-        } else {
-            throw new NotFoundException(messageSource.getMessage("important.not.found.message", null
-                    , LocaleContextHolder.getLocale()));
-        }
+//        } else {
+//            throw new NotFoundException(messageSource.getMessage("important.not.found.message", null
+//                    , LocaleContextHolder.getLocale()));
+//        }
     }
 
     @Override

@@ -9,15 +9,23 @@ import com.pandatronik.utils.HeaderUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Optional;
+
 import static java.util.Objects.isNull;
 
 @Validated
@@ -43,39 +51,33 @@ public class ExtraordinaryResource {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable("username") String username, @PathVariable("id") Long id) {
+    public ExtraordinaryEntity findById(@PathVariable("username") String username, @PathVariable("id") Long id) {
 
         UserEntity userEntity = userService.findByUserName(username);
 
         checkUser(userEntity);
 
-        Optional<ExtraordinaryEntity> extraordinaryDaysById = extraordinaryService.findById(userEntity, id);
+        return extraordinaryService.findById(userEntity, id);
 
-        if (extraordinaryDaysById.isPresent()) {
-            return ResponseEntity.ok(extraordinaryDaysById.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorMessage("Record not found"));
-        }
     }
 
     @GetMapping("/{year}/{month}/{day}")
-    public ResponseEntity<?> findByDate(@PathVariable("username") String username, @PathVariable("year") int year,
+    public ExtraordinaryEntity findByDate(@PathVariable("username") String username, @PathVariable("year") int year,
             @PathVariable("month") int month, @PathVariable("day") int day) {
 
         UserEntity userEntity = userService.findByUserName(username);
 
         checkUser(userEntity);
 
-        Optional<ExtraordinaryEntity> extraordinaryDaysByDayMonthYear =
-                extraordinaryService.findByDate(userEntity, day, month, year);
-
-        if (extraordinaryDaysByDayMonthYear.isPresent()) {
-            return ResponseEntity.ok(extraordinaryDaysByDayMonthYear.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorMessage("Record not found"));
-        }
+//        Optional<ExtraordinaryEntity> extraordinaryDaysByDayMonthYear =
+//                extraordinaryService.findByDate(userEntity, day, month, year);
+//
+//        if (extraordinaryDaysByDayMonthYear.isPresent()) {
+            return extraordinaryService.findByDate(userEntity, day, month, year);
+//        } else {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//                    .body(new ErrorMessage("Record not found"));
+//        }
     }
 
     @PostMapping("")
@@ -106,7 +108,7 @@ public class ExtraordinaryResource {
 
         checkUser(userEntity);
 
-        ExtraordinaryEntity newExtraordinaryRecord = extraordinaryService.update(userEntity, id, extraordinaryEntity);
+        ExtraordinaryEntity newExtraordinaryRecord = extraordinaryService.update(id, extraordinaryEntity);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()

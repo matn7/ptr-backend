@@ -8,11 +8,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Repository
 @Transactional(readOnly = true)
 public interface UserRepository extends CrudRepository<UserEntity, Long> {
 
-	UserEntity findByUsername(String username);
+	Optional<UserEntity> findByUsername(String username);
 
 	UserEntity findByEmail(String email);
 

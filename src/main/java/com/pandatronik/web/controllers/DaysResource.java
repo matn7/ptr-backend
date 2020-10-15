@@ -1,128 +1,100 @@
 package com.pandatronik.web.controllers;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
-import com.pandatronik.backend.persistence.domain.core.DaysEntity;
+import com.pandatronik.backend.persistence.model.DaysEntityDTO;
 import com.pandatronik.backend.service.DaysService;
 import com.pandatronik.backend.service.user.account.UserService;
-import com.pandatronik.exceptions.UserNotFoundException;
-import com.pandatronik.utils.HeaderUtil;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import javax.validation.Valid;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Optional;
-import static java.util.Objects.isNull;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import java.net.URISyntaxException;
+
+// todo CrossOrigin and RequestMapping as Spring property
 @Validated
-@CrossOrigin(origins = "${angular.api.url}")
 @RestController
-@RequestMapping("${api.version}/users/{username}/days")
-@AllArgsConstructor
+@RequestMapping(DaysResource.BASE_URL + "/users/{username}/days")
+@RequiredArgsConstructor
 public class DaysResource {
+
+    public static final String BASE_URL = "/api/v1";
 
     private final DaysService daysService;
     private final UserService userService;
-    private final MessageSource messageSource;
 
     @GetMapping("{id}")
-    public ResponseEntity<?> findById(@PathVariable("username") String username, @PathVariable("id") Long id) {
+    @ResponseStatus(HttpStatus.OK)
+    public DaysEntityDTO findDaysById(@PathVariable("username") String username, @PathVariable("id") Long id) {
 
         UserEntity userEntity = userService.findByUserName(username);
-
         checkUser(userEntity);
 
-        Optional<DaysEntity> daysById = daysService.findById(userEntity, id);
-        if (daysById.isPresent()) {
-            return ResponseEntity.ok(daysById.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
-                            , LocaleContextHolder.getLocale())));
-        }
+        return daysService.findById(userEntity, id);
     }
 
     @GetMapping("{year}/{month}/{day}")
-    public ResponseEntity<?> findByDate(@PathVariable("username") String username, @PathVariable("year") int year,
+    @ResponseStatus(HttpStatus.OK)
+    public DaysEntityDTO findByDate(@PathVariable("username") String username, @PathVariable("year") int year,
             @PathVariable("month") int month, @PathVariable("day") int day) {
 
         UserEntity userEntity = userService.findByUserName(username);
-
         checkUser(userEntity);
 
-        Optional<DaysEntity> daysByDayMonthYear = daysService.findByDate(userEntity, day, month, year);
-
-        if (daysByDayMonthYear.isPresent()) {
-            return ResponseEntity.ok(daysByDayMonthYear.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
-                            , LocaleContextHolder.getLocale())));
-        }
+        return daysService.findByDate(userEntity, day, month, year);
     }
 
-    @PostMapping("")
-    public ResponseEntity<DaysEntity> save(@PathVariable("username") String username,
-            @Valid @RequestBody DaysEntity daysEntity) throws URISyntaxException {
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public DaysEntityDTO save(@PathVariable("username") String username,
+            @Valid @RequestBody DaysEntityDTO daysEntity) {
 
         UserEntity userEntity = userService.findByUserName(username);
-
         checkUser(userEntity);
 
         daysEntity.setUserEntity(userEntity);
+        DaysEntityDTO newDaysRecord = daysService.save(daysEntity);
 
-        DaysEntity newDaysRecord = daysService.save(daysEntity);
-
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(newDaysRecord.getId()).toUri();
-
-        return ResponseEntity.created(location).body(newDaysRecord);
+        return newDaysRecord;
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DaysEntity> update(@PathVariable("username") String username,
-            @PathVariable("id") Long id, @Valid @RequestBody DaysEntity daysEntity) throws URISyntaxException {
+    @ResponseStatus(HttpStatus.OK)
+    public DaysEntityDTO update(@PathVariable("username") String username,
+            @PathVariable("id") Long id, @Valid @RequestBody DaysEntityDTO daysEntity) throws URISyntaxException {
 
         UserEntity userEntity = userService.findByUserName(username);
-
         checkUser(userEntity);
+        daysEntity.setUserEntity(userEntity);
 
-        DaysEntity updatedDaysRecord = daysService.update(userEntity, id, daysEntity);
-
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(updatedDaysRecord.getId()).toUri();
-
-        return ResponseEntity.created(location).body(updatedDaysRecord);
+        return daysService.save(daysEntity);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("username") String username, @PathVariable("id") Long id) {
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable("username") String username, @PathVariable("id") Long id) {
 
         UserEntity userEntity = userService.findByUserName(username);
-
         checkUser(userEntity);
 
         daysService.delete(userEntity, id);
-        return ResponseEntity.ok()
-                .headers(HeaderUtil.createAlert("A record with id: " + id + " has been deleted",
-                        String.valueOf(id))).build();
     }
 
+    // this check method does not looks correctly spring should manage it somehow
+    // when in request provide different username and password receive Invalid Username or password
     private void checkUser(UserEntity userEntity) {
-        if (isNull(userEntity)) {
-            throw new UserNotFoundException(messageSource.getMessage("user.not.found.message", null
-                    , LocaleContextHolder.getLocale()));
-        }
+//        if (isNull(userEntity)) {
+//            throw new UserNotFoundException(messageSource.getMessage("user.not.found.message", null
+//                    , LocaleContextHolder.getLocale()));
+//        }
     }
 }

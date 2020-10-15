@@ -5,12 +5,11 @@ import com.pandatronik.backend.persistence.domain.core.LessImportantEntity2;
 import com.pandatronik.backend.persistence.repositories.LessImportantRepository2;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
-import javax.ws.rs.NotFoundException;
+
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -20,13 +19,13 @@ public class LessImportantService2 implements ImportantCrudService<LessImportant
     private final MessageSource messageSource;
 
     @Override
-    public Optional<LessImportantEntity2> findById(UserEntity userEntity, Long id) {
-        return lessImportantRepository2.findById(userEntity, id);
+    public LessImportantEntity2 findById(UserEntity userEntity, Long id) {
+        return lessImportantRepository2.findById(userEntity, id).orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
-    public Optional<LessImportantEntity2> findByDate(UserEntity userEntity, int year, int month, int day) {
-        return lessImportantRepository2.findByDate(userEntity, day, month, year);
+    public LessImportantEntity2 findByDate(UserEntity userEntity, int year, int month, int day) {
+        return lessImportantRepository2.findByDate(userEntity, day, month, year).orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
@@ -35,16 +34,16 @@ public class LessImportantService2 implements ImportantCrudService<LessImportant
     }
 
     @Override
-    public LessImportantEntity2 update(UserEntity userEntity, Long id, LessImportantEntity2 lessImportantEntity2) {
+    public LessImportantEntity2 update(Long id, LessImportantEntity2 lessImportantEntity2) {
 
-        Optional<LessImportantEntity2> optionalLessImportantEntity = findById(userEntity, id);
-        if (optionalLessImportantEntity.isPresent()) {
-            lessImportantEntity2.setUserEntity(userEntity);
+//        Optional<LessImportantEntity2> optionalLessImportantEntity = findById(userEntity, id);
+//        if (optionalLessImportantEntity.isPresent()) {
+//            lessImportantEntity2.setUserEntity(userEntity);
             return lessImportantRepository2.save(lessImportantEntity2);
-        } else {
-            throw new NotFoundException(messageSource.getMessage("not.important.not.found.message", null
-                    , LocaleContextHolder.getLocale()));
-        }
+//        } else {
+//            throw new NotFoundException(messageSource.getMessage("not.important.not.found.message", null
+//                    , LocaleContextHolder.getLocale()));
+//        }
     }
 
     @Override

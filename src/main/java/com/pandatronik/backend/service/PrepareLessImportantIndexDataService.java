@@ -4,10 +4,10 @@ import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.enums.MadeEnum;
 import com.pandatronik.payload.DaysResponse;
 import com.pandatronik.payload.ExtraordinaryResponse;
-import com.pandatronik.payload.ImportantIndexResponse;
-import com.pandatronik.payload.ImportantResponse;
-import com.pandatronik.payload.ImportantResponse2;
-import com.pandatronik.payload.ImportantResponse3;
+import com.pandatronik.payload.LessImportantIndexResponse;
+import com.pandatronik.payload.LessImportantResponse;
+import com.pandatronik.payload.LessImportantResponse2;
+import com.pandatronik.payload.LessImportantResponse3;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,32 +17,33 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class PrepareIndexDataService implements IndexDataService<ImportantIndexResponse> {
-    private final StatisticsImportantIndexService statisticsImportantIndexService;
+public class PrepareLessImportantIndexDataService implements IndexDataService<LessImportantIndexResponse> {
+
+    private final StatisticsLessImportantIndexService statisticsLessImportantIndexService;
 
     @Override
-    public List<ImportantIndexResponse> getData(UserEntity userEntity, int year, int month) {
-        Optional<List<Object[]>> importantIndexData = statisticsImportantIndexService.findIndexData(userEntity, year, month);
+    public List<LessImportantIndexResponse> getData(UserEntity userEntity, int year, int month) {
+        Optional<List<Object[]>> lessImportantIndexData = statisticsLessImportantIndexService.findIndexData(userEntity, year, month);
 
-        List<ImportantIndexResponse> importantData = new ArrayList<>();
+        List<LessImportantIndexResponse> lessImportantData = new ArrayList<>();
 
-        for (Object[] obj : importantIndexData.get()) {
-            ImportantIndexResponse importantIndexResponse = ImportantIndexResponse.builder()
+        for (Object[] obj : lessImportantIndexData.get()) {
+            LessImportantIndexResponse importantIndexResponse = LessImportantIndexResponse.builder()
                     .extraordinaryResponse(ExtraordinaryResponse.builder()
                             .id((Long) obj[0])
                             .title((String) obj[1])
                             .build())
-                    .importantResponse(ImportantResponse.builder()
+                    .lessImportantResponse(LessImportantResponse.builder()
                             .id((Long) obj[2])
                             .made((MadeEnum) obj[3])
                             .title((String) obj[4])
                             .build())
-                    .importantResponse2(ImportantResponse2.builder()
+                    .lessImportantResponse2(LessImportantResponse2.builder()
                             .id((Long) obj[5])
                             .made((MadeEnum) obj[6])
                             .title((String) obj[7])
                             .build())
-                    .importantResponse3(ImportantResponse3.builder()
+                    .lessImportantResponse3(LessImportantResponse3.builder()
                             .id((Long) obj[8])
                             .made((MadeEnum) obj[9])
                             .title((String) obj[10])
@@ -52,9 +53,9 @@ public class PrepareIndexDataService implements IndexDataService<ImportantIndexR
                             .rateDay((MadeEnum) obj[12])
                             .build())
                     .build();
-            importantData.add(importantIndexResponse);
+            lessImportantData.add(importantIndexResponse);
         }
 
-        return importantData;
+        return lessImportantData;
     }
 }

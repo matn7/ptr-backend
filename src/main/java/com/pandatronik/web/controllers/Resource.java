@@ -8,12 +8,13 @@ import com.pandatronik.utils.HeaderUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 import static java.util.Objects.isNull;
 
@@ -26,40 +27,40 @@ public abstract class Resource<T> {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable("username") String username,
+    public T findById(@PathVariable("username") String username,
                                       @PathVariable("id") Long id) {
         UserEntity userEntity = userService.findByUserName(username);
 
         checkUser(userEntity);
 
-        Optional<?> importantById = taskService.findById(userEntity, id);
+        T importantById = taskService.findById(userEntity, id);
 
-        if (importantById.isPresent()) {
-            return ResponseEntity.ok(importantById.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
-                            , LocaleContextHolder.getLocale())));
-        }
+//        if (importantById.isPresent()) {
+            return taskService.findById(userEntity, id);
+//        } else {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//                    .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
+//                            , LocaleContextHolder.getLocale())));
+//        }
     }
 
     @GetMapping("/{year}/{month}/{day}")
-    public ResponseEntity<?> findByDate(@PathVariable("username") String username,
+    public T findByDate(@PathVariable("username") String username,
             @PathVariable("year") int year, @PathVariable("month") int month, @PathVariable("day") int day) {
 
         UserEntity userEntity = userService.findByUserName(username);
 
         checkUser(userEntity);
-
-        Optional<?> importantByData = taskService.findByDate(userEntity, year, month, day);
-
-        if (importantByData.isPresent()) {
-            return ResponseEntity.ok(importantByData.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
-                            , LocaleContextHolder.getLocale())));
-        }
+//
+//        Optional<?> importantByData = taskService.findByDate(userEntity, year, month, day);
+//
+//        if (importantByData.isPresent()) {
+            return taskService.findByDate(userEntity, year, month, day);
+//        } else {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//                    .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
+//                            , LocaleContextHolder.getLocale())));
+//        }
     }
 
     public abstract ResponseEntity<T> save(@PathVariable("username") String username,
