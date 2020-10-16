@@ -2,9 +2,10 @@ package com.pandatronik.backend.service;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.ImportantEntity3;
+import com.pandatronik.backend.persistence.mapper.Important3Mapper;
+import com.pandatronik.backend.persistence.model.Important3DTO;
 import com.pandatronik.backend.persistence.repositories.ImportantRepository3;
 import lombok.AllArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -13,36 +14,36 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class ImportantService3 implements ImportantCrudService<ImportantEntity3, Long> {
+public class ImportantService3 implements ImportantCrudService<Important3DTO, Long> {
 
+    private final Important3Mapper important3Mapper;
     private final ImportantRepository3 importantRepository;
-    private final MessageSource messageSource;
 
     @Override
-    public ImportantEntity3 findById(UserEntity userEntity, Long id) {
-        return importantRepository.findById(userEntity, id).orElseThrow(ResourceNotFoundException::new);
+    public Important3DTO findById(UserEntity userEntity, Long id) {
+        return importantRepository.findById(userEntity, id)
+                .map(important3Mapper::importantToImportantDTO)
+                .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
-    public ImportantEntity3 findByDate(UserEntity userEntity, int year, int month, int day) {
-        return importantRepository.findByDate(userEntity, day, month, year).orElseThrow(ResourceNotFoundException::new);
+    public Important3DTO findByDate(UserEntity userEntity, int year, int month, int day) {
+        return importantRepository.findByDate(userEntity, day, month, year)
+                .map(important3Mapper::importantToImportantDTO)
+                .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
-    public ImportantEntity3 save(ImportantEntity3 importantEntity) {
-        return importantRepository.save(importantEntity);
+    public Important3DTO save(Important3DTO important3DTO) {
+        ImportantEntity3 important = important3Mapper.importantDtoToImportant(important3DTO);
+        return saveAndReturnDTO(important);
     }
 
     @Override
-    public ImportantEntity3 update(Long id, ImportantEntity3 importantEntity) {
-//        Optional<ImportantEntity3> optionalImportantEntity = findById(userEntity, id);
-//        if (optionalImportantEntity.isPresent()) {
-//            importantEntity.setUserEntity(userEntity);
-            return importantRepository.save(importantEntity);
-//        } else {
-//            throw new NotFoundException(messageSource.getMessage("important.not.found.message", null
-//                    , LocaleContextHolder.getLocale()));
-//        }
+    public Important3DTO update(Long id, Important3DTO important3DTO) {
+        ImportantEntity3 important = important3Mapper.importantDtoToImportant(important3DTO);
+        important.setId(id);
+        return saveAndReturnDTO(important);
     }
 
     @Override
@@ -65,5 +66,11 @@ public class ImportantService3 implements ImportantCrudService<ImportantEntity3,
     @Override
     public List<Integer> findCountMadeByStartEnd(UserEntity userEntity, LocalDate startDate, LocalDate endDate) {
         return importantRepository.findCountMadeByStartEnd(userEntity, startDate, endDate);
+    }
+
+    private Important3DTO saveAndReturnDTO(ImportantEntity3 importantEntity3) {
+        ImportantEntity3 savedImportant = importantRepository.save(importantEntity3);
+        Important3DTO returnDto = important3Mapper.importantToImportantDTO(savedImportant);
+        return returnDto;
     }
 }

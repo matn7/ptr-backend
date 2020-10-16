@@ -2,9 +2,10 @@ package com.pandatronik.backend.service;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.ImportantEntity2;
+import com.pandatronik.backend.persistence.mapper.Important2Mapper;
+import com.pandatronik.backend.persistence.model.Important2DTO;
 import com.pandatronik.backend.persistence.repositories.ImportantRepository2;
 import lombok.AllArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -13,44 +14,41 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class ImportantService2 implements ImportantCrudService<ImportantEntity2, Long> {
+public class ImportantService2 implements ImportantCrudService<Important2DTO, Long> {
 
+    private final Important2Mapper important2Mapper;
     private final ImportantRepository2 importantRepository;
-    private final MessageSource messageSource;
 
     @Override
-    public ImportantEntity2 findById(UserEntity userEntity, Long id) {
-        return importantRepository.findById(userEntity, id).orElseThrow(ResourceNotFoundException::new);
+    public Important2DTO findById(UserEntity userEntity, Long id) {
+        return importantRepository.findById(userEntity, id)
+                .map(important2Mapper::importantToImportantDTO)
+                .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
-    public ImportantEntity2 findByDate(UserEntity userEntity, int year, int month, int day) {
-        return importantRepository.findByDate(userEntity, day, month, year).orElseThrow(ResourceNotFoundException::new);
+    public Important2DTO findByDate(UserEntity userEntity, int year, int month, int day) {
+        return importantRepository.findByDate(userEntity, day, month, year)
+                .map(important2Mapper::importantToImportantDTO)
+                .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
-    public ImportantEntity2 save(ImportantEntity2 importantEntity) {
-        return importantRepository.save(importantEntity);
+    public Important2DTO save(Important2DTO important2DTO) {
+        ImportantEntity2 important = important2Mapper.importantDtoToImportant(important2DTO);
+        return saveAndReturn(important);
     }
 
     @Override
-    public ImportantEntity2 update(Long id, ImportantEntity2 importantEntity) {
-
-//        Optional<ImportantEntity2> optionalImportantEntity = findById(userEntity, id);
-//        if (optionalImportantEntity.isPresent()) {
-//            importantEntity.setUserEntity(userEntity);
-            return importantRepository.save(importantEntity);
-//        } else {
-//            throw new NotFoundException(messageSource.getMessage("important.not.found.message", null
-//                    , LocaleContextHolder.getLocale()));
-//        }
+    public Important2DTO update(Long id, Important2DTO important2DTO) {
+        ImportantEntity2 important = important2Mapper.importantDtoToImportant(important2DTO);
+        important.setId(id);
+        return saveAndReturn(important);
     }
 
     @Override
     public void delete(UserEntity userEntity, Long id) {
-        importantRepository.findById(userEntity, id).ifPresent(important -> {
-            importantRepository.delete(important);
-        });
+        importantRepository.deleteById(id);
     }
 
     @Override
@@ -66,5 +64,11 @@ public class ImportantService2 implements ImportantCrudService<ImportantEntity2,
     @Override
     public List<Integer> findCountMadeByStartEnd(UserEntity userEntity, LocalDate startDate, LocalDate endDate) {
         return importantRepository.findCountMadeByStartEnd(userEntity, startDate, endDate);
+    }
+
+    private Important2DTO saveAndReturn(ImportantEntity2 importantEntity2) {
+        ImportantEntity2 savedImportant = importantRepository.save(importantEntity2);
+        Important2DTO returnDto = important2Mapper.importantToImportantDTO(savedImportant);
+        return returnDto;
     }
 }

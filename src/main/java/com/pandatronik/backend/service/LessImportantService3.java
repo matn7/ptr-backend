@@ -2,9 +2,10 @@ package com.pandatronik.backend.service;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.LessImportantEntity3;
+import com.pandatronik.backend.persistence.mapper.LessImportant3Mapper;
+import com.pandatronik.backend.persistence.model.LessImportant3DTO;
 import com.pandatronik.backend.persistence.repositories.LessImportantRepository3;
 import lombok.AllArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -13,37 +14,36 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class LessImportantService3 implements ImportantCrudService<LessImportantEntity3, Long> {
+public class LessImportantService3 implements ImportantCrudService<LessImportant3DTO, Long> {
 
+    private final LessImportant3Mapper lessImportant3Mapper;
     private final LessImportantRepository3 lessImportantRepository3;
-    private final MessageSource messageSource;
 
     @Override
-    public LessImportantEntity3 findById(UserEntity userEntity, Long id) {
-        return lessImportantRepository3.findById(userEntity, id).orElseThrow(ResourceNotFoundException::new);
+    public LessImportant3DTO findById(UserEntity userEntity, Long id) {
+        return lessImportantRepository3.findById(userEntity, id)
+                .map(lessImportant3Mapper::lessImportantToLessImportantDTO)
+                .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
-    public LessImportantEntity3 findByDate(UserEntity userEntity, int year, int month, int day) {
-        return lessImportantRepository3.findByDate(userEntity, day, month, year).orElseThrow(ResourceNotFoundException::new);
+    public LessImportant3DTO findByDate(UserEntity userEntity, int year, int month, int day) {
+        return lessImportantRepository3.findByDate(userEntity, day, month, year)
+                .map(lessImportant3Mapper::lessImportantToLessImportantDTO)
+                .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
-    public LessImportantEntity3 save(LessImportantEntity3 lessImportantEntity3) {
-        return lessImportantRepository3.save(lessImportantEntity3);
+    public LessImportant3DTO save(LessImportant3DTO lessImportant3DTO) {
+        LessImportantEntity3 lessImportant = lessImportant3Mapper.lessImportantDtoToLessImportant(lessImportant3DTO);
+        return saveAndReturnDTO(lessImportant);
     }
 
     @Override
-    public LessImportantEntity3 update(Long id, LessImportantEntity3 lessImportantEntity3) {
-
-//        Optional<LessImportantEntity3> optionalLessImportantEntity = findById(userEntity, id);
-//        if (optionalLessImportantEntity.isPresent()) {
-//            lessImportantEntity3.setUserEntity(userEntity);
-            return lessImportantRepository3.save(lessImportantEntity3);
-//        } else {
-//            throw new NotFoundException(messageSource.getMessage("not.important.not.found.message", null
-//                    , LocaleContextHolder.getLocale()));
-//        }
+    public LessImportant3DTO update(Long id, LessImportant3DTO lessImportant3DTO) {
+        LessImportantEntity3 lessImportant = lessImportant3Mapper.lessImportantDtoToLessImportant(lessImportant3DTO);
+        lessImportant.setId(id);
+        return saveAndReturnDTO(lessImportant);
     }
 
     @Override
@@ -66,5 +66,11 @@ public class LessImportantService3 implements ImportantCrudService<LessImportant
     @Override
     public List<Integer> findCountMadeByStartEnd(UserEntity userEntity, LocalDate startDate, LocalDate endDate) {
         return lessImportantRepository3.findCountMadeByStartEnd(userEntity, startDate, endDate);
+    }
+
+    private LessImportant3DTO saveAndReturnDTO(LessImportantEntity3 lessImportantEntity3) {
+        LessImportantEntity3 savedLessImportant = lessImportantRepository3.save(lessImportantEntity3);
+        LessImportant3DTO returnDto = lessImportant3Mapper.lessImportantToLessImportantDTO(savedLessImportant);
+        return returnDto;
     }
 }

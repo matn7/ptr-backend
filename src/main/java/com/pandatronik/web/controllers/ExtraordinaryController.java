@@ -25,7 +25,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping(AppConstants.BASE_URL + "/{username}/extraordinary")
 @AllArgsConstructor
-public class ExtraordinaryResource {
+public class ExtraordinaryController {
 
     private final ExtraordinaryService extraordinaryService;
     private final UserService userService;
