@@ -2,57 +2,68 @@ package com.pandatronik.backend.service;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.ExtraordinaryEntity;
+import com.pandatronik.backend.persistence.mapper.ExtraordinaryMapper;
+import com.pandatronik.backend.persistence.model.ExtraordinaryDTO;
 import com.pandatronik.backend.persistence.repositories.ExtraordinaryRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @AllArgsConstructor
-public class ExtraordinaryService implements ExtraordinaryCrudService<ExtraordinaryEntity, Long> {
+public class ExtraordinaryService implements ExtraordinaryCrudService<ExtraordinaryDTO, Long> {
 
+    private final ExtraordinaryMapper extraordinaryMapper;
     private final ExtraordinaryRepository extraordinaryRepository;
-    private final MessageSource messageSource;
 
     @Override
-    public Iterable<ExtraordinaryEntity> findAll(UserEntity userEntity) {
-        return extraordinaryRepository.findAllByUserEntity(userEntity);
+    public List<ExtraordinaryDTO> findAll(UserEntity userEntity) {
+        return extraordinaryRepository.findAllByUserEntity(userEntity)
+                .stream()
+                .map(extraordinaryMapper::extraordinaryToExtraordinaryDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public ExtraordinaryEntity findById(UserEntity userEntity, Long id) {
-        return extraordinaryRepository.findById(userEntity, id).orElseThrow(ResourceNotFoundException::new);
+    public ExtraordinaryDTO findById(UserEntity userEntity, Long id) {
+        return extraordinaryRepository.findById(userEntity, id)
+                .map(extraordinaryMapper::extraordinaryToExtraordinaryDTO)
+                .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
-    public ExtraordinaryEntity findByDate(UserEntity userEntity, int year, int month, int day) {
-        return extraordinaryRepository.findByDate(userEntity, year, month, day).orElseThrow(ResourceNotFoundException::new);
+    public ExtraordinaryDTO findByDate(UserEntity userEntity, int year, int month, int day) {
+        return extraordinaryRepository.findByDate(userEntity, year, month, day)
+                .map(extraordinaryMapper::extraordinaryToExtraordinaryDTO)
+                .orElseThrow(ResourceNotFoundException::new);
+    }
+
+
+    @Override
+    public ExtraordinaryDTO save(ExtraordinaryDTO extraordinaryDTO) {
+        ExtraordinaryEntity extraordinary = extraordinaryMapper.extraordinaryDtoToExtraordinary(extraordinaryDTO);
+        return saveAndReturnDTO(extraordinary);
     }
 
     @Override
-    public ExtraordinaryEntity save(ExtraordinaryEntity extraordinaryEntity) {
-        return extraordinaryRepository.save(extraordinaryEntity);
-    }
-
-    @Override
-    public ExtraordinaryEntity update(Long id, ExtraordinaryEntity extraordinaryEntity) {
-//        Optional<ExtraordinaryEntity> optionalExtraordinaryEntity = findById(userEntity, id);
-//        if (optionalExtraordinaryEntity.isPresent()) {
-//            extraordinaryEntity.setUserEntity(userEntity);
-            return extraordinaryRepository.save(extraordinaryEntity);
-//        } else {
-//            throw new NotFoundException(messageSource.getMessage("extraordinary.not.found.messages", null
-//                    , LocaleContextHolder.getLocale()));
-//        }
-
+    public ExtraordinaryDTO update(Long id, ExtraordinaryDTO extraordinaryDTO) {
+        ExtraordinaryEntity extraordinary = extraordinaryMapper.extraordinaryDtoToExtraordinary(extraordinaryDTO);
+        extraordinary.setId(id);
+        return saveAndReturnDTO(extraordinary);
     }
 
     @Override
     public void delete(UserEntity userEntity, Long id) {
-        extraordinaryRepository.findById(userEntity, id).ifPresent(extraordinary -> {
-            extraordinaryRepository.delete(extraordinary);
-        });
+        extraordinaryRepository.deleteById(id);
+    }
+
+    private ExtraordinaryDTO saveAndReturnDTO(ExtraordinaryEntity extraordinaryEntity) {
+        ExtraordinaryEntity savedExtraordinary = extraordinaryRepository.save(extraordinaryEntity);
+        ExtraordinaryDTO returnDto = extraordinaryMapper.extraordinaryToExtraordinaryDTO(savedExtraordinary);
+        return returnDto;
     }
 
 }

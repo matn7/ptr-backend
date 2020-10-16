@@ -7,7 +7,6 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.pandatronik.backend.persistence.domain.UserEntity;
-import com.pandatronik.enums.MadeEnum;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -18,18 +17,18 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
-//@Builder
 @NoArgsConstructor
-public class DaysEntityDTO {
+public class ExtraordinaryDTO {
 
     private Long id;
 
     @NotNull
-    @Size(min = 1, max = 255)
-    private String body;
+    @Size(min = 1, max = 40)
+    private String title;
 
     @NotNull
-    private MadeEnum rateDay;
+    @Size(min = 1, max = 255)
+    private String body;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)

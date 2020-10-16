@@ -1,6 +1,6 @@
 package com.pandatronik.backend.persistence.mapper;
 import com.pandatronik.backend.persistence.domain.core.DaysEntity;
-import com.pandatronik.backend.persistence.model.DaysEntityDTO;
+import com.pandatronik.backend.persistence.model.DaysDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -9,7 +9,7 @@ public interface DaysMapper {
 
     DaysMapper INSTANCE = Mappers.getMapper(DaysMapper.class);
 
-    DaysEntityDTO daysToDaysDTO(DaysEntity daysEntity);
+    DaysDTO daysToDaysDTO(DaysEntity daysEntity);
 
-    DaysEntity daysDtoToDays(DaysEntityDTO daysEntityDTO);
+    DaysEntity daysDtoToDays(DaysDTO daysDTO);
 }

@@ -1,9 +1,10 @@
 package com.pandatronik.web.controllers;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
-import com.pandatronik.backend.persistence.model.DaysEntityDTO;
+import com.pandatronik.backend.persistence.model.DaysDTO;
 import com.pandatronik.backend.service.DaysService;
 import com.pandatronik.backend.service.user.account.UserService;
+import com.pandatronik.utils.AppConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -23,18 +24,16 @@ import java.net.URISyntaxException;
 // todo CrossOrigin and RequestMapping as Spring property
 @Validated
 @RestController
-@RequestMapping(DaysResource.BASE_URL + "/users/{username}/days")
+@RequestMapping(AppConstants.BASE_URL + "/{username}/days")
 @RequiredArgsConstructor
-public class DaysResource {
-
-    public static final String BASE_URL = "/api/v1";
+public class DaysController {
 
     private final DaysService daysService;
     private final UserService userService;
 
     @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public DaysEntityDTO findDaysById(@PathVariable("username") String username, @PathVariable("id") Long id) {
+    public DaysDTO findById(@PathVariable("username") String username, @PathVariable("id") Long id) {
 
         UserEntity userEntity = userService.findByUserName(username);
         checkUser(userEntity);
@@ -44,8 +43,8 @@ public class DaysResource {
 
     @GetMapping("{year}/{month}/{day}")
     @ResponseStatus(HttpStatus.OK)
-    public DaysEntityDTO findByDate(@PathVariable("username") String username, @PathVariable("year") int year,
-            @PathVariable("month") int month, @PathVariable("day") int day) {
+    public DaysDTO findByDate(@PathVariable("username") String username, @PathVariable("year") int year,
+                              @PathVariable("month") int month, @PathVariable("day") int day) {
 
         UserEntity userEntity = userService.findByUserName(username);
         checkUser(userEntity);
@@ -55,28 +54,27 @@ public class DaysResource {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public DaysEntityDTO save(@PathVariable("username") String username,
-            @Valid @RequestBody DaysEntityDTO daysEntity) {
+    public DaysDTO save(@PathVariable("username") String username,
+                        @Valid @RequestBody DaysDTO daysDTO) {
 
         UserEntity userEntity = userService.findByUserName(username);
         checkUser(userEntity);
 
-        daysEntity.setUserEntity(userEntity);
-        DaysEntityDTO newDaysRecord = daysService.save(daysEntity);
+        daysDTO.setUserEntity(userEntity);
 
-        return newDaysRecord;
+        return daysService.save(daysDTO);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public DaysEntityDTO update(@PathVariable("username") String username,
-            @PathVariable("id") Long id, @Valid @RequestBody DaysEntityDTO daysEntity) throws URISyntaxException {
+    public DaysDTO update(@PathVariable("username") String username,
+                          @PathVariable("id") Long id, @Valid @RequestBody DaysDTO daysDTO) throws URISyntaxException {
 
         UserEntity userEntity = userService.findByUserName(username);
         checkUser(userEntity);
-        daysEntity.setUserEntity(userEntity);
+        daysDTO.setUserEntity(userEntity);
 
-        return daysService.save(daysEntity);
+        return daysService.save(daysDTO);
     }
 
     @DeleteMapping("/{id}")

@@ -7,12 +7,13 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface ExtraordinaryRepository extends CrudRepository<ExtraordinaryEntity, Long> {
 
-    Iterable<ExtraordinaryEntity> findAllByUserEntity(UserEntity userEntity);
+    List<ExtraordinaryEntity> findAllByUserEntity(UserEntity userEntity);
 
     @Query("SELECT i FROM ExtraordinaryEntity i WHERE i.userEntity =:userEntity AND i.id = :id")
     Optional<ExtraordinaryEntity> findById(@Param("userEntity") UserEntity userEntity, @Param("id") Long id);
