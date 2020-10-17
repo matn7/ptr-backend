@@ -1,10 +1,10 @@
 package com.pandatronik.backend.service;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
-import com.pandatronik.backend.persistence.domain.core.ImportantEntity2;
+import com.pandatronik.backend.persistence.domain.core.Important2Entity;
 import com.pandatronik.backend.persistence.mapper.Important2Mapper;
 import com.pandatronik.backend.persistence.model.Important2DTO;
-import com.pandatronik.backend.persistence.repositories.ImportantRepository2;
+import com.pandatronik.backend.persistence.repositories.Important2Repository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
@@ -14,10 +14,10 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class ImportantService2 implements ImportantCrudService<Important2DTO, Long> {
+public class Important2Service implements ImportantCrudService<Important2DTO, Long> {
 
     private final Important2Mapper important2Mapper;
-    private final ImportantRepository2 importantRepository;
+    private final Important2Repository importantRepository;
 
     @Override
     public Important2DTO findById(UserEntity userEntity, Long id) {
@@ -35,13 +35,13 @@ public class ImportantService2 implements ImportantCrudService<Important2DTO, Lo
 
     @Override
     public Important2DTO save(Important2DTO important2DTO) {
-        ImportantEntity2 important = important2Mapper.importantDtoToImportant(important2DTO);
+        Important2Entity important = important2Mapper.importantDtoToImportant(important2DTO);
         return saveAndReturn(important);
     }
 
     @Override
     public Important2DTO update(Long id, Important2DTO important2DTO) {
-        ImportantEntity2 important = important2Mapper.importantDtoToImportant(important2DTO);
+        Important2Entity important = important2Mapper.importantDtoToImportant(important2DTO);
         important.setId(id);
         return saveAndReturn(important);
     }
@@ -66,8 +66,8 @@ public class ImportantService2 implements ImportantCrudService<Important2DTO, Lo
         return importantRepository.findCountMadeByStartEnd(userEntity, startDate, endDate);
     }
 
-    private Important2DTO saveAndReturn(ImportantEntity2 importantEntity2) {
-        ImportantEntity2 savedImportant = importantRepository.save(importantEntity2);
+    private Important2DTO saveAndReturn(Important2Entity important2Entity) {
+        Important2Entity savedImportant = importantRepository.save(important2Entity);
         Important2DTO returnDto = important2Mapper.importantToImportantDTO(savedImportant);
         return returnDto;
     }

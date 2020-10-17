@@ -30,11 +30,11 @@ import java.time.LocalDateTime;
 
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Table(name = "LessImportant3")
+@Table(name = "Important3")
 @Cacheable(false)
 @NoArgsConstructor
 @Data
-public class LessImportantEntity3 implements Serializable {
+public class Important3Entity implements Serializable {
 
     private static final long serialVersionUID = -8916349599502114268L;
 

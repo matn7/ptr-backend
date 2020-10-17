@@ -2,8 +2,8 @@ package com.pandatronik.web.controllers.statistics;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.service.ImportantService;
-import com.pandatronik.backend.service.ImportantService2;
-import com.pandatronik.backend.service.ImportantService3;
+import com.pandatronik.backend.service.Important2Service;
+import com.pandatronik.backend.service.Important3Service;
 import com.pandatronik.backend.service.user.account.UserService;
 import com.pandatronik.exceptions.UserNotFoundException;
 import com.pandatronik.payload.StartEndRequest;
@@ -31,8 +31,8 @@ public class ImportantStatisticsResource {
 
     private final UserService userService;
     private final ImportantService importantService;
-    private final ImportantService2 importantService2;
-    private final ImportantService3 importantService3;
+    private final Important2Service important2Service;
+    private final Important3Service important3Service;
     private final MessageSource messageSource;
 
     @GetMapping("/1/count/{year}")
@@ -60,7 +60,7 @@ public class ImportantStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Object[]> result =  importantService2.findCountByYearStat(userEntity, year);
+        List<Object[]> result =  important2Service.findCountByYearStat(userEntity, year);
         Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(collect)) {
             return ResponseEntity.ok(collect);
@@ -79,7 +79,7 @@ public class ImportantStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Object[]> result =  importantService3.findCountByYearStat(userEntity, year);
+        List<Object[]> result =  important3Service.findCountByYearStat(userEntity, year);
         Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(collect)) {
             // "SEVENTY_FIVE" -> "1"
@@ -118,7 +118,7 @@ public class ImportantStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Object[]> result = importantService2.findAverageByYearStat(userEntity, year);
+        List<Object[]> result = important2Service.findAverageByYearStat(userEntity, year);
         Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(result)) {
             return ResponseEntity.ok(collect);
@@ -137,7 +137,7 @@ public class ImportantStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Object[]> result = importantService3.findAverageByYearStat(userEntity, year);
+        List<Object[]> result = important3Service.findAverageByYearStat(userEntity, year);
         Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(result)) {
             // "2" -> "0.0"
@@ -186,7 +186,7 @@ public class ImportantStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Integer> countMadeByStartEnd = importantService2.findCountMadeByStartEnd(userEntity,
+        List<Integer> countMadeByStartEnd = important2Service.findCountMadeByStartEnd(userEntity,
                 startEndRequest.getStartDate(), startEndRequest.getEndDate());
 
         Map<Integer, Long> collect = countMadeByStartEnd.stream()
@@ -209,7 +209,7 @@ public class ImportantStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Integer> countMadeByStartEnd = importantService3.findCountMadeByStartEnd(userEntity,
+        List<Integer> countMadeByStartEnd = important3Service.findCountMadeByStartEnd(userEntity,
                 startEndRequest.getStartDate(), startEndRequest.getEndDate());
 
         Map<Integer, Long> collect = countMadeByStartEnd.stream()

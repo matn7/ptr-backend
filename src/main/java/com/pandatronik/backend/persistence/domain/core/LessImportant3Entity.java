@@ -30,13 +30,13 @@ import java.time.LocalDateTime;
 
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Table(name = "Important2")
+@Table(name = "LessImportant3")
 @Cacheable(false)
 @NoArgsConstructor
 @Data
-public class ImportantEntity2 implements Serializable {
+public class LessImportant3Entity implements Serializable {
 
-    private static final long serialVersionUID = -4757677094121428220L;
+    private static final long serialVersionUID = -8916349599502114268L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -66,5 +66,4 @@ public class ImportantEntity2 implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private UserEntity userEntity;
-
 }

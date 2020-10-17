@@ -109,19 +109,19 @@ public class UserEntity implements Serializable, UserDetails {
     private List<ImportantEntity> importantEntity;
 
 	@OneToMany(mappedBy = "userEntity")
-	private List<ImportantEntity2> importantEntity2;
+	private List<Important2Entity> important2Entity;
 
     @OneToMany(mappedBy = "userEntity")
-    private List<ImportantEntity3> importantEntity3;
+    private List<Important3Entity> important3Entity;
 
 	@OneToMany(mappedBy = "userEntity")
 	private List<LessImportantEntity> lessImportantEntity;
 
 	@OneToMany(mappedBy = "userEntity")
-	private List<LessImportantEntity2> lessImportantEntity2;
+	private List<LessImportant2Entity> lessImportant2Entity;
 
 	@OneToMany(mappedBy = "userEntity")
-	private List<LessImportantEntity3> lessImportantEntity3;
+	private List<LessImportant3Entity> lessImportant3Entity;
 
 	@OneToMany(mappedBy = "userEntity")
     private List<DaysEntity> daysEntity;

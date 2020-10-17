@@ -2,7 +2,7 @@ package com.pandatronik.web.controllers;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.model.LessImportant2DTO;
-import com.pandatronik.backend.service.LessImportantService2;
+import com.pandatronik.backend.service.LessImportant2Service;
 import com.pandatronik.backend.service.user.account.UserService;
 import com.pandatronik.utils.AppConstants;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ import javax.validation.Valid;
 @RequestMapping(AppConstants.BASE_URL + "/{username}/lessimportant/2")
 public class LessImportant2Controller extends Resource<LessImportant2DTO> {
 
-    public LessImportant2Controller(LessImportantService2 taskService, UserService userService) {
+    public LessImportant2Controller(LessImportant2Service taskService, UserService userService) {
         super(taskService, userService);
     }
 

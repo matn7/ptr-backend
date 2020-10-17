@@ -54,11 +54,11 @@ public class CalendarEntity implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "calendarDate", referencedColumnName="startDate", insertable = false, updatable = false)
-    private ImportantEntity2 important2;
+    private Important2Entity important2;
 
     @OneToOne
     @JoinColumn(name = "calendarDate", referencedColumnName="startDate", insertable = false, updatable = false)
-    private ImportantEntity3 important3;
+    private Important3Entity important3;
 
     @OneToOne
     @JoinColumn(name = "calendarDate", referencedColumnName="startDate", insertable = false, updatable = false)
@@ -66,11 +66,11 @@ public class CalendarEntity implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "calendarDate", referencedColumnName="startDate", insertable = false, updatable = false)
-    private LessImportantEntity2 lessImportant2;
+    private LessImportant2Entity lessImportant2;
 
     @OneToOne
     @JoinColumn(name = "calendarDate", referencedColumnName="startDate", insertable = false, updatable = false)
-    private LessImportantEntity3 lessImportant3;
+    private LessImportant3Entity lessImportant3;
 
     @OneToOne
     @JoinColumn(name = "calendarDate", referencedColumnName="startDate", insertable = false, updatable = false)

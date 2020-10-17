@@ -2,7 +2,7 @@ package com.pandatronik.web.controllers;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.model.Important3DTO;
-import com.pandatronik.backend.service.ImportantService3;
+import com.pandatronik.backend.service.Important3Service;
 import com.pandatronik.backend.service.user.account.UserService;
 import com.pandatronik.utils.AppConstants;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ import javax.validation.Valid;
 @RequestMapping(AppConstants.BASE_URL + "/{username}/important/3")
 public class Important3Controller extends Resource<Important3DTO> {
 
-    public Important3Controller(ImportantService3 importantService, UserService userService) {
+    public Important3Controller(Important3Service importantService, UserService userService) {
         super(importantService, userService);
     }
 

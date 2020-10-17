@@ -1,10 +1,10 @@
 package com.pandatronik.backend.service;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
-import com.pandatronik.backend.persistence.domain.core.ImportantEntity3;
+import com.pandatronik.backend.persistence.domain.core.Important3Entity;
 import com.pandatronik.backend.persistence.mapper.Important3Mapper;
 import com.pandatronik.backend.persistence.model.Important3DTO;
-import com.pandatronik.backend.persistence.repositories.ImportantRepository3;
+import com.pandatronik.backend.persistence.repositories.Important3Repository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
@@ -14,10 +14,10 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class ImportantService3 implements ImportantCrudService<Important3DTO, Long> {
+public class Important3Service implements ImportantCrudService<Important3DTO, Long> {
 
     private final Important3Mapper important3Mapper;
-    private final ImportantRepository3 importantRepository;
+    private final Important3Repository importantRepository;
 
     @Override
     public Important3DTO findById(UserEntity userEntity, Long id) {
@@ -35,13 +35,13 @@ public class ImportantService3 implements ImportantCrudService<Important3DTO, Lo
 
     @Override
     public Important3DTO save(Important3DTO important3DTO) {
-        ImportantEntity3 important = important3Mapper.importantDtoToImportant(important3DTO);
+        Important3Entity important = important3Mapper.importantDtoToImportant(important3DTO);
         return saveAndReturnDTO(important);
     }
 
     @Override
     public Important3DTO update(Long id, Important3DTO important3DTO) {
-        ImportantEntity3 important = important3Mapper.importantDtoToImportant(important3DTO);
+        Important3Entity important = important3Mapper.importantDtoToImportant(important3DTO);
         important.setId(id);
         return saveAndReturnDTO(important);
     }
@@ -68,8 +68,8 @@ public class ImportantService3 implements ImportantCrudService<Important3DTO, Lo
         return importantRepository.findCountMadeByStartEnd(userEntity, startDate, endDate);
     }
 
-    private Important3DTO saveAndReturnDTO(ImportantEntity3 importantEntity3) {
-        ImportantEntity3 savedImportant = importantRepository.save(importantEntity3);
+    private Important3DTO saveAndReturnDTO(Important3Entity important3Entity) {
+        Important3Entity savedImportant = importantRepository.save(important3Entity);
         Important3DTO returnDto = important3Mapper.importantToImportantDTO(savedImportant);
         return returnDto;
     }
