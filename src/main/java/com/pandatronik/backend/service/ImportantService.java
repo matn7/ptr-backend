@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -31,6 +32,14 @@ public class ImportantService implements ImportantCrudService<ImportantDTO, Long
         return importantRepository.findByDate(userEntity, day, month, year)
                 .map(importantMapper::importantToImportantDTO)
                 .orElseThrow(ResourceNotFoundException::new);
+    }
+
+    @Override
+    public List<ImportantDTO> findByDate(UserEntity userEntity, int year, int month) {
+        return importantRepository.findByDate(userEntity, year, month)
+                .stream()
+                .map(importantMapper::importantToImportantDTO)
+                .collect(Collectors.toList());
     }
 
     @Override

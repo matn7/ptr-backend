@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.net.URISyntaxException;
 
-// todo CrossOrigin and RequestMapping as Spring property
 @Validated
 @RestController
 @RequestMapping(AppConstants.BASE_URL + "/{username}/days")
@@ -36,7 +35,6 @@ public class DaysController {
     public DaysDTO findById(@PathVariable("username") String username, @PathVariable("id") Long id) {
 
         UserEntity userEntity = userService.findByUserName(username);
-        checkUser(userEntity);
 
         return daysService.findById(userEntity, id);
     }
@@ -47,7 +45,6 @@ public class DaysController {
                               @PathVariable("month") int month, @PathVariable("day") int day) {
 
         UserEntity userEntity = userService.findByUserName(username);
-        checkUser(userEntity);
 
         return daysService.findByDate(userEntity, day, month, year);
     }
@@ -58,8 +55,6 @@ public class DaysController {
                         @Valid @RequestBody DaysDTO daysDTO) {
 
         UserEntity userEntity = userService.findByUserName(username);
-        checkUser(userEntity);
-
         daysDTO.setUserEntity(userEntity);
 
         return daysService.save(daysDTO);
@@ -71,7 +66,6 @@ public class DaysController {
                           @PathVariable("id") Long id, @Valid @RequestBody DaysDTO daysDTO) throws URISyntaxException {
 
         UserEntity userEntity = userService.findByUserName(username);
-        checkUser(userEntity);
         daysDTO.setUserEntity(userEntity);
 
         return daysService.save(daysDTO);
@@ -82,17 +76,7 @@ public class DaysController {
     public void delete(@PathVariable("username") String username, @PathVariable("id") Long id) {
 
         UserEntity userEntity = userService.findByUserName(username);
-        checkUser(userEntity);
-
         daysService.delete(userEntity, id);
     }
 
-    // this check method does not looks correctly spring should manage it somehow
-    // when in request provide different username and password receive Invalid Username or password
-    private void checkUser(UserEntity userEntity) {
-//        if (isNull(userEntity)) {
-//            throw new UserNotFoundException(messageSource.getMessage("user.not.found.message", null
-//                    , LocaleContextHolder.getLocale()));
-//        }
-    }
 }

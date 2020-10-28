@@ -22,6 +22,11 @@ public interface LessImportant2Repository extends CrudRepository<LessImportant2E
     Optional<LessImportant2Entity> findByDate(@Param("userEntity") UserEntity userEntity, @Param("day") int day,
                                               @Param("month") int month, @Param("year") int year);
 
+    @Query("SELECT i FROM LessImportant2Entity i WHERE " +
+            "MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userEntity = :userEntity")
+    List<LessImportant2Entity> findByDate(@Param("userEntity") UserEntity userEntity,
+                                              @Param("year") int year, @Param("month") int month);
+
     // statistics
     @Query("SELECT made, COUNT(made) FROM LessImportant2Entity i WHERE YEAR(i.startDate) = :year " +
             "AND i.userEntity = :userEntity GROUP BY i.made")

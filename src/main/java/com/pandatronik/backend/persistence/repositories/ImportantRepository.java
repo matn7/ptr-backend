@@ -22,6 +22,11 @@ public interface ImportantRepository extends CrudRepository<ImportantEntity, Lon
     Optional<ImportantEntity> findByDate(@Param("userEntity") UserEntity userEntity, @Param("day") int day,
         @Param("month") int month, @Param("year") int year);
 
+    @Query("SELECT i FROM ImportantEntity i WHERE " +
+            "MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userEntity = :userEntity")
+    List<ImportantEntity> findByDate(@Param("userEntity") UserEntity userEntity,
+                                         @Param("year") int year, @Param("month") int month);
+
     // statistics
     @Query("SELECT made, COUNT(made) FROM ImportantEntity i WHERE YEAR(i.startDate) = :year " +
             "AND i.userEntity =:userEntity GROUP BY i.made")

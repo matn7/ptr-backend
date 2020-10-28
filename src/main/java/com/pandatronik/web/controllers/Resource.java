@@ -19,7 +19,6 @@ public abstract class Resource<T> {
     protected final ImportantCrudService<T, Long> taskService;
     protected final UserService userService;
 
-
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public T findById(@PathVariable("username") String username, @PathVariable("id") Long id) {
@@ -33,7 +32,7 @@ public abstract class Resource<T> {
             @PathVariable("year") int year, @PathVariable("month") int month, @PathVariable("day") int day) {
 
         UserEntity userEntity = userService.findByUserName(username);
-
+        // This looks does not works, i think on I
         return taskService.findByDate(userEntity, year, month, day);
     }
 

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -24,6 +25,14 @@ public class DaysService implements DaysCrudService<DaysDTO, Long> {
         return daysRepository.findById(userEntity, id)
                 .map(daysMapper::daysToDaysDTO)
                 .orElseThrow(ResourceNotFoundException::new);
+    }
+
+    @Override
+    public List<DaysDTO> findByDate(UserEntity userEntity, int year, int month) {
+        return daysRepository.findByPartDate(userEntity, year, month)
+                .stream()
+                .map(daysMapper::daysToDaysDTO)
+                .collect(Collectors.toList());
     }
 
     @Override

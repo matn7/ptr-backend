@@ -23,4 +23,9 @@ public interface ExtraordinaryRepository extends CrudRepository<ExtraordinaryEnt
     Optional<ExtraordinaryEntity> findByDate(@Param("userEntity") UserEntity userEntity,
         @Param("year") int year, @Param("month") int month, @Param("day") int day);
 
+    @Query("SELECT i FROM ExtraordinaryEntity i WHERE " +
+            "MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userEntity = :userEntity")
+    List<ExtraordinaryEntity> findByPartDate(@Param("userEntity") UserEntity userEntity,
+                                             @Param("year") int year, @Param("month") int month);
+
 }

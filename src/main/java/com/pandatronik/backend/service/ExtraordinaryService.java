@@ -28,6 +28,14 @@ public class ExtraordinaryService implements ExtraordinaryCrudService<Extraordin
     }
 
     @Override
+    public List<ExtraordinaryDTO> findByDate(UserEntity userEntity, int year, int month) {
+        return extraordinaryRepository.findByPartDate(userEntity, year, month)
+                .stream()
+                .map(extraordinaryMapper::extraordinaryToExtraordinaryDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public ExtraordinaryDTO findById(UserEntity userEntity, Long id) {
         return extraordinaryRepository.findById(userEntity, id)
                 .map(extraordinaryMapper::extraordinaryToExtraordinaryDTO)
