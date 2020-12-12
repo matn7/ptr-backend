@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-public class ImportantDTO {
+public class ImportantDTO implements Comparable<ImportantDTO> {
 
     private Long id;
 
@@ -51,4 +51,8 @@ public class ImportantDTO {
 
     private UserEntity userEntity;
 
+    @Override
+    public int compareTo(ImportantDTO importantDTO) {
+        return this.startDate.compareTo(importantDTO.startDate);
+    }
 }

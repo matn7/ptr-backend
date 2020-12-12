@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-public class LessImportant3DTO {
+public class LessImportant3DTO implements Comparable<LessImportant3DTO> {
 
     private Long id;
 
@@ -51,4 +51,8 @@ public class LessImportant3DTO {
 
     private UserEntity userEntity;
 
+    @Override
+    public int compareTo(LessImportant3DTO lessImportant3DTO) {
+        return this.startDate.compareTo(lessImportant3DTO.startDate);
+    }
 }
