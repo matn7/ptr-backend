@@ -16,6 +16,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ImportantIndexService implements IndexService<ImportantIndexDTO> {
+
     private final ExtraordinaryService extraordinaryService;
     private final DaysService daysService;
     private final ImportantService importantService;
