@@ -127,33 +127,25 @@ ng add @angular/material
 
 ```console
 ng update
+
+ng g m Shared
+ng g c shared/Input
+
+ng g m Days --routing
+ng g c days/DaysCreate
+ng g c days/DaysHome
+
+ng g m Auth --routing
+ng g c auth/Signin
+ng g c auth/Signup
+ng g s auth/Auth
+
+ng g s shared/ErrorHandle
+ng g s auth/HttpInterceptorAuth
+ng g s auth/RouteGuard
+
+ng g m Index --routing
+ng g c index/Important
+ng g c index/LessImportant
+ng g c index/ImportantCreate
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

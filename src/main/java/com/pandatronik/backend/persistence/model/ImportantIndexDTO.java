@@ -16,3 +16,9 @@ public class ImportantIndexDTO {
     private List<Important3DTO> important3DTO = new ArrayList<>();
     private List<DaysDTO> daysDTO = new ArrayList<>();
 }
+
+//HandleErrorsService
+//
+//AppInternalMessagesService
+//
+//do wywalenia ?

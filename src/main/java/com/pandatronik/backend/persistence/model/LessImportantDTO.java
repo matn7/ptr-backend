@@ -1,5 +1,6 @@
 package com.pandatronik.backend.persistence.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -49,6 +50,7 @@ public class LessImportantDTO implements Comparable<LessImportantDTO> {
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDate startDate;
 
+    @JsonIgnore
     private UserEntity userEntity;
 
     @Override

@@ -6,7 +6,6 @@ import com.pandatronik.backend.service.LessImportantIndexService;
 import com.pandatronik.backend.service.user.account.UserService;
 import com.pandatronik.utils.AppConstants;
 import lombok.AllArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class LessImportantIndexController {
 
     private final UserService userService;
-    private final MessageSource messageSource;
     private final LessImportantIndexService lessImportantIndexService;
 
     @GetMapping("/{year}/{month}")

@@ -22,6 +22,7 @@ import javax.validation.Valid;
 @RequestMapping(AppConstants.BASE_URL + "/{username}/important/1")
 public class ImportantController extends Resource<ImportantDTO> {
 
+    // moze to statyczne zrobic
     public ImportantController(ImportantService importantService, UserService userService) {
         super(importantService, userService);
     }

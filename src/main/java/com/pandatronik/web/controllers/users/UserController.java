@@ -10,14 +10,17 @@ import com.pandatronik.validator.UserValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -61,11 +64,11 @@ public class UserController {
         LOG.info("Execute authentication here");
 
         String ip = getClientIP();
-        if (loginAttemptService.isBlocked(ip)) {
-            LOG.error("MAX LOGIN attempts exceeded");
-            return new ResponseEntity<String>("Login from IP " + ip + " was blocked for 3 minutes. Try again later.",
-                    HttpStatus.UNAUTHORIZED);
-        }
+//        if (loginAttemptService.isBlocked(ip)) {
+//            LOG.error("MAX LOGIN attempts exceeded");
+//            return new ResponseEntity<String>("Login from IP " + ip + " was blocked for 3 minutes. Try again later.",
+//                    HttpStatus.UNAUTHORIZED);
+//        }
 
 
         ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(result);
