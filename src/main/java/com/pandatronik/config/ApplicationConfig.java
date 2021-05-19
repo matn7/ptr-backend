@@ -1,27 +1,25 @@
 package com.pandatronik.config;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+
 //import com.amazonaws.auth.AWSCredentials;
 //import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 //import com.amazonaws.regions.Region;
 //import com.amazonaws.regions.Regions;
 //import com.amazonaws.services.s3.AmazonS3Client;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
-
+//@Configuration
+//@EnableJpaRepositories(basePackages = "com.pandatronik.backend.persistence.repositories")
+//@EntityScan(basePackages = "com.pandatronik.backend.persistence.domain")
+//@PropertySource("file:///${user.home}/.pandatronik/application-common.properties")
+//@PropertySource("file:///${user.home}/.pandatronik/stripe.properties")
+//@EnableTransactionManagement
 @Configuration
-@EnableJpaRepositories(basePackages = "com.pandatronik.backend.persistence.repositories")
-@EntityScan(basePackages = "com.pandatronik.backend.persistence.domain")
 @PropertySource("file:///${user.home}/.pandatronik/application-common.properties")
-@PropertySource("file:///${user.home}/.pandatronik/stripe.properties")
-@EnableTransactionManagement
 public class ApplicationConfig {
 
-    @Value("${aws.s3.profile}")
-    private String awsProfileName;
+//    @Value("${aws.s3.profile}")
+//    private String awsProfileName;
 
 //    @Bean
 //    public AmazonS3Client s3Client() {

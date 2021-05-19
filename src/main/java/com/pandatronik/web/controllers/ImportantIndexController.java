@@ -23,7 +23,7 @@ public class ImportantIndexController {
 
     @GetMapping("/{year}/{month}")
     public ImportantIndexDTO findByDate(@PathVariable("username") String username,
-                                        @PathVariable("year") int year, @PathVariable("month") int month) {
+            @PathVariable("year") int year, @PathVariable("month") int month) {
         final UserEntity userEntity = userService.findByUserName(username);
         return importantIndexService.getData(userEntity, year, month);
     }

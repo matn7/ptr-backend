@@ -23,7 +23,7 @@ public class LessImportantIndexController {
 
     @GetMapping("/{year}/{month}")
     public LessImportantIndexDTO findByDate(@PathVariable("username") String username,
-                                            @PathVariable("year") int year, @PathVariable("month") int month) {
+            @PathVariable("year") int year, @PathVariable("month") int month) {
         final UserEntity userEntity = userService.findByUserName(username);
         return lessImportantIndexService.getData(userEntity, year, month);
     }

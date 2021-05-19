@@ -5,12 +5,11 @@ import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.UserRole;
 import com.pandatronik.configuration.ValidatorConfiguration;
 import com.pandatronik.enums.PlansEnum;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.util.HashSet;
@@ -18,14 +17,16 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.pandatronik.utils.MessagesConstants.*;
+import static com.pandatronik.utils.MessagesConstants.INVALID_USERNAME_MSG;
+import static com.pandatronik.utils.MessagesConstants.SIZE_6_50_MSG;
+import static com.pandatronik.utils.MessagesConstants.USERNAME_PANDA_MSG;
 import static com.pandatronik.utils.ValidCredentials.VALID_EMAIL;
 import static com.pandatronik.utils.ValidCredentials.VALID_PASSWORD;
 import static com.pandatronik.utils.ValidCredentials.VALID_USERNAME;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+//@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class,
     classes = {ValidatorConfiguration.class})
 public class UsernameValidatorTest {

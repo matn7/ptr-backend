@@ -1,19 +1,27 @@
 package com.pandatronik.backend.persistence.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.pandatronik.backend.persistence.domain.core.*;
+import com.pandatronik.backend.persistence.domain.core.DaysEntity;
+import com.pandatronik.backend.persistence.domain.core.ExtraordinaryEntity;
+import com.pandatronik.backend.persistence.domain.core.Important2Entity;
+import com.pandatronik.backend.persistence.domain.core.Important3Entity;
+import com.pandatronik.backend.persistence.domain.core.ImportantEntity;
+import com.pandatronik.backend.persistence.domain.core.LessImportant2Entity;
+import com.pandatronik.backend.persistence.domain.core.LessImportant3Entity;
+import com.pandatronik.backend.persistence.domain.core.LessImportantEntity;
 import com.pandatronik.validator.NoPandaInUsernameConstraint;
 import com.pandatronik.validator.PasswordConstraint;
 import com.pandatronik.validator.UsernameConstraint;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,7 +32,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-
 import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -32,9 +39,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import static java.util.Arrays.stream;
 
 @Entity
 @Getter
@@ -42,7 +52,6 @@ import java.util.Set;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-//@ToString
 @Builder
 @UsernameConstraint
 @PasswordConstraint
@@ -66,7 +75,6 @@ public class UserEntity implements Serializable, UserDetails {
 	@Size(min = 6, max = 60)
 	@Column(name = "password")
 	private String password;
-	// pewnie password po szyfrowanie zwieksza rozmiar dzine ?
 
 	@Transient
 	private String confirmPassword;
@@ -99,7 +107,14 @@ public class UserEntity implements Serializable, UserDetails {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<UserRole> userRoles = new HashSet<>();
 
-	@OneToMany(cascade = CascadeType.ALL, // if we delete user we want to their token be deleted too
+	private String[] authorities;
+
+	private boolean isNotLocked;
+
+	private Date lastLoginDate;
+	private Date lastLoginDateDisplay;
+
+	@OneToMany(cascade = CascadeType.ALL,
 			fetch = FetchType.LAZY,
 			mappedBy = "user")
 	private Set<PasswordResetToken> passwordResetTokens = new HashSet<>();
@@ -138,13 +153,28 @@ public class UserEntity implements Serializable, UserDetails {
 	}
 
 	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return stream(this.authorities).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+	}
+
+	@Override
+	public String getPassword() {
+		return this.password;
+	}
+
+	@Override
+	public String getUsername() {
+		return this.username;
+	}
+
+	@Override
 	public boolean isAccountNonExpired() {
 		return true;
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
-		return true;
+		return this.isNotLocked;
 	}
 
 	@Override
@@ -153,10 +183,9 @@ public class UserEntity implements Serializable, UserDetails {
 	}
 
 	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		Set<GrantedAuthority> authorities = new HashSet<>();
-		userRoles.forEach(ur -> authorities.add(new Authority(ur.getRole().getName())));
-		return authorities;
+	public boolean isEnabled() {
+		return this.enabled;
 	}
+
 
 }

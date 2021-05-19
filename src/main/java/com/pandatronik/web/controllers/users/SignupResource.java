@@ -75,7 +75,10 @@ public class SignupResource {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody UserEntity user, HttpServletRequest request, BindingResult result) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody UserEntity user,
+                                          HttpServletRequest request,
+                                          BindingResult result) {
+
         ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(result);
 
         if (errorMap != null) {

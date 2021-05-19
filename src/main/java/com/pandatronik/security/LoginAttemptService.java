@@ -17,12 +17,12 @@ public class LoginAttemptService {
 
     public LoginAttemptService() {
         super();
-        attemptsCache = CacheBuilder.newBuilder().
-                expireAfterWrite(BLOCK_DURATION, TimeUnit.MINUTES).build(new CacheLoader<String, Integer>() {
-            public Integer load(String key) {
-                return 0;
-            }
-        });
+        attemptsCache = CacheBuilder.newBuilder().expireAfterWrite(BLOCK_DURATION, TimeUnit.MINUTES)
+                .maximumSize(100).build(new CacheLoader<String, Integer>() {
+                    public Integer load(String key) {
+                        return 0;
+                    }
+                });
     }
 
     public void loginSucceeded(String key) {

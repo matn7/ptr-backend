@@ -1,6 +1,5 @@
 package com.pandatronik.security;
 
-import com.google.gson.Gson;
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.service.user.account.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +20,8 @@ import static com.pandatronik.enums.TokenEnum.TOKEN_EXPIRED;
 import static com.pandatronik.security.SecurityConstants.HEADER_STRING;
 import static com.pandatronik.security.SecurityConstants.TOKEN_PREFIX;
 
-
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
     @Autowired
     private JwtTokenProvider tokenProvider;
 

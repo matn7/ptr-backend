@@ -2,18 +2,19 @@ package com.pandatronik.unit;
 
 import com.pandatronik.utils.UserUtils;
 import com.pandatronik.web.controllers.users.ForgotMyPasswordResource;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class UserUtilsTest {
 
     private MockHttpServletRequest mockHttpServletRequest;
 
-    @Before
+    @BeforeEach
     public void init() {
         mockHttpServletRequest = new MockHttpServletRequest();
     }
@@ -31,7 +32,7 @@ public class UserUtilsTest {
 
         String actualUrl = UserUtils.createPasswordResetUrl(mockHttpServletRequest, userId, token);
 
-        Assert.assertEquals(expectedUrl, actualUrl);
+        assertEquals(expectedUrl, actualUrl);
 
     }
 }

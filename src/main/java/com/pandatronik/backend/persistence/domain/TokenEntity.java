@@ -14,10 +14,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name="token_entity")
 public class TokenEntity implements Serializable {
 
     private static final long serialVersionUID = -1241228341368525164L;

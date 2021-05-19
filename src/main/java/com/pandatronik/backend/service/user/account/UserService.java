@@ -23,6 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.pandatronik.utils.Authority.USER_AUTHORITIES;
+
 @Service
 @Transactional(readOnly = true)
 public class UserService {
@@ -49,9 +51,6 @@ public class UserService {
 
 	@Transactional
 	public UserEntity createUser(UserEntity user, PlansEnum plansEnum, Set<UserRole> userRoles) {
-		Preconditions.checkNotNull(user, "user must not be null");
-		Preconditions.checkNotNull(plansEnum, "plansEnum must not be null");
-		Preconditions.checkNotNull(userRoles, "userRoles must not be null");
 
 		LOG.info("Create user \n\n\n");
 		UserEntity localUser = userRepository.findByEmail(user.getEmail());
@@ -70,6 +69,8 @@ public class UserService {
 		}
 		user.getUserRoles().addAll(userRoles);
 		localUser = userRepository.save(user);
+
+		user.setAuthorities(USER_AUTHORITIES);
 
 		LOG.info("Create user end \n\n\n");
 		return localUser;

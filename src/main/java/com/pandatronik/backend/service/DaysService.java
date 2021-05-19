@@ -78,7 +78,8 @@ public class DaysService implements DaysCrudService<DaysDTO, Long> {
 
     @Override
     public Optional<List<Integer>> findByMonthAndYearDailyData(UserEntity userEntity, int year, int month) {
-        return daysRepository.findByMonthAndYearDailyData(userEntity, year, month);
+        return null;
+//        return daysRepository.findByMonthAndYearDailyData(userEntity, year, month);
     }
 
     private DaysDTO saveAndReturnDTO(DaysEntity daysEntity) {

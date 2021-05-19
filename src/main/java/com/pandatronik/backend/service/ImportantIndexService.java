@@ -26,6 +26,7 @@ public class ImportantIndexService implements IndexService<ImportantIndexDTO> {
     @Override
     public ImportantIndexDTO getData(UserEntity userEntity, int year, int month) {
         ImportantIndexDTO importantIndexDTO = new ImportantIndexDTO();
+
         final List<ExtraordinaryDTO> extraordinaries = extraordinaryService.findByDate(userEntity, year, month);
         final List<DaysDTO> days = daysService.findByDate(userEntity, year, month);
         final List<ImportantDTO> important = importantService.findByDate(userEntity, year, month);

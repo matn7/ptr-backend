@@ -10,7 +10,6 @@ import com.pandatronik.backend.persistence.repositories.user.account.UserReposit
 import com.pandatronik.enums.PlansEnum;
 import com.pandatronik.enums.RolesEnum;
 import com.pandatronik.utils.UserUtils;
-import org.junit.rules.TestName;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashSet;
@@ -57,7 +56,7 @@ public abstract class AbstractIntegrationTest {
     protected UserEntity createUser(String random) {
         return createUser(random, random + "@pandatronik.com");
     }
-    protected UserEntity createUser(TestName testName) {
-        return createUser(testName.getMethodName(), testName.getMethodName() + "@pandatronik.com");
-    }
+//    protected UserEntity createUser(Test testName) {
+//        return createUser(testName.getMethodName(), testName.getMethodName() + "@pandatronik.com");
+//    }
 }

@@ -33,6 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        // instead of @Component above JwtAuthenticationFilter class
         return new JwtAuthenticationFilter();
     }
 

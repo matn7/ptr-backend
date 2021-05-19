@@ -1,9 +1,8 @@
 package com.pandatronik.validators;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -20,7 +19,7 @@ public class UserEntityValidator {
     private static ValidatorFactory validatorFactory;
     private static Validator validator;
 
-    @BeforeClass
+    @BeforeEach
     public static void createValidator() {
         validatorFactory = Validation.buildDefaultValidatorFactory();
         validator = validatorFactory.getValidator();
@@ -147,7 +146,7 @@ public class UserEntityValidator {
     }
 
     @Test
-    @Ignore("fix this")
+//    @Ignore("fix this")
     public void shouldValidateInCorrectEmail_3() {
         UserEntity entity = UserEntityProvider.getValidUserEntity().withEmail("panda@panda").build();
 
