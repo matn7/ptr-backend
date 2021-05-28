@@ -20,7 +20,7 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
 
     @ExceptionHandler({ResourceNotFoundException.class})
     public ResponseEntity<Object> handleNotFoundException(Exception exception, WebRequest request) {
-        return new ResponseEntity<>(ExceptionResponse.builder().body("Resource Not Fount").build(),
+        return new ResponseEntity<>(ExceptionResponse.builder().body("Resource Not Found").build(),
                 new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 

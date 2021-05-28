@@ -1,5 +1,6 @@
 package com.pandatronik.backend.persistence.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -8,7 +9,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.pandatronik.backend.persistence.domain.UserEntity;
-import com.pandatronik.enums.MadeEnum;
+import com.pandatronik.enums.RateDayEnum;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -29,8 +30,9 @@ public class DaysDTO implements Comparable<DaysDTO> {
     @Size(min = 1, max = 255)
     private String body;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @NotNull
-    private MadeEnum rateDay;
+    private RateDayEnum rateDay;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)

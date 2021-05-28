@@ -37,7 +37,7 @@ public class ExtraordinaryController {
         UserEntity userEntity = userService.findByUserName(username);
 
         ExtraordinaryListDTO extraordinaryListDTO = new ExtraordinaryListDTO();
-        extraordinaryListDTO.getExtraordinaryList().addAll(extraordinaryService.findAll(userEntity));
+        extraordinaryListDTO.setExtraordinaryList(extraordinaryService.findAll(userEntity));
 
         return extraordinaryListDTO;
     }

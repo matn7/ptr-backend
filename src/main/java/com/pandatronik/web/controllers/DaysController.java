@@ -68,7 +68,7 @@ public class DaysController {
         UserEntity userEntity = userService.findByUserName(username);
         daysDTO.setUserEntity(userEntity);
 
-        return daysService.save(daysDTO);
+        return daysService.update(id, daysDTO);
     }
 
     @DeleteMapping("/{id}")

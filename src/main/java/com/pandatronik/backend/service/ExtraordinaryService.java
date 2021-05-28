@@ -25,6 +25,7 @@ public class ExtraordinaryService implements ExtraordinaryCrudService<Extraordin
                 .stream()
                 .map(extraordinaryMapper::extraordinaryToExtraordinaryDTO)
                 .collect(Collectors.toList());
+
     }
 
     @Override

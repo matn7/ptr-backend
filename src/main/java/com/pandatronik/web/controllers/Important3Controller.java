@@ -28,7 +28,7 @@ public class Important3Controller extends Resource<Important3DTO> {
 
     @Override
     @PostMapping
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public Important3DTO save(@PathVariable("username") String username,
             @Valid @RequestBody Important3DTO important3DTO){
 

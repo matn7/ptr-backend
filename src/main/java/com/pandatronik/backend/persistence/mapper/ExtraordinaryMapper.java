@@ -14,4 +14,6 @@ public interface ExtraordinaryMapper {
 
     ExtraordinaryEntity extraordinaryDtoToExtraordinary(ExtraordinaryDTO extraordinaryDTO);
 
+//    List<ExtraordinaryDTO> extraordinaryDtoToExtraordinaryListDTO(ExtraordinaryListDTO extraordinaryListDTO);
+
 }

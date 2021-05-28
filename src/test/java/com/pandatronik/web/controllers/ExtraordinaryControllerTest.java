@@ -3,9 +3,9 @@ package com.pandatronik.web.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.pandatronik.backend.persistence.domain.UserEntity;
-import com.pandatronik.backend.persistence.model.DaysDTO;
-import com.pandatronik.backend.service.DaysService;
-import com.pandatronik.enums.RateDayEnum;
+import com.pandatronik.backend.persistence.model.ExtraordinaryDTO;
+import com.pandatronik.backend.persistence.model.ExtraordinaryListDTO;
+import com.pandatronik.backend.service.ExtraordinaryService;
 import com.pandatronik.utils.AppConstants;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +16,13 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
@@ -32,43 +35,68 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = DaysController.class)
+@WebMvcTest(controllers = ExtraordinaryController.class)
 @AutoConfigureMockMvc(addFilters = false)
-public class DaysControllerTest extends SecurityConfigBeans {
+public class ExtraordinaryControllerTest extends SecurityConfigBeans {
 
     @MockBean
-    private DaysService daysService;
+    private ExtraordinaryService extraordinaryService;
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    public void findById() throws Exception {
+    public void findAll() throws Exception {
         UserEntity user = UserEntity.builder().build();
-        DaysDTO day = getDaysDTO();
+        List<ExtraordinaryDTO> list = getExtraordinaryDTOList();
+        ExtraordinaryListDTO extraordinaryListDTO = new ExtraordinaryListDTO();
+        extraordinaryListDTO.setExtraordinaryList(list);
 
         when(userService.findByUserName(anyString())).thenReturn(user);
-        when(daysService.findById(user, 1L)).thenReturn(day);
+        when(extraordinaryService.findAll(user)).thenReturn(list);
 
-        RequestBuilder request = MockMvcRequestBuilders
-                .get(AppConstants.BASE_URL + "/someuser/days/1")
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get(AppConstants.BASE_URL + "/someuser/extraordinary/all")
+                .accept(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.extraordinaryList[0].id", equalTo(1)))
+                .andExpect(jsonPath("$.extraordinaryList[0].title", equalTo("Extra Day Title")))
+                .andExpect(jsonPath("$.extraordinaryList[0].body", equalTo("Extra Day Body")))
+                .andExpect(jsonPath("$.extraordinaryList[1].id", equalTo(2)))
+                .andExpect(jsonPath("$.extraordinaryList[1].title", equalTo("Extra Day Title 2")))
+                .andExpect(jsonPath("$.extraordinaryList[1].body", equalTo("Extra Day Body 2")));
+    }
+
+    @Test
+    public void findById() throws Exception {
+        UserEntity user = UserEntity.builder().build();
+        ExtraordinaryDTO extraordinary = getExtraordinary();
+
+        when(userService.findByUserName(anyString())).thenReturn(user);
+        when(extraordinaryService.findById(user, 1L)).thenReturn(extraordinary);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get(AppConstants.BASE_URL + "/someuser/extraordinary/1")
                 .accept(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(request)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(1)))
-                .andExpect(jsonPath("$.body", equalTo("Some Day")))
-                .andExpect(jsonPath("$.rateDay", equalTo(String.valueOf(RateDayEnum.VERY_GOOD.getRateDay()))));
+                .andExpect(jsonPath("$.title", equalTo("Extra Day Title")))
+                .andExpect(jsonPath("$.body", equalTo("Extra Day Body")));
     }
+
 
     @Test
     public void findByIdNotFound() throws Exception {
         UserEntity user = UserEntity.builder().build();
         when(userService.findByUserName(anyString())).thenReturn(user);
-        when(daysService.findById(user, 1L)).thenThrow(ResourceNotFoundException.class);
+        when(extraordinaryService.findById(user, 1L)).thenThrow(ResourceNotFoundException.class);
 
         RequestBuilder request = MockMvcRequestBuilders
-                .get(AppConstants.BASE_URL + "/someuser/days/1")
+                .get(AppConstants.BASE_URL + "/someuser/extraordinary/1")
                 .accept(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(request)
@@ -79,24 +107,24 @@ public class DaysControllerTest extends SecurityConfigBeans {
     @Test
     public void findByDate() throws Exception {
         UserEntity user = UserEntity.builder().build();
-        DaysDTO day = getDaysDTO();
+        ExtraordinaryDTO extraordinary = getExtraordinary();
 
         when(userService.findByUserName(anyString())).thenReturn(user);
-        when(daysService.findByDate(user, 25, 5, 2025)).thenReturn(day);
+        when(extraordinaryService.findByDate(user, 25, 5, 2025)).thenReturn(extraordinary);
 
         RequestBuilder request = MockMvcRequestBuilders
-                .get(AppConstants.BASE_URL + "/someuser/days/2025/05/25")
+                .get(AppConstants.BASE_URL + "/someuser/extraordinary/2025/05/25")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(request)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(1)))
-                .andExpect(jsonPath("$.body", equalTo("Some Day")))
+                .andExpect(jsonPath("$.title", equalTo("Extra Day Title")))
+                .andExpect(jsonPath("$.body", equalTo("Extra Day Body")))
                 .andExpect(jsonPath("$.startDate[0]", equalTo(2025)))
                 .andExpect(jsonPath("$.startDate[1]", equalTo(5)))
-                .andExpect(jsonPath("$.startDate[2]", equalTo(25)))
-                .andExpect(jsonPath("$.rateDay", equalTo(String.valueOf(RateDayEnum.VERY_GOOD.getRateDay()))));
+                .andExpect(jsonPath("$.startDate[2]", equalTo(25)));
     }
 
     @Test
@@ -104,10 +132,10 @@ public class DaysControllerTest extends SecurityConfigBeans {
         UserEntity user = UserEntity.builder().build();
 
         when(userService.findByUserName(anyString())).thenReturn(user);
-        when(daysService.findByDate(user, 25, 5, 2025)).thenThrow(ResourceNotFoundException.class);
+        when(extraordinaryService.findByDate(user, 25, 5, 2025)).thenThrow(ResourceNotFoundException.class);
 
         RequestBuilder request = MockMvcRequestBuilders
-                .get(AppConstants.BASE_URL + "/someuser/days/2025/05/25")
+                .get(AppConstants.BASE_URL + "/someuser/extraordinary/2025/05/25")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
 
@@ -120,17 +148,17 @@ public class DaysControllerTest extends SecurityConfigBeans {
     public void save() throws Exception {
 
         UserEntity user = UserEntity.builder().build();
-        DaysDTO day = getDaysDTO();
+        ExtraordinaryDTO extraordinary = getExtraordinary();
 
         when(userService.findByUserName(anyString())).thenReturn(user);
-        when(daysService.save(any())).thenReturn(day);
+        when(extraordinaryService.save(any())).thenReturn(extraordinary);
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 
-        final String json = objectMapper.writeValueAsString(day);
+        final String json = objectMapper.writeValueAsString(extraordinary);
 
-        RequestBuilder request = post(AppConstants.BASE_URL + "/someuser/days")
+        RequestBuilder request = post(AppConstants.BASE_URL + "/someuser/extraordinary")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
@@ -138,24 +166,24 @@ public class DaysControllerTest extends SecurityConfigBeans {
         mockMvc.perform(request)
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", equalTo(1)))
-                .andExpect(jsonPath("$.body", equalTo("Some Day")))
-                .andExpect(jsonPath("$.rateDay", equalTo(String.valueOf(RateDayEnum.VERY_GOOD.getRateDay()))));
+                .andExpect(jsonPath("$.title", equalTo("Extra Day Title")))
+                .andExpect(jsonPath("$.body", equalTo("Extra Day Body")));
     }
 
     @Test
     public void update() throws Exception {
         UserEntity user = UserEntity.builder().build();
-        DaysDTO day = getDaysDTO();
+        ExtraordinaryDTO extraordinary = getExtraordinary();
 
         when(userService.findByUserName(anyString())).thenReturn(user);
-        when(daysService.update(anyLong(), any())).thenReturn(day);
+        when(extraordinaryService.update(anyLong(), any())).thenReturn(extraordinary);
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 
-        final String json = objectMapper.writeValueAsString(day);
+        final String json = objectMapper.writeValueAsString(extraordinary);
 
-        RequestBuilder request = put(AppConstants.BASE_URL + "/someuser/days/1")
+        RequestBuilder request = put(AppConstants.BASE_URL + "/someuser/extraordinary/1")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
@@ -163,29 +191,53 @@ public class DaysControllerTest extends SecurityConfigBeans {
         mockMvc.perform(request)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(1)))
-                .andExpect(jsonPath("$.body", equalTo("Some Day")))
-                .andExpect(jsonPath("$.rateDay", equalTo(String.valueOf(RateDayEnum.VERY_GOOD.getRateDay()))));
+                .andExpect(jsonPath("$.title", equalTo("Extra Day Title")))
+                .andExpect(jsonPath("$.body", equalTo("Extra Day Body")));
     }
 
     @Test
-    public void deleteDay() throws Exception {
+    public void deleteExtraordinaryDay() throws Exception {
         UserEntity user = UserEntity.builder().build();
         when(userService.findByUserName(anyString())).thenReturn(user);
 
-        mockMvc.perform(delete(AppConstants.BASE_URL + "/someuser/days/1")
+        mockMvc.perform(delete(AppConstants.BASE_URL + "/someuser/extraordinary/1")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
-    private DaysDTO getDaysDTO() {
-        DaysDTO day = new DaysDTO();
-        day.setId(1L);
-        day.setBody("Some Day");
-        day.setStartDate(LocalDate.of(2025, 5, 25));
-        day.setPostedOn(LocalDateTime.now());
-        day.setRateDay(RateDayEnum.VERY_GOOD);
-        return day;
+
+    private List<ExtraordinaryDTO> getExtraordinaryDTOList() {
+        List<ExtraordinaryDTO> extraordinaryDTOList = new ArrayList<>();
+        ExtraordinaryDTO extra1 = new ExtraordinaryDTO();
+        extra1.setId(1L);
+        extra1.setTitle("Extra Day Title");
+        extra1.setBody("Extra Day Body");
+        extra1.setStartDate(LocalDate.of(2025,5,25));
+        extra1.setPostedOn(LocalDateTime.now());
+
+        ExtraordinaryDTO extra2 = new ExtraordinaryDTO();
+        extra2.setId(2L);
+        extra2.setTitle("Extra Day Title 2");
+        extra2.setBody("Extra Day Body 2");
+        extra2.setStartDate(LocalDate.of(2025,5,25));
+        extra2.setPostedOn(LocalDateTime.now());
+
+        extraordinaryDTOList.add(extra1);
+        extraordinaryDTOList.add(extra2);
+
+        return extraordinaryDTOList;
     }
 
+    private ExtraordinaryDTO getExtraordinary() {
+        ExtraordinaryDTO extra1 = new ExtraordinaryDTO();
+        extra1.setId(1L);
+        extra1.setTitle("Extra Day Title");
+        extra1.setBody("Extra Day Body");
+        extra1.setStartDate(LocalDate.of(2025,5,25));
+        extra1.setPostedOn(LocalDateTime.now());
+
+        return extra1;
+    }
 }
+

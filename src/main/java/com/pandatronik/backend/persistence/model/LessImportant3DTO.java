@@ -1,5 +1,6 @@
 package com.pandatronik.backend.persistence.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -35,6 +36,7 @@ public class LessImportant3DTO implements Comparable<LessImportant3DTO> {
     @Size(min = 1, max = 255)
     private String body;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @NotNull
     private MadeEnum made;
 
