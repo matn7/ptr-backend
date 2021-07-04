@@ -1,6 +1,5 @@
 package com.pandatronik.backend.service.user.account;
 
-import com.google.common.base.Preconditions;
 import com.pandatronik.backend.persistence.domain.PasswordResetToken;
 import com.pandatronik.backend.persistence.domain.Plan;
 import com.pandatronik.backend.persistence.domain.TokenEntity;
@@ -23,8 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.pandatronik.utils.Authority.USER_AUTHORITIES;
-
 @Service
 @Transactional(readOnly = true)
 public class UserService {
@@ -41,7 +38,7 @@ public class UserService {
 	private UserRepository userRepository;
 
 	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	private BCryptPasswordEncoder passwordEncoder;
 	
 	@Autowired
 	private PasswordResetTokenRepository passwordResetTokenRepository;
@@ -59,7 +56,7 @@ public class UserService {
 					user.getUsername(), user.getEmail());
 		} else {
 
-			String encryptedPassword = bCryptPasswordEncoder.encode(user.getPassword());
+			String encryptedPassword = passwordEncoder.encode(user.getPassword());
 			user.setPassword(encryptedPassword);
 
 			Plan plan = new Plan(plansEnum);
@@ -67,14 +64,17 @@ public class UserService {
 			if (!planRepository.existsById(plansEnum.getId())) {
 				plan = planRepository.save(plan);
 			}
-			user.setPlan(plan);
-			for (UserRole ur : userRoles) {
-				roleRepository.save(ur.getRole());
-			}
-			user.getUserRoles().addAll(userRoles);
 
-			user.setAuthorities(USER_AUTHORITIES);
+			user.setPlan(plan);
+
+//			for (UserRole ur : userRoles) {
+//				roleRepository.save(ur.getRole());
+//			}
+//
+//			user.getUserRoles().addAll(userRoles);
+
 			localUser = userRepository.save(user);
+
 		}
 
 		return localUser;
@@ -87,12 +87,10 @@ public class UserService {
 	}
 
 	public UserEntity findByEmail(String email) {
-		Preconditions.checkNotNull(email, "email must not be null");
 		return userRepository.findByEmail(email);
 	}
 	
 	public UserEntity save(UserEntity user) {
-		Preconditions.checkNotNull(user, "user must not be null");
 		return userRepository.save(user);
 	}
 
@@ -112,10 +110,7 @@ public class UserService {
 
 	@Transactional
     public void updateUserPassword(long userId, String password) {
-		Preconditions.checkNotNull(userId, "userId must not be null");
-		Preconditions.checkNotNull(password, "password must not be null");
-		
-    	password = bCryptPasswordEncoder.encode(password);
+    	password = passwordEncoder.encode(password);
     	userRepository.updateUserPassword(userId, password);
     	LOG.debug("Password updated successfully for user id {} ", userId);
     	
@@ -135,13 +130,11 @@ public class UserService {
 			tokenRepository.deleteAll(activateToken);
 		}
 	}
-	
+
 	@Transactional
     public void updateUserEmail(long userId, String email) {
-		Preconditions.checkNotNull(userId, "userId must not be null");
-		Preconditions.checkNotNull(email, "email must not be null");
     	userRepository.updateUserEmail(userId, email);
-    	LOG.debug("Email updated successfully for user id {} ", userId);	
+    	LOG.debug("Email updated successfully for user id {} ", userId);
     }
 
     public Optional<UserEntity> findById(Long userId) {

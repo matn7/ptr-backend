@@ -24,7 +24,7 @@ public interface UserRepository extends CrudRepository<UserEntity, Long> {
 	@Modifying
 	@Query("update UserEntity u set u.password = :password where u.id = :userId")
 	void updateUserPassword(@Param("userId") long userId, @Param("password") String password);
-	
+
 	@Transactional
 	@Modifying
 	@Query("update UserEntity u set u.email = :email where u.id = :userId")
@@ -35,7 +35,6 @@ public interface UserRepository extends CrudRepository<UserEntity, Long> {
 	@Query("update UserEntity u set u.enabled = 1 where u.id = :userId")
 	void activateUser(@Param("userId") long userId);
 
-//	@Transactional
-	@Override
+	@Transactional
 	void deleteById(Long aLong);
 }

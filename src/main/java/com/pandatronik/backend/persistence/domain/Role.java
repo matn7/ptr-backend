@@ -12,7 +12,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-//@Table(name = "role_entity")
 public class Role implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -60,10 +59,8 @@ public class Role implements Serializable {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (o == null || getClass() != o.getClass())
-			return false;
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
 
 		Role role = (Role) o;
 

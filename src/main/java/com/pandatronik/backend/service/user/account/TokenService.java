@@ -1,6 +1,5 @@
 package com.pandatronik.backend.service.user.account;
 
-import com.google.common.base.Preconditions;
 import com.pandatronik.backend.persistence.domain.TokenEntity;
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.repositories.user.account.TokenRepository;
@@ -33,7 +32,6 @@ public class TokenService {
 
     @Transactional
     public TokenEntity createPasswordResetTokenForEmail(String email) {
-        Preconditions.checkNotNull(email, "email must not be null");
         TokenEntity tokenEntity = null;
 
         UserEntity user = userRepository.findByEmail(email);
@@ -53,7 +51,6 @@ public class TokenService {
     }
 
     public TokenEntity findByToken(String token) {
-        Preconditions.checkNotNull(token, "token must not be null");
         return tokenRepository.findByToken(token);
     }
 

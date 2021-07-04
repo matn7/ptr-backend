@@ -1,7 +1,6 @@
 package com.pandatronik.backend.service.user.account;
 
 
-import com.google.common.base.Preconditions;
 import com.pandatronik.backend.persistence.domain.Plan;
 import com.pandatronik.backend.persistence.repositories.user.account.PlanRepository;
 import com.pandatronik.enums.PlansEnum;
@@ -21,13 +20,11 @@ public class PlanService {
 	private PlanRepository planRepository;
 
 	public Plan findPlanById(int planId) {
-		Preconditions.checkNotNull(planId, "planId must not be null");
 		return planRepository.findById(planId).get();
 	}
 
 	@Transactional
 	public Plan createPlan(int planId) {
-		Preconditions.checkNotNull(planId, "planId must not be null");
 		Plan plan = null;
 		if (planId == 1) {
 			plan = planRepository.save(new Plan(PlansEnum.BASIC)); // BASIC

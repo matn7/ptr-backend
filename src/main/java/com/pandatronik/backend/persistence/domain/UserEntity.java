@@ -1,6 +1,5 @@
 package com.pandatronik.backend.persistence.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pandatronik.backend.persistence.domain.core.DaysEntity;
 import com.pandatronik.backend.persistence.domain.core.ExtraordinaryEntity;
 import com.pandatronik.backend.persistence.domain.core.Important2Entity;
@@ -19,7 +18,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.CascadeType;
@@ -43,8 +41,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-import static java.util.Arrays.stream;
 
 @Entity
 @Getter
@@ -66,7 +62,7 @@ public class UserEntity implements Serializable, UserDetails {
 
 	@NotNull
 	@NotBlank
-	@Size(min = 6, max = 50)
+	@Size(min = 5, max = 50)
 	@Column(unique = true)
 	private String username;
 
@@ -98,26 +94,24 @@ public class UserEntity implements Serializable, UserDetails {
 
 	private boolean enabled;
 
-	/* Many users with the same Plan*/
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "plan_id")
 	private Plan plan;
 
-	@JsonIgnore
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<UserRole> userRoles = new HashSet<>();
 
-	private String[] authorities;
+	@OneToMany(cascade = CascadeType.ALL,
+			fetch = FetchType.LAZY,
+			mappedBy = "user"
+	)
+	private Set<PasswordResetToken> passwordResetTokens = new HashSet<>();
 
 	private boolean isNotLocked;
 
 	private Date lastLoginDate;
 	private Date lastLoginDateDisplay;
 
-	@OneToMany(cascade = CascadeType.ALL,
-			fetch = FetchType.LAZY,
-			mappedBy = "user")
-	private Set<PasswordResetToken> passwordResetTokens = new HashSet<>();
 
 	// Tesks, Days
     @OneToMany(mappedBy = "userEntity")
@@ -154,7 +148,9 @@ public class UserEntity implements Serializable, UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return stream(this.authorities).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+		Set<GrantedAuthority> authorities = new HashSet<>();
+		userRoles.forEach(ur -> authorities.add(new Authority(ur.getRole().getName())));
+		return authorities;
 	}
 
 	@Override

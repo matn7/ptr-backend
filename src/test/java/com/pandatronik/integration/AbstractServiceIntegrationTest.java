@@ -8,11 +8,8 @@ import com.pandatronik.enums.PlansEnum;
 import com.pandatronik.enums.RolesEnum;
 import com.pandatronik.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.HashSet;
 import java.util.Set;
-
-//import org.junit.rules.TestName;
 
 public class AbstractServiceIntegrationTest {
 
@@ -24,7 +21,6 @@ public class AbstractServiceIntegrationTest {
         String email =  "someuser@pandatronik.com";
 
         Set<UserRole> userRoles = new HashSet<>();
-
         UserEntity basicUser = UserUtils.createBasicUser(username, email);
         userRoles.add(new UserRole(basicUser, new Role(RolesEnum.BASIC)));
 

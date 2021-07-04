@@ -1,6 +1,5 @@
 package com.pandatronik.backend.persistence.domain;
 
-import com.google.common.base.Preconditions;
 import com.pandatronik.converters.LocalDateTimeAttributeConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,11 +45,6 @@ public class TokenEntity implements Serializable {
     public TokenEntity() {}
 
     public TokenEntity(String token, UserEntity user, LocalDateTime creationDateTime, int expirationInMinutes) {
-        Preconditions.checkNotNull(token);
-        Preconditions.checkNotNull(user);
-        Preconditions.checkNotNull(creationDateTime);
-        Preconditions.checkNotNull(expirationInMinutes);
-
         if ((null == token) || (null == user) || (null == creationDateTime)) {
             throw new IllegalArgumentException("token, user and creation date time can't be null");
         }

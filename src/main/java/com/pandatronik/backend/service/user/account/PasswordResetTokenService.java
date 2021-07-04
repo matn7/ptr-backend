@@ -1,6 +1,5 @@
 package com.pandatronik.backend.service.user.account;
 
-import com.google.common.base.Preconditions;
 import com.pandatronik.backend.persistence.domain.PasswordResetToken;
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.repositories.user.account.PasswordResetTokenRepository;
@@ -29,17 +28,10 @@ public class PasswordResetTokenService {
     @Value("${token.expiration.length.minutes}")
     private int tokenExpirationInMinutes;
 
-    /** The application logger */
     private static final Logger LOG = LoggerFactory.getLogger(PasswordResetTokenService.class);
 
-    /**
-     * Creates a new Password Reset Token for the user identified by the given email.
-     * @param email The email uniquely identifying the user
-     * @return a new Password Reset Token for the user identified by the given email or null if none was found
-     */
     @Transactional
     public PasswordResetToken createPasswordResetTokenForEmail(String email) {
-    	Preconditions.checkNotNull(email, "email must not be null");
         PasswordResetToken passwordResetToken = null;
 
         UserEntity user = userRepository.findByEmail(email);
@@ -59,16 +51,8 @@ public class PasswordResetTokenService {
 
     }
 
-    /**
-     * Retrieves a Password Reset Token for the given token id.
-     * @param token The token to be returned
-     * @return A Password Reset Token if one was found or null if none was found.
-     */
     public PasswordResetToken findByToken(String token) {
-    	Preconditions.checkNotNull(token, "token must not be null");
         return passwordResetTokenRepository.findByToken(token);
     }
-
-
 
 }
