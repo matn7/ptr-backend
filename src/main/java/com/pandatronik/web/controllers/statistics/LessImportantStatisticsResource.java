@@ -41,7 +41,7 @@ public class LessImportantStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Object[]> result =  lessImportantService.findCountByYearStat(userEntity, year);
+        List<Object[]> result =  lessImportantService.findCountByYearStat(userEntity.getId(), year);
         Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(collect)) {
             return ResponseEntity.ok(collect);
@@ -59,7 +59,7 @@ public class LessImportantStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Object[]> result =  lessImportant2Service.findCountByYearStat(userEntity, year);
+        List<Object[]> result =  lessImportant2Service.findCountByYearStat(userEntity.getId(), year);
         Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(collect)) {
             return ResponseEntity.ok(collect);
@@ -78,7 +78,7 @@ public class LessImportantStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Object[]> result =  lessImportant3Service.findCountByYearStat(userEntity, year);
+        List<Object[]> result =  lessImportant3Service.findCountByYearStat(userEntity.getId(), year);
         Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(collect)) {
             return ResponseEntity.ok(collect);
@@ -96,7 +96,7 @@ public class LessImportantStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Object[]> result = lessImportantService.findAverageByYearStat(userEntity, year);
+        List<Object[]> result = lessImportantService.findAverageByYearStat(userEntity.getId(), year);
         Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(result)) {
             return ResponseEntity.ok(collect);
@@ -114,7 +114,7 @@ public class LessImportantStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Object[]> result = lessImportant2Service.findAverageByYearStat(userEntity, year);
+        List<Object[]> result = lessImportant2Service.findAverageByYearStat(userEntity.getId(), year);
         Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(result)) {
             return ResponseEntity.ok(collect);
@@ -133,7 +133,7 @@ public class LessImportantStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Object[]> result = lessImportant3Service.findAverageByYearStat(userEntity, year);
+        List<Object[]> result = lessImportant3Service.findAverageByYearStat(userEntity.getId(), year);
         Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(result)) {
             return ResponseEntity.ok(collect);
@@ -151,7 +151,7 @@ public class LessImportantStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Integer> countMadeByStartEnd = lessImportantService.findCountMadeByStartEnd(userEntity,
+        List<Integer> countMadeByStartEnd = lessImportantService.findCountMadeByStartEnd(userEntity.getId(),
                 startEndRequest.getStartDate(), startEndRequest.getEndDate());
 
         Map<Integer, Long> collect = countMadeByStartEnd.stream()
@@ -173,7 +173,7 @@ public class LessImportantStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Integer> countMadeByStartEnd = lessImportant2Service.findCountMadeByStartEnd(userEntity,
+        List<Integer> countMadeByStartEnd = lessImportant2Service.findCountMadeByStartEnd(userEntity.getId(),
                 startEndRequest.getStartDate(), startEndRequest.getEndDate());
 
         Map<Integer, Long> collect = countMadeByStartEnd.stream()
@@ -196,7 +196,7 @@ public class LessImportantStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Integer> countMadeByStartEnd = lessImportant3Service.findCountMadeByStartEnd(userEntity,
+        List<Integer> countMadeByStartEnd = lessImportant3Service.findCountMadeByStartEnd(userEntity.getId(),
                 startEndRequest.getStartDate(), startEndRequest.getEndDate());
 
         Map<Integer, Long> collect = countMadeByStartEnd.stream()

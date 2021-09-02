@@ -37,7 +37,7 @@ public class ExtraordinaryController {
         UserEntity userEntity = userService.findByUserName(username);
 
         ExtraordinaryListDTO extraordinaryListDTO = new ExtraordinaryListDTO();
-        extraordinaryListDTO.setExtraordinaryList(extraordinaryService.findAll(userEntity));
+        extraordinaryListDTO.setExtraordinaryList(extraordinaryService.findAll(userEntity.getId()));
 
         return extraordinaryListDTO;
     }
@@ -48,7 +48,7 @@ public class ExtraordinaryController {
 
         UserEntity userEntity = userService.findByUserName(username);
 
-        return extraordinaryService.findById(userEntity, id);
+        return extraordinaryService.findById(userEntity.getId(), id);
 
     }
 
@@ -59,7 +59,7 @@ public class ExtraordinaryController {
 
         UserEntity userEntity = userService.findByUserName(username);
 
-        return extraordinaryService.findByDate(userEntity, day, month, year);
+        return extraordinaryService.findByDate(userEntity.getId(), day, month, year);
     }
 
     @PostMapping
@@ -69,7 +69,7 @@ public class ExtraordinaryController {
 
         UserEntity userEntity = userService.findByUserName(username);
 
-        extraordinaryDTO.setUserEntity(userEntity);
+        extraordinaryDTO.setUserEntityId(userEntity.getId());
         return extraordinaryService.save(extraordinaryDTO);
     }
 
@@ -79,7 +79,7 @@ public class ExtraordinaryController {
                                    @PathVariable("id") Long id, @Valid @RequestBody ExtraordinaryDTO extraordinaryDTO) {
 
         UserEntity userEntity = userService.findByUserName(username);
-        extraordinaryDTO.setUserEntity(userEntity);
+        extraordinaryDTO.setUserEntityId(userEntity.getId());
 
         return extraordinaryService.update(id, extraordinaryDTO);
     }
@@ -90,7 +90,7 @@ public class ExtraordinaryController {
 
         UserEntity userEntity = userService.findByUserName(username);
 
-        extraordinaryService.delete(userEntity, id);
+        extraordinaryService.delete(userEntity.getId(), id);
     }
 
 }

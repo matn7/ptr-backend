@@ -48,7 +48,7 @@ public class DaysControllerTest extends SecurityConfigBeans {
         DaysDTO day = getDaysDTO();
 
         when(userService.findByUserName(anyString())).thenReturn(user);
-        when(daysService.findById(user, 1L)).thenReturn(day);
+        when(daysService.findById(user.getId(), 1L)).thenReturn(day);
 
         RequestBuilder request = MockMvcRequestBuilders
                 .get(AppConstants.BASE_URL + "/someuser/days/1")
@@ -65,7 +65,7 @@ public class DaysControllerTest extends SecurityConfigBeans {
     public void findByIdNotFound() throws Exception {
         UserEntity user = UserEntity.builder().build();
         when(userService.findByUserName(anyString())).thenReturn(user);
-        when(daysService.findById(user, 1L)).thenThrow(ResourceNotFoundException.class);
+        when(daysService.findById(user.getId(), 1L)).thenThrow(ResourceNotFoundException.class);
 
         RequestBuilder request = MockMvcRequestBuilders
                 .get(AppConstants.BASE_URL + "/someuser/days/1")
@@ -82,7 +82,7 @@ public class DaysControllerTest extends SecurityConfigBeans {
         DaysDTO day = getDaysDTO();
 
         when(userService.findByUserName(anyString())).thenReturn(user);
-        when(daysService.findByDate(user, 25, 5, 2025)).thenReturn(day);
+        when(daysService.findByDate(user.getId(), 25, 5, 2025)).thenReturn(day);
 
         RequestBuilder request = MockMvcRequestBuilders
                 .get(AppConstants.BASE_URL + "/someuser/days/2025/05/25")
@@ -104,7 +104,7 @@ public class DaysControllerTest extends SecurityConfigBeans {
         UserEntity user = UserEntity.builder().build();
 
         when(userService.findByUserName(anyString())).thenReturn(user);
-        when(daysService.findByDate(user, 25, 5, 2025)).thenThrow(ResourceNotFoundException.class);
+        when(daysService.findByDate(user.getId(), 25, 5, 2025)).thenThrow(ResourceNotFoundException.class);
 
         RequestBuilder request = MockMvcRequestBuilders
                 .get(AppConstants.BASE_URL + "/someuser/days/2025/05/25")

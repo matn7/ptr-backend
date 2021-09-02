@@ -34,7 +34,7 @@ public class Important2Controller extends Resource<Important2DTO> {
 
         UserEntity userEntity = userService.findByUserName(username);
 
-        important2DTO.setUserEntity(userEntity);
+        important2DTO.setUserEntityId(userEntity.getId());
 
         return taskService.save(important2DTO);
     }
@@ -45,7 +45,7 @@ public class Important2Controller extends Resource<Important2DTO> {
             @PathVariable("id") Long id, @Valid @RequestBody Important2DTO important2DTO) {
 
         UserEntity userEntity = userService.findByUserName(username);
-        important2DTO.setUserEntity(userEntity);
+        important2DTO.setUserEntityId(userEntity.getId());
 
         return taskService.update(id, important2DTO);
     }

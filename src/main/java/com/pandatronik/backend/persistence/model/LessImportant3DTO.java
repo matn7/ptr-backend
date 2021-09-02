@@ -8,7 +8,6 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.enums.MadeEnum;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -53,7 +52,7 @@ public class LessImportant3DTO implements Comparable<LessImportant3DTO> {
     private LocalDate startDate;
 
     @JsonIgnore
-    private UserEntity userEntity;
+    private long userEntityId;
 
     @Override
     public int compareTo(LessImportant3DTO lessImportant3DTO) {

@@ -1,6 +1,5 @@
 package com.pandatronik.backend.service;
 
-import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.model.DaysDTO;
 import com.pandatronik.backend.persistence.model.ExtraordinaryDTO;
 import com.pandatronik.backend.persistence.model.Important2DTO;
@@ -24,14 +23,14 @@ public class ImportantIndexService implements IndexService<ImportantIndexDTO> {
     private final Important3Service important3Service;
 
     @Override
-    public ImportantIndexDTO getData(UserEntity userEntity, int year, int month) {
+    public ImportantIndexDTO getData(long userEntityId, int year, int month) {
         ImportantIndexDTO importantIndexDTO = new ImportantIndexDTO();
 
-        final List<ExtraordinaryDTO> extraordinaries = extraordinaryService.findByDate(userEntity, year, month);
-        final List<DaysDTO> days = daysService.findByDate(userEntity, year, month);
-        final List<ImportantDTO> important = importantService.findByDate(userEntity, year, month);
-        final List<Important2DTO> important2 = important2Service.findByDate(userEntity, year, month);
-        final List<Important3DTO> important3 = important3Service.findByDate(userEntity, year, month);
+        final List<ExtraordinaryDTO> extraordinaries = extraordinaryService.findByDate(userEntityId, year, month);
+        final List<DaysDTO> days = daysService.findByDate(userEntityId, year, month);
+        final List<ImportantDTO> important = importantService.findByDate(userEntityId, year, month);
+        final List<Important2DTO> important2 = important2Service.findByDate(userEntityId, year, month);
+        final List<Important3DTO> important3 = important3Service.findByDate(userEntityId, year, month);
 
         // sort here
         Collections.sort(extraordinaries);

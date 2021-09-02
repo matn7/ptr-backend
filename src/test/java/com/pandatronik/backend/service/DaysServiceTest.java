@@ -47,7 +47,7 @@ public class DaysServiceTest {
 
         when(daysMapper.daysToDaysDTO(daysEntity)).thenReturn(day);
 
-        final DaysDTO daysDTO = daysService.findById(user, 1L);
+        final DaysDTO daysDTO = daysService.findById(user.getId(), 1L);
 
         assertEquals(1L, daysDTO.getId());
         assertEquals("Some Day", daysDTO.getBody());
@@ -70,7 +70,7 @@ public class DaysServiceTest {
 
         when(daysMapper.daysToDaysDTO(daysEntity1)).thenReturn(day);
 
-        final List<DaysDTO> daysDTO = daysService.findByDate(user, 2025, 5);
+        final List<DaysDTO> daysDTO = daysService.findByDate(user.getId(), 2025, 5);
 
         assertEquals(1L, daysDTO.get(0).getId());
         assertEquals("Some Day", daysDTO.get(0).getBody());

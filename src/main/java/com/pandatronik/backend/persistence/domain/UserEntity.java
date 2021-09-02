@@ -39,7 +39,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -112,31 +111,38 @@ public class UserEntity implements Serializable, UserDetails {
 	private Date lastLoginDate;
 	private Date lastLoginDateDisplay;
 
+	// Entities related to AppUser
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "userEntityId")
+    private Set<ImportantEntity> importantEntity = new HashSet<>();
 
-	// Tesks, Days
-    @OneToMany(mappedBy = "userEntity")
-    private List<ImportantEntity> importantEntity;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "userEntityId")
+	private Set<Important2Entity> important2Entity = new HashSet<>();
 
-	@OneToMany(mappedBy = "userEntity")
-	private List<Important2Entity> important2Entity;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "userEntityId")
+    private Set<Important3Entity> important3Entity = new HashSet<>();
 
-    @OneToMany(mappedBy = "userEntity")
-    private List<Important3Entity> important3Entity;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "userEntityId")
+	private Set<LessImportantEntity> lessImportantEntity = new HashSet<>();
 
-	@OneToMany(mappedBy = "userEntity")
-	private List<LessImportantEntity> lessImportantEntity;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "userEntityId")
+	private Set<LessImportant2Entity> lessImportant2Entity = new HashSet<>();
 
-	@OneToMany(mappedBy = "userEntity")
-	private List<LessImportant2Entity> lessImportant2Entity;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "userEntityId")
+	private Set<LessImportant3Entity> lessImportant3Entity = new HashSet<>();
 
-	@OneToMany(mappedBy = "userEntity")
-	private List<LessImportant3Entity> lessImportant3Entity;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "userEntityId")
+    private Set<DaysEntity> daysEntity = new HashSet<>();
 
-	@OneToMany(mappedBy = "userEntity")
-    private List<DaysEntity> daysEntity;
-
-    @OneToMany(mappedBy = "userEntity")
-    private List<ExtraordinaryEntity> extraordinaryEntity;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "userEntityId")
+    private Set<ExtraordinaryEntity> extraordinaryEntity = new HashSet<>();
 
 	public Set<PasswordResetToken> getPasswordResetTokens() {
 		return passwordResetTokens;

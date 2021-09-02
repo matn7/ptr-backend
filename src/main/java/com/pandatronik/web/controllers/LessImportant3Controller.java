@@ -33,7 +33,7 @@ public class LessImportant3Controller extends Resource<LessImportant3DTO> {
                                   @Valid @RequestBody LessImportant3DTO lessImportant3DTO){
 
         UserEntity userEntity = userService.findByUserName(username);
-        lessImportant3DTO.setUserEntity(userEntity);
+        lessImportant3DTO.setUserEntityId(userEntity.getId());
         return taskService.save(lessImportant3DTO);
     }
 
@@ -44,7 +44,7 @@ public class LessImportant3Controller extends Resource<LessImportant3DTO> {
             @PathVariable("id") Long id, @Valid @RequestBody LessImportant3DTO lessImportant3DTO) {
 
         UserEntity userEntity = userService.findByUserName(username);
-        lessImportant3DTO.setUserEntity(userEntity);
+        lessImportant3DTO.setUserEntityId(userEntity.getId());
         return taskService.update(id, lessImportant3DTO);
     }
 }

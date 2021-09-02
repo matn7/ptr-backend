@@ -3,23 +3,26 @@ package com.pandatronik.web.controllers.statistics;
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.service.DaysService;
 import com.pandatronik.backend.service.user.account.UserService;
-import com.pandatronik.enums.RateDayEnum;
 import com.pandatronik.exceptions.UserNotFoundException;
 import com.pandatronik.payload.DateRequest;
 import com.pandatronik.web.controllers.ErrorMessage;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -43,7 +46,7 @@ public class DaysStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Integer> res = daysService.findByYearData(userEntity, dateRequest.getYear());
+        List<Integer> res = daysService.findByYearData(userEntity.getId(), dateRequest.getYear());
 
         Map<Integer, Long> collect = res.stream()
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
@@ -65,7 +68,7 @@ public class DaysStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Object[]> res = daysService.findAverageByYearData(userEntity, dateRequest.getYear());
+        List<Object[]> res = daysService.findAverageByYearData(userEntity.getId(), dateRequest.getYear());
         Map<Object, Object> collect = res.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(res)) {
             return ResponseEntity.ok(collect);
@@ -84,7 +87,7 @@ public class DaysStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Object[]> res = daysService.findByMonthAndYearData(userEntity, dateRequest.getMonth(),
+        List<Object[]> res = daysService.findByMonthAndYearData(userEntity.getId(), dateRequest.getMonth(),
                 dateRequest.getYear());
         Map<Object, Object> collect = res.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
 
@@ -105,7 +108,7 @@ public class DaysStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Integer> result = daysService.findByMonthAndYearDailyData(userEntity, dateRequest.getYear(),
+        List<Integer> result = daysService.findByMonthAndYearDailyData(userEntity.getId(), dateRequest.getYear(),
                 dateRequest.getMonth()).get();
 
         if (result != null) {

@@ -1,6 +1,5 @@
 package com.pandatronik.backend.service;
 
-import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.DaysEntity;
 import com.pandatronik.backend.persistence.mapper.DaysMapper;
 import com.pandatronik.backend.persistence.model.DaysDTO;
@@ -21,23 +20,23 @@ public class DaysService implements DaysCrudService<DaysDTO, Long> {
     private final DaysMapper daysMapper;
 
     @Override
-    public DaysDTO findById(UserEntity userEntity, Long id) {
-        return daysRepository.findById(userEntity, id)
+    public DaysDTO findById(long userEntityId, Long id) {
+        return daysRepository.findById(userEntityId, id)
                 .map(daysMapper::daysToDaysDTO)
                 .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
-    public List<DaysDTO> findByDate(UserEntity userEntity, int year, int month) {
-        return daysRepository.findByPartDate(userEntity, year, month)
+    public List<DaysDTO> findByDate(long userEntityId, int year, int month) {
+        return daysRepository.findByPartDate(userEntityId, year, month)
                 .stream()
                 .map(daysMapper::daysToDaysDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public DaysDTO findByDate(UserEntity userEntity, int day, int month, int year) {
-        return daysRepository.findByDate(userEntity, day, month, year)
+    public DaysDTO findByDate(long userEntityId, int day, int month, int year) {
+        return daysRepository.findByDate(userEntityId, day, month, year)
                 .map(daysMapper::daysToDaysDTO)
                 .orElseThrow(ResourceNotFoundException::new);
     }
@@ -56,28 +55,30 @@ public class DaysService implements DaysCrudService<DaysDTO, Long> {
     }
 
     @Override
-    public void delete(UserEntity userEntity, Long id) {
+    public void delete(long userEntity, Long id) {
         // check whether user can delete other users record known its id
         daysRepository.deleteById(id);
     }
 
     @Override
-    public List<Integer> findByYearData(UserEntity userEntity, int year) {
-        return  daysRepository.findByYearData(userEntity, year);
+    public List<Integer> findByYearData(long userEntityId, int year) {
+        return  daysRepository.findByYearData(userEntityId, year);
     }
 
     @Override
-    public List<Object[]> findAverageByYearData(UserEntity userEntity, int year) {
-        return  daysRepository.findAverageByYearData(userEntity, year);
+    public List<Object[]> findAverageByYearData(long userEntityId, int year) {
+//        return  daysRepository.findAverageByYearData(userEntityId, year);
+        return null;
     }
 
     @Override
-    public List<Object[]> findByMonthAndYearData(UserEntity userEntity, int month, int year) {
-        return daysRepository.findByMonthAndYearData(userEntity, month, year);
+    public List<Object[]> findByMonthAndYearData(long userEntityId, int month, int year) {
+//        return daysRepository.findByMonthAndYearData(userEntityId, month, year);
+        return null;
     }
 
     @Override
-    public Optional<List<Integer>> findByMonthAndYearDailyData(UserEntity userEntity, int year, int month) {
+    public Optional<List<Integer>> findByMonthAndYearDailyData(long userEntityId, int year, int month) {
         return null;
 //        return daysRepository.findByMonthAndYearDailyData(userEntity, year, month);
     }

@@ -1,6 +1,5 @@
 package com.pandatronik.backend.service;
 
-import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.Important2Entity;
 import com.pandatronik.backend.persistence.mapper.Important2Mapper;
 import com.pandatronik.backend.persistence.model.Important2DTO;
@@ -21,22 +20,22 @@ public class Important2Service implements ImportantCrudService<Important2DTO, Lo
     private final Important2Repository importantRepository;
 
     @Override
-    public Important2DTO findById(UserEntity userEntity, Long id) {
-        return importantRepository.findById(userEntity, id)
+    public Important2DTO findById(long userEntityId, Long id) {
+        return importantRepository.findById(userEntityId, id)
                 .map(important2Mapper::importantToImportantDTO)
                 .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
-    public Important2DTO findByDate(UserEntity userEntity, int year, int month, int day) {
-        return importantRepository.findByDate(userEntity, day, month, year)
+    public Important2DTO findByDate(long userEntityId, int year, int month, int day) {
+        return importantRepository.findByDate(userEntityId, day, month, year)
                 .map(important2Mapper::importantToImportantDTO)
                 .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
-    public List<Important2DTO> findByDate(UserEntity userEntity, int year, int month) {
-        return importantRepository.findByDate(userEntity, year, month)
+    public List<Important2DTO> findByDate(long userEntityId, int year, int month) {
+        return importantRepository.findByDate(userEntityId, year, month)
                 .stream()
                 .map(important2Mapper::importantToImportantDTO)
                 .collect(Collectors.toList());
@@ -56,23 +55,23 @@ public class Important2Service implements ImportantCrudService<Important2DTO, Lo
     }
 
     @Override
-    public void delete(UserEntity userEntity, Long id) {
+    public void delete(long userEntityId, Long id) {
         importantRepository.deleteById(id);
     }
 
     @Override
-    public List<Object[]> findCountByYearStat(UserEntity userEntity, int year) {
-        return importantRepository.findCountByYearStat(userEntity, year);
+    public List<Object[]> findCountByYearStat(long userEntityId, int year) {
+        return importantRepository.findCountByYearStat(userEntityId, year);
     }
 
     @Override
-    public List<Object[]> findAverageByYearStat(UserEntity userEntity, int year) {
-        return importantRepository.findAverageByYearStat(userEntity, year);
+    public List<Object[]> findAverageByYearStat(long userEntityId, int year) {
+        return importantRepository.findAverageByYearStat(userEntityId, year);
     }
 
     @Override
-    public List<Integer> findCountMadeByStartEnd(UserEntity userEntity, LocalDate startDate, LocalDate endDate) {
-        return importantRepository.findCountMadeByStartEnd(userEntity, startDate, endDate);
+    public List<Integer> findCountMadeByStartEnd(long userEntityId, LocalDate startDate, LocalDate endDate) {
+        return importantRepository.findCountMadeByStartEnd(userEntityId, startDate, endDate);
     }
 
     private Important2DTO saveAndReturn(Important2Entity important2Entity) {

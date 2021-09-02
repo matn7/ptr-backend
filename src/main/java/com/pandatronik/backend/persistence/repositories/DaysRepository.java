@@ -1,6 +1,5 @@
 package com.pandatronik.backend.persistence.repositories;
 
-import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.DaysEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -15,31 +14,31 @@ public interface DaysRepository extends CrudRepository<DaysEntity, Long> {
 
     Iterable<DaysEntity> findAll();
 
-    @Query("SELECT i FROM DaysEntity i WHERE i.userEntity =:userEntity AND i.id = :id")
-    Optional<DaysEntity> findById(@Param("userEntity") UserEntity userEntity, @Param("id") Long id);
+    @Query("SELECT i FROM DaysEntity i WHERE i.userEntityId =:userEntityId AND i.id = :id")
+    Optional<DaysEntity> findById(@Param("userEntityId") long userEntityId, @Param("id") Long id);
 
     @Query("SELECT i FROM DaysEntity i WHERE DAYOFMONTH(i.startDate) = :day AND " +
-            "MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userEntity = :userEntity")
-    Optional<DaysEntity> findByDate(@Param("userEntity") UserEntity userEntity, @Param("day") int day,
+            "MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userEntityId = :userEntityId")
+    Optional<DaysEntity> findByDate(@Param("userEntityId") long userEntityId, @Param("day") int day,
         @Param("month") int month, @Param("year") int year);
 
     @Query("SELECT i FROM DaysEntity i WHERE " +
-            "MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userEntity = :userEntity")
-    List<DaysEntity> findByPartDate(@Param("userEntity") UserEntity userEntity,
+            "MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userEntityId = :userEntityId")
+    List<DaysEntity> findByPartDate(@Param("userEntityId") long userEntityId,
                                     @Param("year") int year, @Param("month") int month);
 
     // statistics
-    @Query("SELECT rateDay FROM DaysEntity i WHERE YEAR(i.startDate) = :year AND i.userEntity = :userEntity")
-    List<Integer> findByYearData(@Param("userEntity") UserEntity userEntity, @Param("year") int year);
+    @Query("SELECT rateDay FROM DaysEntity i WHERE YEAR(i.startDate) = :year AND i.userEntityId = :userEntityId")
+    List<Integer> findByYearData(@Param("userEntityId") long userEntityId, @Param("year") int year);
 
-    @Query("SELECT MONTH(i.startDate), AVG(rateDay) FROM DaysEntity i WHERE YEAR(i.startDate) = :year " +
-    "AND i.userEntity = :userEntity GROUP BY MONTH(i.startDate)")
-    List<Object[]> findAverageByYearData(@Param("userEntity") UserEntity userEntity, @Param("year") int year);
+//    @Query("SELECT MONTH(i.startDate), AVG(rateDay) FROM DaysEntity i WHERE YEAR(i.startDate) = :year " +
+//    "AND i.userEntityId = :userEntityId GROUP BY MONTH(i.startDate)")
+//    List<Object[]> findAverageByYearData(@Param("userEntityId") long userEntityId, @Param("year") int year);
 
-    @Query("SELECT rateDay, COUNT(rateDay) FROM DaysEntity i WHERE MONTH(i.startDate) = :month AND " +
-            "YEAR(i.startDate) = :year AND i.userEntity = :userEntity GROUP BY i.rateDay")
-    List<Object[]> findByMonthAndYearData(@Param("userEntity") UserEntity userEntity, @Param("month") int month,
-                                             @Param("year") int year);
+//    @Query("SELECT rateDay, COUNT(rateDay) FROM DaysEntity i WHERE MONTH(i.startDate) = :month AND " +
+//            "YEAR(i.startDate) = :year AND i.userEntityId = :userEntityId GROUP BY i.rateDay")
+//    List<Object[]> findByMonthAndYearData(@Param("userEntityId") long userEntityId, @Param("month") int month,
+//                                             @Param("year") int year);
 
 //    @Query("SELECT d.rateDay "
 //            + " FROM CalendarEntity c"

@@ -33,7 +33,7 @@ public class LessImportantController extends Resource<LessImportantDTO> {
                                  @Valid @RequestBody LessImportantDTO lessImportantDTO){
 
         UserEntity userEntity = userService.findByUserName(username);
-        lessImportantDTO.setUserEntity(userEntity);
+        lessImportantDTO.setUserEntityId(userEntity.getId());
         return taskService.save(lessImportantDTO);
     }
 
@@ -44,7 +44,7 @@ public class LessImportantController extends Resource<LessImportantDTO> {
                                    @Valid @RequestBody LessImportantDTO lessImportantDTO) {
 
         UserEntity userEntity = userService.findByUserName(username);
-        lessImportantDTO.setUserEntity(userEntity);
+        lessImportantDTO.setUserEntityId(userEntity.getId());
         return taskService.update(id, lessImportantDTO);
     }
 }

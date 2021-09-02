@@ -42,7 +42,7 @@ public class ImportantStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Object[]> result =  importantService.findCountByYearStat(userEntity, year);
+        List<Object[]> result =  importantService.findCountByYearStat(userEntity.getId(), year);
         Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(collect)) {
             return ResponseEntity.ok(collect);
@@ -60,7 +60,7 @@ public class ImportantStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Object[]> result =  important2Service.findCountByYearStat(userEntity, year);
+        List<Object[]> result =  important2Service.findCountByYearStat(userEntity.getId(), year);
         Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(collect)) {
             return ResponseEntity.ok(collect);
@@ -79,7 +79,7 @@ public class ImportantStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Object[]> result =  important3Service.findCountByYearStat(userEntity, year);
+        List<Object[]> result =  important3Service.findCountByYearStat(userEntity.getId(), year);
         Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(collect)) {
             // "SEVENTY_FIVE" -> "1"
@@ -100,7 +100,7 @@ public class ImportantStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Object[]> result = importantService.findAverageByYearStat(userEntity, year);
+        List<Object[]> result = importantService.findAverageByYearStat(userEntity.getId(), year);
         Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(result)) {
             return ResponseEntity.ok(collect);
@@ -118,7 +118,7 @@ public class ImportantStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Object[]> result = important2Service.findAverageByYearStat(userEntity, year);
+        List<Object[]> result = important2Service.findAverageByYearStat(userEntity.getId(), year);
         Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(result)) {
             return ResponseEntity.ok(collect);
@@ -137,7 +137,7 @@ public class ImportantStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Object[]> result = important3Service.findAverageByYearStat(userEntity, year);
+        List<Object[]> result = important3Service.findAverageByYearStat(userEntity.getId(), year);
         Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(result)) {
             // "2" -> "0.0"
@@ -157,7 +157,7 @@ public class ImportantStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Integer> countMadeByStartEnd = importantService.findCountMadeByStartEnd(userEntity,
+        List<Integer> countMadeByStartEnd = importantService.findCountMadeByStartEnd(userEntity.getId(),
                 startEndRequest.getStartDate(), startEndRequest.getEndDate());
 
         Map<Integer, Long> collect = countMadeByStartEnd.stream()
@@ -186,7 +186,7 @@ public class ImportantStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Integer> countMadeByStartEnd = important2Service.findCountMadeByStartEnd(userEntity,
+        List<Integer> countMadeByStartEnd = important2Service.findCountMadeByStartEnd(userEntity.getId(),
                 startEndRequest.getStartDate(), startEndRequest.getEndDate());
 
         Map<Integer, Long> collect = countMadeByStartEnd.stream()
@@ -209,7 +209,7 @@ public class ImportantStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Integer> countMadeByStartEnd = important3Service.findCountMadeByStartEnd(userEntity,
+        List<Integer> countMadeByStartEnd = important3Service.findCountMadeByStartEnd(userEntity.getId(),
                 startEndRequest.getStartDate(), startEndRequest.getEndDate());
 
         Map<Integer, Long> collect = countMadeByStartEnd.stream()
