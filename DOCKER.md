@@ -29,3 +29,9 @@ docker run -d -p 4200:4200 pandatronik-ui
 docker build -t pandatronik-ui-nginx .
 docker run -d -p 8082:80 pandatronik-ui-nginx
 ```
+
+```
+ppmtool
+roombooking
+unit-testing
+```
