@@ -1,5 +1,14 @@
 package com.pandatronik.security;
 
+import com.pandatronik.backend.persistence.domain.UserEntity;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Clock;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.impl.DefaultClock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,13 +16,11 @@ import org.springframework.cglib.core.internal.Function;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import io.jsonwebtoken.*;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import com.pandatronik.backend.persistence.domain.UserEntity;
 
 import static com.pandatronik.security.SecurityConstants.EXPIRATION_TIME;
 import static com.pandatronik.security.SecurityConstants.SECRET;

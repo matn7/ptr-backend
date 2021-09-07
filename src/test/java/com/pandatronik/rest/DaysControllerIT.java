@@ -23,7 +23,8 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {ValidatorConfiguration.class})
+@ContextConfiguration(loader = AnnotationConfigContextLoader.class,
+        classes = {ValidatorConfiguration.class})
 public class DaysControllerIT extends SecurityConfigBeans {
 
     @MockBean
