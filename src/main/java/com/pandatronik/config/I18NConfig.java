@@ -9,12 +9,12 @@ public class I18NConfig {
 
 	@Bean
 	public ReloadableResourceBundleMessageSource messageSource() {
-		ReloadableResourceBundleMessageSource resourceBundleMessageSource = new ReloadableResourceBundleMessageSource();
-//		resourceBundleMessageSource.setBasename("classpath:i18n/messages");
-		resourceBundleMessageSource.setBasename("classpath:messages");
+		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+		messageSource.setBasename("classpath:messages");
 		// check for new messages every 30 minutes
-		resourceBundleMessageSource.setCacheSeconds(1800);
-		return resourceBundleMessageSource;
+		messageSource.setDefaultEncoding("UTF-8");
+		messageSource.setCacheSeconds(1800);
+		return messageSource;
 	}
 
 }

@@ -54,4 +54,9 @@ public class Important3ControllerTest extends AbstractTaskControllerTest<Importa
     protected String title() {
         return "Important Task 3 title";
     }
+
+    @Override
+    protected String getUser() {
+        return "User3";
+    }
 }

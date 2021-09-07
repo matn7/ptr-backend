@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -42,7 +41,7 @@ public class DaysServiceTest {
         DaysDTO day = getDaysDTO();
         DaysEntity daysEntity = new DaysEntity();
 
-        when(daysRepository.findById(any(), anyLong()))
+        when(daysRepository.findById(anyLong(), anyLong()))
                 .thenReturn(Optional.of(daysEntity));
 
         when(daysMapper.daysToDaysDTO(daysEntity)).thenReturn(day);
@@ -65,7 +64,7 @@ public class DaysServiceTest {
         daysEntityList.add(daysEntity1);
         daysEntityList.add(daysEntity2);
 
-        when(daysRepository.findByPartDate(any(), anyInt(), anyInt()))
+        when(daysRepository.findByPartDate(anyLong(), anyInt(), anyInt()))
                 .thenReturn(daysEntityList);
 
         when(daysMapper.daysToDaysDTO(daysEntity1)).thenReturn(day);
@@ -86,6 +85,7 @@ public class DaysServiceTest {
 
         when(daysRepository.save(daysEntity))
                 .thenReturn(daysEntity);
+        when(daysMapper.daysDtoToDays(day)).thenReturn(daysEntity);
         when(daysMapper.daysToDaysDTO(daysEntity)).thenReturn(day);
 
         final DaysDTO daysDTO = daysService.save(day);
@@ -94,11 +94,6 @@ public class DaysServiceTest {
         assertEquals("Some Day", daysDTO.getBody());
         assertEquals(LocalDate.of(2025, 5, 25), daysDTO.getStartDate());
         assertEquals(RateDayEnum.VERY_GOOD, daysDTO.getRateDay());
-    }
-
-    @Test
-    public void save() {
-        UserEntity user = UserEntity.builder().build();
     }
 
 

@@ -15,8 +15,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({ METHOD, FIELD, TYPE })
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = ImportantEntityUniqueValidator.class)
-public @interface ImportantEntityUnique {
+@Constraint(validatedBy = Important2EntityUniqueValidator.class)
+public @interface Important2EntityUnique {
     String message() default "Duplicate entry found";
 
     Class<?>[] groups() default {};

@@ -6,7 +6,6 @@ import com.pandatronik.payload.JWTLoginSuccessResponse;
 import com.pandatronik.payload.LoginRequest;
 import com.pandatronik.security.JwtTokenProvider;
 import com.pandatronik.security.LoginAttemptService;
-import com.pandatronik.validator.UserValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,9 +37,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private UserValidator userValidator;
+//
+//    @Autowired
+//    private UserValidator userValidator;
 
     @Autowired
     private JwtTokenProvider tokenProvider;

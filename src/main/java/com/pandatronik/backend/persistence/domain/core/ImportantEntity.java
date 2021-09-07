@@ -1,5 +1,6 @@
 package com.pandatronik.backend.persistence.domain.core;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -64,6 +65,7 @@ public class ImportantEntity implements Serializable {
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDate startDate;
 
+    @JsonIgnore
     private long userEntityId;
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JsonIgnore

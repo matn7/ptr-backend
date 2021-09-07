@@ -34,6 +34,12 @@ public class Important2Service implements ImportantCrudService<Important2DTO, Lo
     }
 
     @Override
+    public Important2DTO duplicateCheck(long userEntityId, int year, int month, int day) {
+        return importantRepository.findByDate(userEntityId, day, month, year)
+                .map(important2Mapper::importantToImportantDTO).orElse(null);
+    }
+
+    @Override
     public List<Important2DTO> findByDate(long userEntityId, int year, int month) {
         return importantRepository.findByDate(userEntityId, year, month)
                 .stream()

@@ -54,4 +54,9 @@ public class LessImportant2ControllerTest extends AbstractTaskControllerTest<Les
     protected String title() {
         return "Less Important Task 2 title";
     }
+
+    @Override
+    protected String getUser() {
+        return "User2";
+    }
 }

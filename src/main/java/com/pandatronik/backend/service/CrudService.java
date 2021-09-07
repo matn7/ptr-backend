@@ -8,6 +8,8 @@ public interface CrudService<T, ID> {
 
     T findByDate(long userEntityId, int year, int month, int day);
 
+    T duplicateCheck(long userEntityId, int year, int month, int day);
+
     List<T> findByDate(long userEntityId, int year, int month);
 
     T save(T object);

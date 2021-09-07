@@ -43,9 +43,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -81,15 +78,15 @@ public class SignupResource {
 
     @Autowired
     private TokenService tokenService;
-
-    @Autowired
-    private Validator validator;
-
-    public SignupResource()
-    {
-        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
-        validator = validatorFactory.getValidator();
-    }
+//
+//    @Autowired
+//    private Validator validator;
+//
+//    public SignupResource()
+//    {
+//        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
+//        validator = validatorFactory.getValidator();
+//    }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserEntity user,

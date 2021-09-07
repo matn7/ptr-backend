@@ -3,7 +3,7 @@ package com.pandatronik.validators;
 import com.pandatronik.backend.persistence.domain.Plan;
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.UserRole;
-import com.pandatronik.configuration.ValidatorConfiguration;
+import com.pandatronik.config.ValidatorConfig;
 import com.pandatronik.enums.PlansEnum;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 //@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class,
-    classes = {ValidatorConfiguration.class})
+    classes = {ValidatorConfig.class})
 public class UsernameValidatorTest {
 
     @Autowired

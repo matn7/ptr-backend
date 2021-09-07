@@ -1,4 +1,4 @@
-package com.pandatronik.configuration;
+package com.pandatronik.config;
 
 import org.hibernate.validator.HibernateValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +12,13 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 @Configuration
-public class ValidatorConfiguration {
+public class ValidatorConfig {
 
     @Autowired
     private AutowireCapableBeanFactory autowireCapableBeanFactory;
 
     @Bean
-    public SpringConstraintValidatorFactory springConstraintValidatorFactory2() {
+    public SpringConstraintValidatorFactory springConstraintValidatorFactory() {
         return new SpringConstraintValidatorFactory(autowireCapableBeanFactory);
     }
 
@@ -26,7 +26,7 @@ public class ValidatorConfiguration {
     public Validator validator () {
 
         ValidatorFactory validatorFactory = Validation.byProvider( HibernateValidator.class )
-                .configure().constraintValidatorFactory(springConstraintValidatorFactory2())
+                .configure().constraintValidatorFactory(springConstraintValidatorFactory())
                 .buildValidatorFactory();
         Validator validator = validatorFactory.getValidator();
 

@@ -34,6 +34,12 @@ public class LessImportant3Service implements ImportantCrudService<LessImportant
     }
 
     @Override
+    public LessImportant3DTO duplicateCheck(long userEntityId, int year, int month, int day) {
+        return lessImportant3Repository.findByDate(userEntityId, day, month, year)
+                .map(lessImportant3Mapper::lessImportantToLessImportantDTO).orElse(null);
+    }
+
+    @Override
     public List<LessImportant3DTO> findByDate(long userEntityId, int year, int month) {
         return lessImportant3Repository.findByDate(userEntityId, year, month)
                 .stream()

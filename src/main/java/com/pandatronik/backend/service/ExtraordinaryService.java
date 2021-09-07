@@ -36,6 +36,12 @@ public class ExtraordinaryService implements ExtraordinaryCrudService<Extraordin
     }
 
     @Override
+    public ExtraordinaryDTO duplicateCheck(long userEntityId, int year, int month, int day) {
+        return extraordinaryRepository.findByDate(userEntityId, year, month, day)
+                .map(extraordinaryMapper::extraordinaryToExtraordinaryDTO).orElse(null);
+    }
+
+    @Override
     public ExtraordinaryDTO findById(long userEntityId, Long id) {
         return extraordinaryRepository.findById(userEntityId, id)
                 .map(extraordinaryMapper::extraordinaryToExtraordinaryDTO)

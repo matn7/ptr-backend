@@ -35,6 +35,12 @@ public class DaysService implements DaysCrudService<DaysDTO, Long> {
     }
 
     @Override
+    public DaysDTO duplicateCheck(long userEntityId, int year, int month, int day) {
+        return daysRepository.findByDate(userEntityId, day, month, year)
+                .map(daysMapper::daysToDaysDTO).orElse(null);
+    }
+
+    @Override
     public DaysDTO findByDate(long userEntityId, int day, int month, int year) {
         return daysRepository.findByDate(userEntityId, day, month, year)
                 .map(daysMapper::daysToDaysDTO)

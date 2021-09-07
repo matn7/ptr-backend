@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -114,6 +115,10 @@ public abstract class AbstractTaskControllerTest<T> extends SecurityConfigBeans 
         when(userService.findByUserName(anyString())).thenReturn(user);
         when(getService().save(any())).thenReturn(task);
 
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(getUser());
+
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 
@@ -140,6 +145,10 @@ public abstract class AbstractTaskControllerTest<T> extends SecurityConfigBeans 
 
         when(userService.findByUserName(anyString())).thenReturn(user);
         when(getService().update(anyLong(), any())).thenReturn(task);
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(getUser());
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
@@ -185,5 +194,7 @@ public abstract class AbstractTaskControllerTest<T> extends SecurityConfigBeans 
     protected abstract String body();
 
     protected abstract String title();
+
+    protected abstract String getUser();
 
 }

@@ -4,6 +4,7 @@ import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.model.Important2DTO;
 import com.pandatronik.backend.service.Important2Service;
 import com.pandatronik.backend.service.user.account.UserService;
+import com.pandatronik.exceptions.ConflictException;
 import com.pandatronik.utils.AppConstants;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -35,6 +36,12 @@ public class Important2Controller extends Resource<Important2DTO> {
         UserEntity userEntity = userService.findByUserName(username);
 
         important2DTO.setUserEntityId(userEntity.getId());
+        int year = important2DTO.getStartDate().getYear();
+        int month = important2DTO.getStartDate().getMonthValue();
+        int day = important2DTO.getStartDate().getDayOfMonth();
+        if (taskService.findByDate(userEntity.getId(), year, month, day) != null) {
+            throw new ConflictException("Conflict");
+        }
 
         return taskService.save(important2DTO);
     }
