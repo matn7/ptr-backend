@@ -14,14 +14,19 @@ public class UsernameValidator implements ConstraintValidator<UsernameConstraint
     static {
         // todo add this to some text, properties file
         invalidUsernames.add("panda");
-        invalidUsernames.add("panda2");
+        invalidUsernames.add("panda2"); // regex starts with panda
         invalidUsernames.add("username");
         invalidUsernames.add("password");
+        invalidUsernames.add("admin");
+        invalidUsernames.add("root");
     }
-
 
     @Override
     public boolean isValid(UserEntity userEntity, ConstraintValidatorContext constraintValidatorContext) {
+
+        if (userEntity.getUsername() == null) {
+            return false;
+        }
 
         return !invalidUsernames.contains(userEntity.getUsername());
     }

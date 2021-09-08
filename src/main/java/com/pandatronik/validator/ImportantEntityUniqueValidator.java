@@ -34,6 +34,4 @@ public class ImportantEntityUniqueValidator implements ConstraintValidator<Impor
 
         return true;
     }
-
-
 }

@@ -6,17 +6,18 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.regex.Pattern;
 
-public class PasswordValidator implements ConstraintValidator<PasswordConstraint, UserEntity> {
+public class EmailValidator implements ConstraintValidator<EmailConstraint, UserEntity> {
     @Override
     public boolean isValid(UserEntity userEntity, ConstraintValidatorContext constraintValidatorContext) {
 
-        if (userEntity.getPassword() == null) {
+        if (userEntity.getEmail() == null) {
+            // Other validators check that
             return false;
         }
 
-        String regex = "^(?=.*?\\p{Lu})(?=.*?\\p{Ll})(?=.*?\\d)(?=.*?[`~!@#$%^&*()\\-_=+\\\\|\\[{\\]};:'\",<.>/?]).*$";
+        String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
 
-        boolean matches = Pattern.compile(regex).matcher(userEntity.getPassword()).matches();
+        boolean matches = Pattern.compile(regex).matcher(userEntity.getEmail()).matches();
         return matches;
     }
 

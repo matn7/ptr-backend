@@ -10,7 +10,8 @@ import java.lang.annotation.*;
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UsernameConstraint {
-    String message() default "Invalid username";
+
+    String message() default "invalid username lol";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

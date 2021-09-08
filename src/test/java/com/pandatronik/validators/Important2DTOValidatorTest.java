@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 @SpringBootTest
 public class Important2DTOValidatorTest extends AbstractTaskValidatorTest<Important2DTO> {
-    
+
     @MockBean
     private Important2Service importantService;
 

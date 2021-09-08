@@ -8,6 +8,7 @@ import com.pandatronik.backend.persistence.domain.core.ImportantEntity;
 import com.pandatronik.backend.persistence.domain.core.LessImportant2Entity;
 import com.pandatronik.backend.persistence.domain.core.LessImportant3Entity;
 import com.pandatronik.backend.persistence.domain.core.LessImportantEntity;
+import com.pandatronik.validator.EmailConstraint;
 import com.pandatronik.validator.NoPandaInUsernameConstraint;
 import com.pandatronik.validator.PasswordConstraint;
 import com.pandatronik.validator.UsernameConstraint;
@@ -31,7 +32,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -48,9 +48,10 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@UsernameConstraint
+@UsernameConstraint(message = "{not.allowed.username.message}")
 @PasswordConstraint
-@NoPandaInUsernameConstraint
+@NoPandaInUsernameConstraint(message = "{panda.in.username.message}")
+@EmailConstraint(message = "{invalid.email.address.message}")
 public class UserEntity implements Serializable, UserDetails {
 
 	private static final long serialVersionUID = 1L;
@@ -61,7 +62,7 @@ public class UserEntity implements Serializable, UserDetails {
 
 	@NotNull
 	@NotBlank
-	@Size(min = 5, max = 50)
+	@Size(min = 5, max = 20)
 	@Column(unique = true)
 	private String username;
 
@@ -75,19 +76,19 @@ public class UserEntity implements Serializable, UserDetails {
 	private String confirmPassword;
 
 	@NotNull
-	@Email(message = "This not an valid email address")
+//	@Email(message = "{invalid.email.address}")
 	@Column(unique = true)
 	private String email;
 
 	@NotNull
 	@NotBlank
-	@Size(max = 50)
+	@Size(max = 20)
 	@Column(name = "first_name")
 	private String firstName;
 
 	@NotNull
 	@NotBlank
-	@Size(max = 50)
+	@Size(max = 20)
 	@Column(name = "last_name")
 	private String lastName;
 

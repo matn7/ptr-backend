@@ -3,12 +3,10 @@ package com.pandatronik.validators;
 import com.pandatronik.backend.persistence.domain.Plan;
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.UserRole;
-import com.pandatronik.config.ValidatorConfig;
 import com.pandatronik.enums.PlansEnum;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
@@ -18,17 +16,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.pandatronik.utils.MessagesConstants.INVALID_USERNAME_MSG;
-import static com.pandatronik.utils.MessagesConstants.SIZE_6_50_MSG;
-import static com.pandatronik.utils.MessagesConstants.USERNAME_PANDA_MSG;
 import static com.pandatronik.utils.ValidCredentials.VALID_EMAIL;
 import static com.pandatronik.utils.ValidCredentials.VALID_PASSWORD;
 import static com.pandatronik.utils.ValidCredentials.VALID_USERNAME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-//@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(loader = AnnotationConfigContextLoader.class,
-    classes = {ValidatorConfig.class})
+@SpringBootTest
 public class UsernameValidatorTest {
 
     @Autowired
@@ -50,7 +44,7 @@ public class UsernameValidatorTest {
         Set<ConstraintViolation<UserEntity>> violations = validator.validate(userEntity);
 
         List<String> collect = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
-        assertThat(collect).hasSize(1);
+        assertEquals(1, collect.size());
         assertThat(collect).containsExactlyInAnyOrder(INVALID_USERNAME_MSG);
     }
 
@@ -61,9 +55,8 @@ public class UsernameValidatorTest {
         Set<ConstraintViolation<UserEntity>> violations = validator.validate(userEntity);
 
         List<String> collect = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
-        assertThat(collect).hasSize(3);
-        assertThat(collect).containsExactlyInAnyOrder(SIZE_6_50_MSG,
-                USERNAME_PANDA_MSG, INVALID_USERNAME_MSG);
+        assertEquals(2, collect.size());
+        assertThat(collect).containsExactlyInAnyOrder("username cannot starts with panda", "this username is not allowed");
     }
 
     private UserEntity getUserEntity(String username) {

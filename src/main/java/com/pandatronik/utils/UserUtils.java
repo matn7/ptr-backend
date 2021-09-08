@@ -13,21 +13,12 @@ public class UserUtils {
 		throw new AssertionError("Non instantiable");
 	}
 
-	/**
-	 * Creates a user with basic attributes set.
-	 * 
-	 * @param username
-	 *            The username.
-	 * @param email
-	 *            The email.
-	 * @return A User entity
-	 */
 	public static UserEntity createBasicUser(String username, String email) {
 
 		UserEntity user = new UserEntity();
 		user.setUsername(username);
-		user.setPassword("secret123");
-		user.setConfirmPassword("secret123");
+		user.setPassword("Secret123!");
+		user.setConfirmPassword("Secret123!");
 		user.setEmail(email);
 		user.setFirstName("firstName");
 		user.setLastName("lastName");

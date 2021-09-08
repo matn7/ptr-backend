@@ -9,6 +9,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.pandatronik.enums.MadeEnum;
+import com.pandatronik.validator.LessImportant2EntityUnique;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,6 +22,7 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
+@LessImportant2EntityUnique(message = "{task.duplicate.entry.message}")
 public class LessImportant2DTO implements Comparable<LessImportant2DTO> {
 
     private Long id;

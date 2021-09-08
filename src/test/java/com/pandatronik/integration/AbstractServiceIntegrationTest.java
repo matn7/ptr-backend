@@ -18,7 +18,7 @@ public class AbstractServiceIntegrationTest {
 
     protected UserEntity createUser() {
         String username = "someuser";
-        String email =  "someuser@pandatronik.com";
+        String email = "someuser@pandatronik.com";
 
         Set<UserRole> userRoles = new HashSet<>();
         UserEntity basicUser = UserUtils.createBasicUser(username, email);
@@ -26,6 +26,4 @@ public class AbstractServiceIntegrationTest {
 
         return userService.createUser(basicUser, PlansEnum.BASIC, userRoles);
     }
-
-
 }

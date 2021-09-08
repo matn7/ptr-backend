@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface NoPandaInUsernameConstraint {
-    String message() default "Your username cannot starts with panda";
+    String message() default "username cannot starts with panda";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

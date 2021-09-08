@@ -14,6 +14,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -46,6 +48,7 @@ public abstract class AbstractTaskValidatorTest<T> extends SecurityConfigBeans {
         T task = getTask();
 
         when(userService.findByUserName(anyString())).thenReturn(user);
+        when(getService().duplicateCheck(anyLong(), anyInt(), anyInt(), anyInt())).thenReturn(task);
 
         when(securityContext.getAuthentication()).thenReturn(authentication);
         SecurityContextHolder.setContext(securityContext);
@@ -55,7 +58,8 @@ public abstract class AbstractTaskValidatorTest<T> extends SecurityConfigBeans {
 
         List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
 
-        assertEquals(0, collect.size());
+        assertEquals(1, collect.size());
+        assertEquals("Entry for specified date already exists", collect.get(0));
     }
 
     protected abstract T getTask();

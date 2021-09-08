@@ -27,7 +27,7 @@ public class UserUtilsTest {
         String token = UUID.randomUUID().toString();
         long userId = 123456;
 
-        String expectedUrl = "http://localhost:8080" +
+        String expectedUrl = "http://localhost:4200" +
                 ForgotMyPasswordResource.CHANGE_PASSWORD_PATH + "?id=" + userId + "&token=" + token;
 
         String actualUrl = UserUtils.createPasswordResetUrl(mockHttpServletRequest, userId, token);
