@@ -17,9 +17,9 @@ public class LessImportant3DTOValidatorTest extends AbstractTaskValidatorTest<Le
     private LessImportant3Service lessImportantService;
 
     @Override
-    protected LessImportant3DTO getTask() {
+    protected LessImportant3DTO getTask(Long id) {
         LessImportant3DTO lessImportantDTO = new LessImportant3DTO();
-        lessImportantDTO.setId(1L);
+        lessImportantDTO.setId(id);
         lessImportantDTO.setTitle(title());
         lessImportantDTO.setBody(body());
         lessImportantDTO.setMade(MadeEnum.HUNDRED);

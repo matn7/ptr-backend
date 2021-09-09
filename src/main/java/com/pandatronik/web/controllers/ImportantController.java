@@ -33,7 +33,7 @@ public class ImportantController extends Resource<ImportantDTO> {
                              @Valid @RequestBody ImportantDTO importantDTO) {
         UserEntity userEntity = userService.findByUserName(username);
 
-        importantDTO.setUserEntityId(userEntity.getId());
+        importantDTO.setUserEntity(userEntity);
 
         return taskService.save(importantDTO);
     }
@@ -42,9 +42,9 @@ public class ImportantController extends Resource<ImportantDTO> {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ImportantDTO update(@PathVariable("username") String username, @PathVariable("id") Long id,
-                               @Valid @RequestBody ImportantDTO importantDTO) {
+                               @RequestBody ImportantDTO importantDTO) {
         UserEntity userEntity = userService.findByUserName(username);
-        importantDTO.setUserEntityId(userEntity.getId());
+        importantDTO.setUserEntity(userEntity);
 
         return taskService.update(id, importantDTO);
     }

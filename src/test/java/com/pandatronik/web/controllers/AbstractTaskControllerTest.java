@@ -34,7 +34,7 @@ public abstract class AbstractTaskControllerTest<T> extends SecurityConfigBeans 
         T task = getTask();
 
         when(userService.findByUserName(anyString())).thenReturn(user);
-        when(getService().findById(user.getId(), 1L)).thenReturn(task);
+        when(getService().findById(user, 1L)).thenReturn(task);
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .get(AppConstants.BASE_URL + "/someuser/" + task() + "/" + testCase() + "/1")
@@ -56,7 +56,7 @@ public abstract class AbstractTaskControllerTest<T> extends SecurityConfigBeans 
         UserEntity user = UserEntity.builder().build();
 
         when(userService.findByUserName(anyString())).thenReturn(user);
-        when(getService().findById(user.getId(), 1L)).thenThrow(ResourceNotFoundException.class);
+        when(getService().findById(user, 1L)).thenThrow(ResourceNotFoundException.class);
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .get(AppConstants.BASE_URL + "/someuser/" + task() + "/" + testCase() + "/1")
@@ -73,7 +73,7 @@ public abstract class AbstractTaskControllerTest<T> extends SecurityConfigBeans 
         T task = getTask();
 
         when(userService.findByUserName(anyString())).thenReturn(user);
-        when(getService().findByDate(user.getId(), 2025, 5, 25)).thenReturn(task);
+        when(getService().findByDate(user, 2025, 5, 25)).thenReturn(task);
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .get(AppConstants.BASE_URL + "/someuser/" + task() + "/" + testCase() + "/2025/5/25")
@@ -96,7 +96,7 @@ public abstract class AbstractTaskControllerTest<T> extends SecurityConfigBeans 
         T task = getTask();
 
         when(userService.findByUserName(anyString())).thenReturn(user);
-        when(getService().findByDate(user.getId(), 2025, 5, 25)).thenThrow(ResourceNotFoundException.class);
+        when(getService().findByDate(user, 2025, 5, 25)).thenThrow(ResourceNotFoundException.class);
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .get(AppConstants.BASE_URL + "/someuser/" + task() + "/" + testCase() + "/2025/5/25")

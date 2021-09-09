@@ -1,5 +1,6 @@
 package com.pandatronik.backend.service;
 
+import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.ExtraordinaryEntity;
 import com.pandatronik.backend.persistence.mapper.ExtraordinaryMapper;
 import com.pandatronik.backend.persistence.model.ExtraordinaryDTO;
@@ -19,8 +20,8 @@ public class ExtraordinaryService implements ExtraordinaryCrudService<Extraordin
     private final ExtraordinaryRepository extraordinaryRepository;
 
     @Override
-    public List<ExtraordinaryDTO> findAll(long userEntityId) {
-        return extraordinaryRepository.findAllById(userEntityId)
+    public List<ExtraordinaryDTO> findAll(UserEntity userEntity) {
+        return extraordinaryRepository.findAllById(userEntity.getId())
                 .stream()
                 .map(extraordinaryMapper::extraordinaryToExtraordinaryDTO)
                 .collect(Collectors.toList());
@@ -28,29 +29,29 @@ public class ExtraordinaryService implements ExtraordinaryCrudService<Extraordin
     }
 
     @Override
-    public List<ExtraordinaryDTO> findByDate(long userEntityId, int year, int month) {
-        return extraordinaryRepository.findByPartDate(userEntityId, year, month)
+    public List<ExtraordinaryDTO> findByDate(UserEntity userEntity, int year, int month) {
+        return extraordinaryRepository.findByPartDate(userEntity, year, month)
                 .stream()
                 .map(extraordinaryMapper::extraordinaryToExtraordinaryDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public ExtraordinaryDTO duplicateCheck(long userEntityId, int year, int month, int day) {
-        return extraordinaryRepository.findByDate(userEntityId, year, month, day)
+    public ExtraordinaryDTO duplicateCheck(UserEntity userEntity, int year, int month, int day) {
+        return extraordinaryRepository.findByDate(userEntity, year, month, day)
                 .map(extraordinaryMapper::extraordinaryToExtraordinaryDTO).orElse(null);
     }
 
     @Override
-    public ExtraordinaryDTO findById(long userEntityId, Long id) {
-        return extraordinaryRepository.findById(userEntityId, id)
+    public ExtraordinaryDTO findById(UserEntity userEntity, Long id) {
+        return extraordinaryRepository.findById(userEntity, id)
                 .map(extraordinaryMapper::extraordinaryToExtraordinaryDTO)
                 .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
-    public ExtraordinaryDTO findByDate(long userEntityId, int year, int month, int day) {
-        return extraordinaryRepository.findByDate(userEntityId, year, month, day)
+    public ExtraordinaryDTO findByDate(UserEntity userEntity, int year, int month, int day) {
+        return extraordinaryRepository.findByDate(userEntity, year, month, day)
                 .map(extraordinaryMapper::extraordinaryToExtraordinaryDTO)
                 .orElseThrow(ResourceNotFoundException::new);
     }
@@ -70,8 +71,12 @@ public class ExtraordinaryService implements ExtraordinaryCrudService<Extraordin
     }
 
     @Override
-    public void delete(long userEntityId, Long id) {
-        extraordinaryRepository.deleteById(id);
+    public void delete(UserEntity userEntity, Long id) {
+        try {
+            extraordinaryRepository.deleteById(id);
+        } catch (RuntimeException e) {
+            System.out.println();
+        }
     }
 
     private ExtraordinaryDTO saveAndReturnDTO(ExtraordinaryEntity extraordinaryEntity) {

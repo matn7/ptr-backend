@@ -53,7 +53,7 @@ public class ExtraordinaryControllerTest extends SecurityConfigBeans {
         extraordinaryListDTO.setExtraordinaryList(list);
 
         when(userService.findByUserName(anyString())).thenReturn(user);
-        when(extraordinaryService.findAll(user.getId())).thenReturn(list);
+        when(extraordinaryService.findAll(user)).thenReturn(list);
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .get(AppConstants.BASE_URL + "/someuser/extraordinary/all")
@@ -75,7 +75,7 @@ public class ExtraordinaryControllerTest extends SecurityConfigBeans {
         ExtraordinaryDTO extraordinary = getExtraordinary();
 
         when(userService.findByUserName(anyString())).thenReturn(user);
-        when(extraordinaryService.findById(user.getId(), 1L)).thenReturn(extraordinary);
+        when(extraordinaryService.findById(user, 1L)).thenReturn(extraordinary);
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .get(AppConstants.BASE_URL + "/someuser/extraordinary/1")
@@ -93,7 +93,7 @@ public class ExtraordinaryControllerTest extends SecurityConfigBeans {
     public void findByIdNotFound() throws Exception {
         UserEntity user = UserEntity.builder().build();
         when(userService.findByUserName(anyString())).thenReturn(user);
-        when(extraordinaryService.findById(user.getId(), 1L)).thenThrow(ResourceNotFoundException.class);
+        when(extraordinaryService.findById(user, 1L)).thenThrow(ResourceNotFoundException.class);
 
         RequestBuilder request = MockMvcRequestBuilders
                 .get(AppConstants.BASE_URL + "/someuser/extraordinary/1")
@@ -110,7 +110,7 @@ public class ExtraordinaryControllerTest extends SecurityConfigBeans {
         ExtraordinaryDTO extraordinary = getExtraordinary();
 
         when(userService.findByUserName(anyString())).thenReturn(user);
-        when(extraordinaryService.findByDate(user.getId(), 25, 5, 2025)).thenReturn(extraordinary);
+        when(extraordinaryService.findByDate(user, 25, 5, 2025)).thenReturn(extraordinary);
 
         RequestBuilder request = MockMvcRequestBuilders
                 .get(AppConstants.BASE_URL + "/someuser/extraordinary/2025/05/25")
@@ -132,7 +132,7 @@ public class ExtraordinaryControllerTest extends SecurityConfigBeans {
         UserEntity user = UserEntity.builder().build();
 
         when(userService.findByUserName(anyString())).thenReturn(user);
-        when(extraordinaryService.findByDate(user.getId(), 25, 5, 2025)).thenThrow(ResourceNotFoundException.class);
+        when(extraordinaryService.findByDate(user, 25, 5, 2025)).thenThrow(ResourceNotFoundException.class);
 
         RequestBuilder request = MockMvcRequestBuilders
                 .get(AppConstants.BASE_URL + "/someuser/extraordinary/2025/05/25")

@@ -1,5 +1,6 @@
 package com.pandatronik.backend.service;
 
+import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.LessImportantEntity;
 import com.pandatronik.backend.persistence.mapper.LessImportantMapper;
 import com.pandatronik.backend.persistence.model.LessImportantDTO;
@@ -20,28 +21,28 @@ public class LessImportantService implements ImportantCrudService<LessImportantD
     private final LessImportantRepository lessImportantRepository;
 
     @Override
-    public LessImportantDTO findById(long userEntityId, Long id) {
-        return lessImportantRepository.findById(userEntityId, id)
+    public LessImportantDTO findById(UserEntity userEntity, Long id) {
+        return lessImportantRepository.findById(userEntity, id)
                 .map(lessImportantMapper::lessImportantToLessImportantDTO)
                 .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
-    public LessImportantDTO findByDate(long userEntityId, int year, int month, int day) {
-        return lessImportantRepository.findByDate(userEntityId, day, month, year)
+    public LessImportantDTO findByDate(UserEntity userEntity, int year, int month, int day) {
+        return lessImportantRepository.findByDate(userEntity, day, month, year)
                 .map(lessImportantMapper::lessImportantToLessImportantDTO)
                 .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
-    public LessImportantDTO duplicateCheck(long userEntityId, int year, int month, int day) {
-        return lessImportantRepository.findByDate(userEntityId, day, month, year)
+    public LessImportantDTO duplicateCheck(UserEntity userEntity, int year, int month, int day) {
+        return lessImportantRepository.findByDate(userEntity, day, month, year)
                 .map(lessImportantMapper::lessImportantToLessImportantDTO).orElse(null);
     }
 
     @Override
-    public List<LessImportantDTO> findByDate(long userEntityId, int year, int month) {
-        return lessImportantRepository.findByDate(userEntityId, year, month)
+    public List<LessImportantDTO> findByDate(UserEntity userEntity, int year, int month) {
+        return lessImportantRepository.findByDate(userEntity, year, month)
                 .stream()
                 .map(lessImportantMapper::lessImportantToLessImportantDTO)
                 .collect(Collectors.toList());
@@ -61,23 +62,23 @@ public class LessImportantService implements ImportantCrudService<LessImportantD
     }
 
     @Override
-    public void delete(long userEntityId, Long id) {
+    public void delete(UserEntity userEntity, Long id) {
         lessImportantRepository.deleteById(id);
     }
 
     @Override
-    public List<Object[]> findCountByYearStat(long userEntityId, int year) {
-        return lessImportantRepository.findCountByYearStat(userEntityId, year);
+    public List<Object[]> findCountByYearStat(UserEntity userEntity, int year) {
+        return lessImportantRepository.findCountByYearStat(userEntity, year);
     }
 
     @Override
-    public List<Object[]> findAverageByYearStat(long userEntityId, int year) {
-        return lessImportantRepository.findAverageByYearStat(userEntityId, year);
+    public List<Object[]> findAverageByYearStat(UserEntity userEntity, int year) {
+        return lessImportantRepository.findAverageByYearStat(userEntity, year);
     }
 
     @Override
-    public List<Integer> findCountMadeByStartEnd(long userEntityId, LocalDate startDate, LocalDate endDate) {
-        return lessImportantRepository.findCountMadeByStartEnd(userEntityId, startDate, endDate);
+    public List<Integer> findCountMadeByStartEnd(UserEntity userEntity, LocalDate startDate, LocalDate endDate) {
+        return lessImportantRepository.findCountMadeByStartEnd(userEntity, startDate, endDate);
     }
 
     private LessImportantDTO saveAndReturnDTO(LessImportantEntity lessImportantEntity) {

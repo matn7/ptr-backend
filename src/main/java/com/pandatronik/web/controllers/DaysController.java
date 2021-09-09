@@ -36,7 +36,7 @@ public class DaysController {
 
         UserEntity userEntity = userService.findByUserName(username);
 
-        return daysService.findById(userEntity.getId(), id);
+        return daysService.findById(userEntity, id);
     }
 
     @GetMapping("{year}/{month}/{day}")
@@ -46,7 +46,7 @@ public class DaysController {
 
         UserEntity userEntity = userService.findByUserName(username);
 
-        return daysService.findByDate(userEntity.getId(), day, month, year);
+        return daysService.findByDate(userEntity, day, month, year);
     }
 
     @PostMapping
@@ -55,7 +55,7 @@ public class DaysController {
                         @Valid @RequestBody DaysDTO daysDTO) {
 
         UserEntity userEntity = userService.findByUserName(username);
-        daysDTO.setUserEntityId(userEntity.getId());
+        daysDTO.setUserEntity(userEntity);
 
         return daysService.save(daysDTO);
     }
@@ -66,7 +66,7 @@ public class DaysController {
                           @PathVariable("id") Long id, @Valid @RequestBody DaysDTO daysDTO) throws URISyntaxException {
 
         UserEntity userEntity = userService.findByUserName(username);
-        daysDTO.setUserEntityId(userEntity.getId());
+        daysDTO.setUserEntity(userEntity);
 
         return daysService.update(id, daysDTO);
     }
@@ -76,7 +76,7 @@ public class DaysController {
     public void delete(@PathVariable("username") String username, @PathVariable("id") Long id) {
 
         UserEntity userEntity = userService.findByUserName(username);
-        daysService.delete(userEntity.getId(), id);
+        daysService.delete(userEntity, id);
     }
 
 }

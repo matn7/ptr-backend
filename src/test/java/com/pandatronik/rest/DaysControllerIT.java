@@ -19,6 +19,7 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
@@ -36,7 +37,7 @@ public class DaysControllerIT extends SecurityConfigBeans {
     @Test
     public void contextLoads() throws JSONException {
         // given
-        given(daysService.findById(anyLong(), anyLong())).willReturn(getDaysDTO());
+        given(daysService.findById(any(), anyLong())).willReturn(getDaysDTO());
 
         final ResponseEntity<DaysDTO> forEntity =
                 this.restTemplate.getForEntity(AppConstants.BASE_URL + "/someuser/days/1", DaysDTO.class);

@@ -23,7 +23,7 @@ public abstract class Resource<T> {
     @ResponseStatus(HttpStatus.OK)
     public T findById(@PathVariable("username") String username, @PathVariable("id") Long id) {
         UserEntity userEntity = userService.findByUserName(username);
-        return taskService.findById(userEntity.getId(), id);
+        return taskService.findById(userEntity, id);
     }
 
     @GetMapping("/{year}/{month}/{day}")
@@ -33,7 +33,7 @@ public abstract class Resource<T> {
 
         UserEntity userEntity = userService.findByUserName(username);
         // This looks does not works, i think on I
-        return taskService.findByDate(userEntity.getId(), year, month, day);
+        return taskService.findByDate(userEntity, year, month, day);
     }
 
     public abstract T save(@PathVariable("username") String username,
@@ -48,7 +48,7 @@ public abstract class Resource<T> {
     public void delete(@PathVariable("username") String username, @PathVariable("id") Long id) {
 
         UserEntity userEntity = userService.findByUserName(username);
-        taskService.delete(userEntity.getId(), id);
+        taskService.delete(userEntity, id);
     }
 
 }

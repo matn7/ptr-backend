@@ -8,6 +8,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.enums.RateDayEnum;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -44,7 +45,7 @@ public class DaysDTO implements Comparable<DaysDTO> {
     private LocalDate startDate;
 
     @JsonIgnore
-    private long userEntityId;
+    private UserEntity userEntity;
 
     @Override
     public int compareTo(DaysDTO daysDTO) {

@@ -1,5 +1,6 @@
 package com.pandatronik.backend.persistence.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pandatronik.backend.persistence.domain.core.DaysEntity;
 import com.pandatronik.backend.persistence.domain.core.ExtraordinaryEntity;
 import com.pandatronik.backend.persistence.domain.core.Important2Entity;
@@ -113,36 +114,36 @@ public class UserEntity implements Serializable, UserDetails {
 	private Date lastLoginDateDisplay;
 
 	// Entities related to AppUser
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "userEntityId")
+	@JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "userEntity")
     private Set<ImportantEntity> importantEntity = new HashSet<>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "userEntityId")
+	@JsonIgnore
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "userEntity")
 	private Set<Important2Entity> important2Entity = new HashSet<>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "userEntityId")
+	@JsonIgnore
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "userEntity")
     private Set<Important3Entity> important3Entity = new HashSet<>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "userEntityId")
+	@JsonIgnore
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "userEntity")
 	private Set<LessImportantEntity> lessImportantEntity = new HashSet<>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "userEntityId")
+	@JsonIgnore
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "userEntity")
 	private Set<LessImportant2Entity> lessImportant2Entity = new HashSet<>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "userEntityId")
+	@JsonIgnore
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "userEntity")
 	private Set<LessImportant3Entity> lessImportant3Entity = new HashSet<>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "userEntityId")
+	@JsonIgnore
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "userEntity")
     private Set<DaysEntity> daysEntity = new HashSet<>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "userEntityId")
+	@JsonIgnore
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "userEntity")
     private Set<ExtraordinaryEntity> extraordinaryEntity = new HashSet<>();
 
 	public Set<PasswordResetToken> getPasswordResetTokens() {

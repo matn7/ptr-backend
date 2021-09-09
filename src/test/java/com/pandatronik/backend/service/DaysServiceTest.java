@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -41,12 +42,12 @@ public class DaysServiceTest {
         DaysDTO day = getDaysDTO();
         DaysEntity daysEntity = new DaysEntity();
 
-        when(daysRepository.findById(anyLong(), anyLong()))
+        when(daysRepository.findById(any(), anyLong()))
                 .thenReturn(Optional.of(daysEntity));
 
         when(daysMapper.daysToDaysDTO(daysEntity)).thenReturn(day);
 
-        final DaysDTO daysDTO = daysService.findById(user.getId(), 1L);
+        final DaysDTO daysDTO = daysService.findById(user, 1L);
 
         assertEquals(1L, daysDTO.getId());
         assertEquals("Some Day", daysDTO.getBody());
@@ -64,12 +65,12 @@ public class DaysServiceTest {
         daysEntityList.add(daysEntity1);
         daysEntityList.add(daysEntity2);
 
-        when(daysRepository.findByPartDate(anyLong(), anyInt(), anyInt()))
+        when(daysRepository.findByPartDate(any(), anyInt(), anyInt()))
                 .thenReturn(daysEntityList);
 
         when(daysMapper.daysToDaysDTO(daysEntity1)).thenReturn(day);
 
-        final List<DaysDTO> daysDTO = daysService.findByDate(user.getId(), 2025, 5);
+        final List<DaysDTO> daysDTO = daysService.findByDate(user, 2025, 5);
 
         assertEquals(1L, daysDTO.get(0).getId());
         assertEquals("Some Day", daysDTO.get(0).getBody());

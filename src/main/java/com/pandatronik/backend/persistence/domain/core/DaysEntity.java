@@ -1,5 +1,6 @@
 package com.pandatronik.backend.persistence.domain.core;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -7,6 +8,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.enums.RateDayEnum;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,9 +16,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -57,11 +62,9 @@ public class DaysEntity implements Serializable {
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDate startDate;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JsonIgnore
-    private long userEntityId;
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JsonIgnore
-//    private UserEntity userEntity;
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userEntity")
+    private UserEntity userEntity;
 
 }

@@ -17,9 +17,9 @@ public class Important2DTOValidatorTest extends AbstractTaskValidatorTest<Import
     private Important2Service importantService;
 
     @Override
-    protected Important2DTO getTask() {
+    protected Important2DTO getTask(Long id) {
         Important2DTO importantDTO = new Important2DTO();
-        importantDTO.setId(1L);
+        importantDTO.setId(id);
         importantDTO.setTitle(title());
         importantDTO.setBody(body());
         importantDTO.setMade(MadeEnum.HUNDRED);

@@ -17,9 +17,9 @@ public class Important3DTOValidatorTest extends AbstractTaskValidatorTest<Import
     private Important3Service importantService;
 
     @Override
-    protected Important3DTO getTask() {
+    protected Important3DTO getTask(Long id) {
         Important3DTO importantDTO = new Important3DTO();
-        importantDTO.setId(1L);
+        importantDTO.setId(id);
         importantDTO.setTitle(title());
         importantDTO.setBody(body());
         importantDTO.setMade(MadeEnum.HUNDRED);

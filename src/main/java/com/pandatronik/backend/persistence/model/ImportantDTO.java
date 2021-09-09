@@ -1,12 +1,14 @@
 package com.pandatronik.backend.persistence.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.enums.MadeEnum;
 import com.pandatronik.validator.ImportantEntityUnique;
 import lombok.Data;
@@ -52,8 +54,8 @@ public class ImportantDTO implements Comparable<ImportantDTO> {
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDate startDate;
 
-//    @JsonIgnore
-    private long userEntityId;
+    @JsonIgnore
+    private UserEntity userEntity;
 
     @Override
     public int compareTo(ImportantDTO importantDTO) {

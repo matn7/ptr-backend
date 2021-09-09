@@ -17,9 +17,9 @@ public class LessImportantDTOValidatorTest extends AbstractTaskValidatorTest<Les
     private LessImportantService lessImportantService;
 
     @Override
-    protected LessImportantDTO getTask() {
+    protected LessImportantDTO getTask(Long id) {
         LessImportantDTO lessImportantDTO = new LessImportantDTO();
-        lessImportantDTO.setId(1L);
+        lessImportantDTO.setId(id);
         lessImportantDTO.setTitle(title());
         lessImportantDTO.setBody(body());
         lessImportantDTO.setMade(MadeEnum.HUNDRED);

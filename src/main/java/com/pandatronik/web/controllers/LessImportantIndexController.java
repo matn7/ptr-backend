@@ -25,6 +25,6 @@ public class LessImportantIndexController {
     public LessImportantIndexDTO findByDate(@PathVariable("username") String username,
             @PathVariable("year") int year, @PathVariable("month") int month) {
         final UserEntity userEntity = userService.findByUserName(username);
-        return lessImportantIndexService.getData(userEntity.getId(), year, month);
+        return lessImportantIndexService.getData(userEntity, year, month);
     }
 }

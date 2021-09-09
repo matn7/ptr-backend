@@ -1,12 +1,12 @@
-USE `pandatronik_user_experiments`;
+USE `pandatronik_user_experiments_db_model`;
 SET foreign_key_checks = 0;
 
 INSERT INTO plan VALUES ('1', 'Basic');
 INSERT INTO plan VALUES ('2', 'Pro');
 
-INSERT INTO pandatronik_user_experiments.role VALUES (1, 'ROLE_BASIC');
-INSERT INTO pandatronik_user_experiments.role VALUES (2, 'ROLE_PRO');
-INSERT INTO pandatronik_user_experiments.role VALUES (3, 'ROLE_ADMIN');
+INSERT INTO pandatronik_user_experiments_db_model.role VALUES (1, 'ROLE_BASIC');
+INSERT INTO pandatronik_user_experiments_db_model.role VALUES (2, 'ROLE_PRO');
+INSERT INTO pandatronik_user_experiments_db_model.role VALUES (3, 'ROLE_ADMIN');
 
 COMMIT;
 

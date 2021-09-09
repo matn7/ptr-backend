@@ -46,7 +46,7 @@ public class DaysStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Integer> res = daysService.findByYearData(userEntity.getId(), dateRequest.getYear());
+        List<Integer> res = daysService.findByYearData(userEntity, dateRequest.getYear());
 
         Map<Integer, Long> collect = res.stream()
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
@@ -68,7 +68,7 @@ public class DaysStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Object[]> res = daysService.findAverageByYearData(userEntity.getId(), dateRequest.getYear());
+        List<Object[]> res = daysService.findAverageByYearData(userEntity, dateRequest.getYear());
         Map<Object, Object> collect = res.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(res)) {
             return ResponseEntity.ok(collect);
@@ -87,7 +87,7 @@ public class DaysStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Object[]> res = daysService.findByMonthAndYearData(userEntity.getId(), dateRequest.getMonth(),
+        List<Object[]> res = daysService.findByMonthAndYearData(userEntity, dateRequest.getMonth(),
                 dateRequest.getYear());
         Map<Object, Object> collect = res.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
 
@@ -108,7 +108,7 @@ public class DaysStatisticsResource {
 
         checkUser(userEntity);
 
-        List<Integer> result = daysService.findByMonthAndYearDailyData(userEntity.getId(), dateRequest.getYear(),
+        List<Integer> result = daysService.findByMonthAndYearDailyData(userEntity, dateRequest.getYear(),
                 dateRequest.getMonth()).get();
 
         if (result != null) {

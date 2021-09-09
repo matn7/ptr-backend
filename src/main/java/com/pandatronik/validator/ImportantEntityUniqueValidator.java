@@ -28,7 +28,9 @@ public class ImportantEntityUniqueValidator implements ConstraintValidator<Impor
 
         UserEntity userEntity = userService.findByUserName(name);
 
-        if (importantService.duplicateCheck(userEntity.getId(), year, month, day) != null) {
+        // duplicate check, only for new entry, allow update
+        if (importantService.duplicateCheck(userEntity, year, month, day) != null
+                && importantDTO.getId() == null) {
             return false;
         }
 
