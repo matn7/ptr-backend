@@ -46,25 +46,25 @@ public class DaysEntity implements Serializable {
     private Long id;
 
     @NotNull
-    @Size(min = 1, max = 255)
-    private String body;
-
-    @NotNull
     private RateDayEnum rateDay;
-
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @DateTimeFormat(pattern = "MM/dd/yyyy HH:mm:ss")
-    private LocalDateTime postedOn;
 
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDate startDate;
 
+    @NotNull
+    @Size(min = 1, max = 255)
+    private String body;
+
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @DateTimeFormat(pattern = "MM/dd/yyyy HH:mm:ss")
+    private LocalDateTime postedOn;
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userEntity")
+    @JoinColumn(name = "userEntityId")
     private UserEntity userEntity;
 
 }

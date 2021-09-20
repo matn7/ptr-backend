@@ -28,8 +28,8 @@ public class LessImportant2EntityUniqueValidator implements ConstraintValidator<
 
         UserEntity userEntity = userService.findByUserName(name);
 
-        if (lessImportantService.duplicateCheck(userEntity, year, month, day) != null
-                && lessImportantDTO.getId() == null) {
+        // && lessImportantDTO.getId() == null
+        if (lessImportantService.duplicateCheck(userEntity, year, month, day) != null) {
             return false;
         }
 

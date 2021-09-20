@@ -68,7 +68,12 @@ public class Important2Service implements ImportantCrudService<Important2DTO, Lo
 
     @Override
     public List<Object[]> findCountByYearStat(UserEntity userEntity, int year) {
-        return importantRepository.findCountByYearStat(userEntity, year);
+        final List<Object[]> objects = importantRepository.findCountByYearStat(userEntity, year)
+                .orElseThrow(ResourceNotFoundException::new);
+        if (objects.isEmpty()) {
+            throw new ResourceNotFoundException();
+        }
+        return objects;
     }
 
     @Override

@@ -30,7 +30,7 @@ public interface Important2Repository extends CrudRepository<Important2Entity, L
     // statistics
     @Query("SELECT made, COUNT(made) FROM Important2Entity i WHERE YEAR(i.startDate) = :year " +
             "AND i.userEntity =:userEntity GROUP BY i.made")
-    List<Object[]> findCountByYearStat(@Param("userEntity") UserEntity userEntity, @Param("year") int year);
+    Optional<List<Object[]>> findCountByYearStat(@Param("userEntity") UserEntity userEntity, @Param("year") int year);
 
     @Query("SELECT MONTH(i.startDate), AVG(made) FROM Important2Entity i WHERE YEAR(i.startDate) = :year " +
             "AND i.userEntity =:userEntity GROUP BY MONTH(i.startDate)")

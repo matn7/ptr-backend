@@ -1,10 +1,14 @@
 package com.pandatronik.web.controllers.statistics;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
-import com.pandatronik.backend.service.*;
+import com.pandatronik.backend.service.LessImportant2Service;
+import com.pandatronik.backend.service.LessImportant3Service;
+import com.pandatronik.backend.service.LessImportantService;
 import com.pandatronik.backend.service.user.account.UserService;
 import com.pandatronik.exceptions.UserNotFoundException;
 import com.pandatronik.payload.StartEndRequest;
+import com.pandatronik.payload.YearRequest;
+import com.pandatronik.utils.AppConstants;
 import com.pandatronik.web.controllers.ErrorMessage;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -12,18 +16,25 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Component
-@CrossOrigin(origins = "${angular.api.url}")
 @RestController
-@RequestMapping("${api.version}/users/{username}/statistics/lessimportant")
+@RequestMapping(AppConstants.BASE_URL + "/{username}/statistics/lessimportant")
 @AllArgsConstructor
 public class LessImportantStatisticsResource {
 
@@ -33,60 +44,43 @@ public class LessImportantStatisticsResource {
     private final LessImportant3Service lessImportant3Service;
     private final MessageSource messageSource;
 
-    @GetMapping("/1/count/{year}")
+    @PostMapping("/1/count")
     public ResponseEntity<?> findCountByYearTask1(@PathVariable("username") String username,
-                                                  @PathVariable("year") int year) {
-
+                                                  @Valid @RequestBody YearRequest yearRequest) {
         UserEntity userEntity = userService.findByUserName(username);
 
         checkUser(userEntity);
 
-        List<Object[]> result =  lessImportantService.findCountByYearStat(userEntity, year);
+        List<Object[]> result =  lessImportantService.findCountByYearStat(userEntity,
+                Integer.parseInt(yearRequest.getYear()));
         Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
-        if (nonNull(collect)) {
-            return ResponseEntity.ok(collect);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
-                            , LocaleContextHolder.getLocale())));
-        }
+        return ResponseEntity.ok(collect);
     }
 
-    @GetMapping("/2/count/{year}")
+    @PostMapping("/2/count")
     public ResponseEntity<?> findCountByYearTask2(@PathVariable("username") String username,
-                                              @PathVariable("year") int year) {
+                                                  @Valid @RequestBody YearRequest yearRequest) {
         UserEntity userEntity = userService.findByUserName(username);
 
         checkUser(userEntity);
 
-        List<Object[]> result =  lessImportant2Service.findCountByYearStat(userEntity, year);
+        List<Object[]> result =  lessImportant2Service.findCountByYearStat(userEntity,
+                Integer.parseInt(yearRequest.getYear()));
         Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
-        if (nonNull(collect)) {
-            return ResponseEntity.ok(collect);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
-                            , LocaleContextHolder.getLocale())));
-        }
+        return ResponseEntity.ok(collect);
     }
 
-    @GetMapping("/3/count/{year}")
+    @PostMapping("/3/count")
     public ResponseEntity<?> findCountByYearTask3(@PathVariable("username") String username,
-                                              @PathVariable("year") int year) {
-
+                                                  @Valid @RequestBody YearRequest yearRequest) {
         UserEntity userEntity = userService.findByUserName(username);
 
         checkUser(userEntity);
 
-        List<Object[]> result =  lessImportant3Service.findCountByYearStat(userEntity, year);
+        List<Object[]> result =  lessImportant3Service.findCountByYearStat(userEntity,
+                Integer.parseInt(yearRequest.getYear()));
         Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
-        if (nonNull(collect)) {
-            return ResponseEntity.ok(collect);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorMessage(messageSource.getMessage("record.not.found.message", null
-                            , LocaleContextHolder.getLocale())));
-        }
+        return ResponseEntity.ok(collect);
     }
 
     @GetMapping("/1/avg/{year}")

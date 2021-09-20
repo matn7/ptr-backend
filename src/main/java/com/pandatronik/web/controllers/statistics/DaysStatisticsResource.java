@@ -5,6 +5,7 @@ import com.pandatronik.backend.service.DaysService;
 import com.pandatronik.backend.service.user.account.UserService;
 import com.pandatronik.exceptions.UserNotFoundException;
 import com.pandatronik.payload.DateRequest;
+import com.pandatronik.utils.AppConstants;
 import com.pandatronik.web.controllers.ErrorMessage;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -30,7 +31,7 @@ import static java.util.Objects.nonNull;
 @Component
 @CrossOrigin(origins = "${angular.api.url}")
 @RestController
-@RequestMapping("${api.version}/users/{username}/statistics/days")
+@RequestMapping(AppConstants.BASE_URL + "/{username}/statistics/days")
 @AllArgsConstructor
 public class DaysStatisticsResource {
 
