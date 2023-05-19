@@ -7,9 +7,12 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-public class YearRequest {
+public class YearBetweenRequest {
+
+    @NotNull(message = "Year start cannot be blank")
+    private Integer yearStart;
 
     @NotNull(message = "Year end cannot be blank")
-    private Integer year;
+    private Integer yearEnd;
 
 }

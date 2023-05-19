@@ -9,7 +9,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,21 +63,6 @@ public class LessImportantService implements ImportantCrudService<LessImportantD
     @Override
     public void delete(UserEntity userEntity, Long id) {
         lessImportantRepository.deleteById(id);
-    }
-
-    @Override
-    public List<Object[]> findCountByYearStat(UserEntity userEntity, int year) {
-        return lessImportantRepository.findCountByYearStat(userEntity, year);
-    }
-
-    @Override
-    public List<Object[]> findAverageByYearStat(UserEntity userEntity, int year) {
-        return lessImportantRepository.findAverageByYearStat(userEntity, year);
-    }
-
-    @Override
-    public List<Integer> findCountMadeByStartEnd(UserEntity userEntity, LocalDate startDate, LocalDate endDate) {
-        return lessImportantRepository.findCountMadeByStartEnd(userEntity, startDate, endDate);
     }
 
     private LessImportantDTO saveAndReturnDTO(LessImportantEntity lessImportantEntity) {

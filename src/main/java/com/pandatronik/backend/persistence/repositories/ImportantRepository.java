@@ -7,7 +7,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,20 +25,6 @@ public interface ImportantRepository extends CrudRepository<ImportantEntity, Lon
             "MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userEntity = :userEntity")
     List<ImportantEntity> findByDate(@Param("userEntity") UserEntity userEntity,
                                          @Param("year") int year, @Param("month") int month);
-
-    // statistics
-    @Query("SELECT made, COUNT(made) FROM ImportantEntity i WHERE YEAR(i.startDate) = :year " +
-            "AND i.userEntity =:userEntity GROUP BY i.made")
-    List<Object[]> findCountByYearStat(@Param("userEntity") UserEntity userEntity, @Param("year") int year);
-
-    @Query("SELECT MONTH(i.startDate), AVG(made) FROM ImportantEntity i WHERE YEAR(i.startDate) = :year " +
-            "AND i.userEntity =:userEntity GROUP BY MONTH(i.startDate)")
-    List<Object[]> findAverageByYearStat(@Param("userEntity") UserEntity userEntity, @Param("year") int year);
-
-    @Query("SELECT made FROM ImportantEntity i WHERE i.startDate >= :startDate and i.startDate <= :endDate"
-            + " AND i.userEntity = :userEntity")
-    List<Integer> findCountMadeByStartEnd(@Param("userEntity") UserEntity userEntity, @Param("startDate") LocalDate startDate,
-                                          @Param("endDate") LocalDate endDate);
 
 
 }

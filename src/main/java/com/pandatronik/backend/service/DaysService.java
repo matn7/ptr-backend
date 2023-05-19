@@ -5,12 +5,13 @@ import com.pandatronik.backend.persistence.domain.core.DaysEntity;
 import com.pandatronik.backend.persistence.mapper.DaysMapper;
 import com.pandatronik.backend.persistence.model.DaysDTO;
 import com.pandatronik.backend.persistence.repositories.DaysRepository;
+import com.pandatronik.backend.persistence.repositories.model.DaysBetween;
+import com.pandatronik.backend.persistence.repositories.model.DaysMonthDateAvgRate;
 import lombok.AllArgsConstructor;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,6 +44,7 @@ public class DaysService implements DaysCrudService<DaysDTO, Long> {
 
     @Override
     public DaysDTO findByDate(UserEntity userEntity, int day, int month, int year) {
+        System.out.println();
         return daysRepository.findByDate(userEntity, day, month, year)
                 .map(daysMapper::daysToDaysDTO)
                 .orElseThrow(ResourceNotFoundException::new);
@@ -65,30 +67,17 @@ public class DaysService implements DaysCrudService<DaysDTO, Long> {
     public void delete(UserEntity userEntity, Long id) {
         // check whether user can delete other users record known its id
         daysRepository.deleteById(id);
-        System.out.println();
     }
 
     @Override
-    public List<Integer> findByYearData(UserEntity userEntity, int year) {
-        return  daysRepository.findByYearData(userEntity, year);
+    public List<DaysBetween> findByYearRange(UserEntity userEntity, int yearStart, int yearEnd) {
+        List<DaysBetween> byYearRange = daysRepository.findByYearRange(userEntity, yearStart, yearEnd);
+        return byYearRange;
     }
 
-    @Override
-    public List<Object[]> findAverageByYearData(UserEntity userEntity, int year) {
-//        return  daysRepository.findAverageByYearData(userEntity, year);
-        return null;
-    }
-
-    @Override
-    public List<Object[]> findByMonthAndYearData(UserEntity userEntity, int month, int year) {
-//        return daysRepository.findByMonthAndYearData(userEntity, month, year);
-        return null;
-    }
-
-    @Override
-    public Optional<List<Integer>> findByMonthAndYearDailyData(UserEntity userEntity, int year, int month) {
-        return null;
-//        return daysRepository.findByMonthAndYearDailyData(userEntity, year, month);
+    public List<DaysMonthDateAvgRate> findMonthAvgRateDayByYear(UserEntity userEntity, int year) {
+        List<DaysMonthDateAvgRate> monthAvgRate = daysRepository.findMonthAvgRateDay(userEntity, year);
+        return monthAvgRate;
     }
 
     private DaysDTO saveAndReturnDTO(DaysEntity daysEntity) {

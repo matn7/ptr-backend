@@ -58,10 +58,10 @@ SET GLOBAL validate_password_special_char_count = 0;
 
 CREATE USER 'ptrdevuser'@'localhost' IDENTIFIED BY '1yvS8lEnD5';
 
-GRANT SELECT ON pandatronik_dev.* to 'ptrdevuser'@'localhost';
-GRANT INSERT ON pandatronik_dev.* to 'ptrdevuser'@'localhost';
-GRANT DELETE ON pandatronik_dev.* to 'ptrdevuser'@'localhost';
-GRANT UPDATE ON pandatronik_dev.* to 'ptrdevuser'@'localhost';
+GRANT SELECT ON pandatronik_user_experiments_db_model.* to 'ptrdevuser'@'localhost';
+GRANT INSERT ON pandatronik_user_experiments_db_model.* to 'ptrdevuser'@'localhost';
+GRANT DELETE ON pandatronik_user_experiments_db_model.* to 'ptrdevuser'@'localhost';
+GRANT UPDATE ON pandatronik_user_experiments_db_model.* to 'ptrdevuser'@'localhost';
 ```
 
 ***
@@ -104,9 +104,6 @@ GRANT UPDATE ON pandatronik_dev.* to 'ptrdevuser'@'localhost';
 - ImportantIndex - retrieves all data from Days, Important1, Important2, Important3, Remarkable based on
 selected month and year
 
-- Statistics
-
-
 
 ## Angular
 
@@ -134,6 +131,12 @@ ng g c shared/Input
 ng g m Days --routing
 ng g c days/DaysCreate
 ng g c days/DaysHome
+
+ng g m Stat --routing
+ng g c stat/days/StatHome
+ng g c stat/days/DaysBetween
+ng g c stat/days/DaysMonthAvgRateDayByYear
+ng g s stat/Stat
 
 ng g m Auth --routing
 ng g c auth/Signin

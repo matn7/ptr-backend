@@ -2,6 +2,8 @@ package com.pandatronik.backend.persistence.repositories;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.DaysEntity;
+import com.pandatronik.backend.persistence.repositories.model.DaysBetween;
+import com.pandatronik.backend.persistence.repositories.model.DaysMonthDateAvgRate;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -20,33 +22,29 @@ public interface DaysRepository extends CrudRepository<DaysEntity, Long> {
 
     @Query("SELECT i FROM DaysEntity i WHERE DAYOFMONTH(i.startDate) = :day AND " +
             "MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userEntity = :userEntity")
-    Optional<DaysEntity> findByDate(@Param("userEntity") UserEntity userEntity, @Param("day") int day,
-        @Param("month") int month, @Param("year") int year);
+    Optional<DaysEntity> findByDate(@Param("userEntity") UserEntity userEntity,
+                                    @Param("day") int day,
+                                    @Param("month") int month,
+                                    @Param("year") int year);
 
     @Query("SELECT i FROM DaysEntity i WHERE " +
             "MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userEntity = :userEntity")
     List<DaysEntity> findByPartDate(@Param("userEntity") UserEntity userEntity,
                                     @Param("year") int year, @Param("month") int month);
 
-    // statistics
-    @Query("SELECT rateDay FROM DaysEntity i WHERE YEAR(i.startDate) = :year AND i.userEntity = :userEntity")
-    List<Integer> findByYearData(@Param("userEntity") UserEntity userEntity, @Param("year") int year);
+    // SELECT rate_day, start_date FROM days WHERE user_entity_id = 1 AND YEAR(start_date) between 2017 and 2020
+    @Query(value = "SELECT " +
+            " new com.pandatronik.backend.persistence.repositories.model.DaysBetween(i.rateDay, i.startDate) " +
+            " FROM DaysEntity i WHERE " +
+            " YEAR(i.startDate) BETWEEN :yearStart AND :yearEnd AND i.userEntity = :userEntity")
+    List<DaysBetween> findByYearRange(@Param("userEntity") UserEntity userEntity,
+                                      @Param("yearStart") int yearStart, @Param("yearEnd") int yearEnd);
 
-//    @Query("SELECT MONTH(i.startDate), AVG(rateDay) FROM DaysEntity i WHERE YEAR(i.startDate) = :year " +
-//    "AND i.userEntity = :userEntity GROUP BY MONTH(i.startDate)")
-//    List<Object[]> findAverageByYearData(@Param("userEntity") long userEntity, @Param("year") int year);
-
-//    @Query("SELECT rateDay, COUNT(rateDay) FROM DaysEntity i WHERE MONTH(i.startDate) = :month AND " +
-//            "YEAR(i.startDate) = :year AND i.userEntity = :userEntity GROUP BY i.rateDay")
-//    List<Object[]> findByMonthAndYearData(@Param("userEntity") long userEntity, @Param("month") int month,
-//                                             @Param("year") int year);
-
-//    @Query("SELECT d.rateDay "
-//            + " FROM CalendarEntity c"
-//            + " LEFT JOIN c.days d WITH d.userEntity = :userEntity"
-//            + " WHERE YEAR(c.calendarDate) = :year AND MONTH(c.calendarDate) = :month"
-//            + " ORDER BY c.calendarDate")
-//    Optional<List<Integer>> findByMonthAndYearDailyData(@Param("userEntity") UserEntity userEntity,
-//        @Param("year") int year, @Param("month") int month);
-
+    // SELECT MONTH(start_date), AVG(rate_day) FROM days WHERE user_entity_id = 1 AND YEAR(start_date) = 2017
+    // group by MONTH(start_date) order by MONTH(start_date) ASC;
+    @Query(value = "SELECT " +
+            " new com.pandatronik.backend.persistence.repositories.model.DaysMonthDateAvgRate(MONTH(d.startDate), AVG(d.rateDay)) " +
+            " FROM DaysEntity d WHERE " +
+            " d.userEntity = :userEntity AND YEAR(d.startDate) = :year GROUP BY MONTH(d.startDate) ORDER BY MONTH(d.startDate) ASC")
+    List<DaysMonthDateAvgRate> findMonthAvgRateDay(@Param("userEntity") UserEntity userEntity, @Param("year") int year);
 }

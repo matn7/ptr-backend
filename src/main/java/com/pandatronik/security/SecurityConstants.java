@@ -22,6 +22,8 @@ public class SecurityConstants {
 
     public static final String HEADER_STRING = "Authorization";
 
-    public static final long EXPIRATION_TIME = 600_000;
+//    public static final long EXPIRATION_TIME = 600_000;
+
+    public static final long EXPIRATION_TIME = 6_000_000;
 
 }

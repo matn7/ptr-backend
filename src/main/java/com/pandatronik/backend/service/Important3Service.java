@@ -9,7 +9,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,21 +63,6 @@ public class Important3Service implements ImportantCrudService<Important3DTO, Lo
     @Override
     public void delete(UserEntity userEntity, Long id) {
         importantRepository.findById(userEntity, id).ifPresent(importantRepository::delete);
-    }
-
-    @Override
-    public List<Object[]> findCountByYearStat(UserEntity userEntity, int year) {
-        return importantRepository.findCountByYearStat(userEntity, year);
-    }
-
-    @Override
-    public List<Object[]> findAverageByYearStat(UserEntity userEntity, int year) {
-        return importantRepository.findAverageByYearStat(userEntity, year);
-    }
-
-    @Override
-    public List<Integer> findCountMadeByStartEnd(UserEntity userEntity, LocalDate startDate, LocalDate endDate) {
-        return importantRepository.findCountMadeByStartEnd(userEntity, startDate, endDate);
     }
 
     private Important3DTO saveAndReturnDTO(Important3Entity important3Entity) {

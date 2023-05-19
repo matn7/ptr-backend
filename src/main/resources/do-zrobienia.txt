@@ -35,7 +35,6 @@ Incorrect string value: '\xC5\xBCenka' for column 'body' at row 1               
 - check and fix routes both in backend and frontend
 - exceptions general handling @ExceptionHandler
 - refresh sessions token button
-- Use spring reactive                                                               [??]
 - Constants move to properties                                                      [ok]
 - Change less important to not important ?? not sure good idea                      [??]
 - bug in localdate saved day -1 in db                                               [ok] [BUG-1]
@@ -44,6 +43,7 @@ Incorrect string value: '\xC5\xBCenka' for column 'body' at row 1               
 - Use project lombok in all entities
 - check pom for un needed dependencies
 - Pandatronik documentation
+- OAuth2
 
 [Angular]
 - We have January 5 2019 and i should'nt be allowed to navigate to this lew page http://localhost:4200/important/1/2019/1/6/new using browser search bar             [ok]

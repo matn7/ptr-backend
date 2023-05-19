@@ -6,7 +6,9 @@
 **Create database**
 
 ```sql
-CREATE DATABASE pandatronik_dev
+CREATE DATABASE pandatronik_user_experiments_db_model
+
+CREATE DATABASE pandatronik_user_experiments_db_model
 ```
 
 **Prepare schema**

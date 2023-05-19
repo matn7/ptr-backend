@@ -33,6 +33,7 @@ public class ImportantIndexService implements IndexService<ImportantIndexDTO> {
         final List<Important2DTO> important2 = important2Service.findByDate(userEntity, year, month);
         final List<Important3DTO> important3 = important3Service.findByDate(userEntity, year, month);
 
+        // remove this, we shouldn't sort every time on server side
         // sort here
         Collections.sort(extraordinaries);
         Collections.sort(days);
