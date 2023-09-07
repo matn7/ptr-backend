@@ -5,6 +5,11 @@ import com.pandatronik.backend.persistence.domain.core.*;
 import com.pandatronik.validator.NoPandaInUsernameConstraint;
 import com.pandatronik.validator.PasswordConstraint;
 import com.pandatronik.validator.UsernameConstraint;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -14,22 +19,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
-import javax.persistence.Transient;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
@@ -42,7 +32,6 @@ import java.util.Set;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-//@ToString
 @Builder
 @UsernameConstraint
 @PasswordConstraint
@@ -100,33 +89,33 @@ public class UserEntity implements Serializable, UserDetails {
 	private Set<UserRole> userRoles = new HashSet<>();
 
 	@OneToMany(cascade = CascadeType.ALL, // if we delete user we want to their token be deleted too
-			fetch = FetchType.LAZY,
+			fetch = FetchType.EAGER,
 			mappedBy = "user")
 	private Set<PasswordResetToken> passwordResetTokens = new HashSet<>();
 
 	// Tesks, Days
-    @OneToMany(mappedBy = "userEntity")
+    @OneToMany(mappedBy = "userEntity", fetch = FetchType.EAGER)
     private List<ImportantEntity> importantEntity;
 
-	@OneToMany(mappedBy = "userEntity")
+	@OneToMany(mappedBy = "userEntity", fetch = FetchType.EAGER)
 	private List<Important2Entity> important2Entity;
 
-    @OneToMany(mappedBy = "userEntity")
+	@OneToMany(mappedBy = "userEntity", fetch = FetchType.EAGER)
     private List<Important3Entity> important3Entity;
 
-	@OneToMany(mappedBy = "userEntity")
+	@OneToMany(mappedBy = "userEntity", fetch = FetchType.EAGER)
 	private List<LessImportantEntity> lessImportantEntity;
 
-	@OneToMany(mappedBy = "userEntity")
+	@OneToMany(mappedBy = "userEntity", fetch = FetchType.EAGER)
 	private List<LessImportant2Entity> lessImportant2Entity;
 
-	@OneToMany(mappedBy = "userEntity")
+	@OneToMany(mappedBy = "userEntity", fetch = FetchType.EAGER)
 	private List<LessImportant3Entity> lessImportant3Entity;
 
-	@OneToMany(mappedBy = "userEntity")
+	@OneToMany(mappedBy = "userEntity", fetch = FetchType.EAGER)
     private List<DaysEntity> daysEntity;
 
-    @OneToMany(mappedBy = "userEntity")
+	@OneToMany(mappedBy = "userEntity", fetch = FetchType.EAGER)
     private List<ExtraordinaryEntity> extraordinaryEntity;
 
 	public Set<PasswordResetToken> getPasswordResetTokens() {

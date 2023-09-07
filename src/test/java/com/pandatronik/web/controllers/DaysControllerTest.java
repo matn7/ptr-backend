@@ -8,8 +8,8 @@ import com.pandatronik.enums.MadeEnum;
 import com.pandatronik.exceptions.CustomResponseEntityExceptionHandler;
 import com.pandatronik.utils.AppConstants;
 import org.json.JSONObject;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -58,7 +58,7 @@ public class DaysControllerTest {
 
     MockMvc mockMvc;
 
-    @Before
+    @BeforeAll
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 

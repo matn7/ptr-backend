@@ -6,7 +6,9 @@
 **Create database**
 
 ```sql
-CREATE DATABASE pandatronik_dev
+CREATE DATABASE pandatronik_dev;
+
+USE pandatronik_dev;
 ```
 
 **Prepare schema**
@@ -72,6 +74,8 @@ COMMIT;
 
 ```console
 npm install
+
+npm start
 ```
 
 ## Way to update mysql primary key

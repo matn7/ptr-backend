@@ -1,29 +1,28 @@
 package com.pandatronik.validators;
 
 import com.pandatronik.backend.persistence.domain.core.ImportantEntity;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.leftPad;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.junit.Assert.assertEquals;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ImportantEntityValidator {
     private static ValidatorFactory validatorFactory;
     private static Validator validator;
 
-    @BeforeClass
+    @BeforeAll
     public static void createValidator() {
         validatorFactory = Validation.buildDefaultValidatorFactory();
         validator = validatorFactory.getValidator();
@@ -152,7 +151,7 @@ public class ImportantEntityValidator {
     }
 
     @Test
-    @Ignore("Fix when make sure upid must have 30 chars")
+    @Disabled("Fix when make sure upid must have 30 chars")
     public void shouldValidateToLongUserProfileId() {
         ImportantEntity entity = ImportantEntityProvider.getValidImportantEntity().build();
 
@@ -164,7 +163,7 @@ public class ImportantEntityValidator {
     }
 
     @Test
-    @Ignore
+    @Disabled
     public void shouldValidateToShortUserProfileId() {
         ImportantEntity entity = ImportantEntityProvider.getValidImportantEntity().build();
 

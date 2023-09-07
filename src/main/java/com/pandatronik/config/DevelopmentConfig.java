@@ -16,7 +16,7 @@ import org.h2.server.web.WebServlet;
 @Profile("dev")
 //@PropertySource("file:///${user.home}/.pandatronik_properties/application-pandatronik-rest-dev.properties")
 public class DevelopmentConfig {
-    @Value("${stripe.test.private.key}")
+
     private String stripeDevKey;
 
     @Bean
@@ -24,12 +24,12 @@ public class DevelopmentConfig {
         return new MockEmailService();
     }
 
-    @Bean
-    public ServletRegistrationBean h2ConsoleServletRegistration() {
-        ServletRegistrationBean bean = new ServletRegistrationBean(new WebServlet());
-        bean.addUrlMappings("/console/*");
-        return bean;
-    }
+//    @Bean
+//    public ServletRegistrationBean h2ConsoleServletRegistration() {
+//        ServletRegistrationBean bean = new ServletRegistrationBean(new WebServlet());
+//        bean.addUrlMappings("/console/*");
+//        return bean;
+//    }
 
     @Bean
     public String stripeKey() {

@@ -15,7 +15,6 @@ import org.springframework.context.annotation.PropertySource;
 //@PropertySource("file:///${user.home}/.pandatronik_properties/application-pandatronik-rest-prod.properties")
 public class ProductionConfig {
 
-    @Value("${stripe.test.private.key}")
     private String stripeDevKey;
 
     @Bean
@@ -23,12 +22,12 @@ public class ProductionConfig {
         return new SmtpEmailService();
     }
 
-    @Bean
-    public ServletRegistrationBean h2ConsoleServletRegistration() {
-        ServletRegistrationBean bean = new ServletRegistrationBean(new WebServlet());
-        bean.addUrlMappings("/console/*");
-        return bean;
-    }
+//    @Bean
+//    public ServletRegistrationBean h2ConsoleServletRegistration() {
+//        ServletRegistrationBean bean = new ServletRegistrationBean(new WebServlet());
+//        bean.addUrlMappings("/console/*");
+//        return bean;
+//    }
 
     @Bean
     public String stripeKey() {

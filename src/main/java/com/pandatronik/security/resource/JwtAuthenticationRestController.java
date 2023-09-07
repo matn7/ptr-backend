@@ -4,6 +4,7 @@ import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.exceptions.AuthenticationException;
 import com.pandatronik.security.JwtTokenProvider;
 import com.pandatronik.security.SecurityConstants;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("${api.version}/users")
