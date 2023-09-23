@@ -66,6 +66,12 @@ INSERT INTO role VALUES (3, 'ROLE_ADMIN');
 COMMIT;
 ```
 
+- Activate dummy user
+
+```sql
+UPDATE `pandatronik_dev`.`user_entity` SET `enabled` = 1 WHERE (`id` = 1);
+```
+
 # UI
 
 **Pull code from github**

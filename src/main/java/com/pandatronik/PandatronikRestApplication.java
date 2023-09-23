@@ -26,11 +26,11 @@ public class PandatronikRestApplication {
     @Value("${webmaster.email}")
     private String webmasterEmail;
 
-    // BUG-1
-    @PostConstruct
-    public void started() {
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-    }
+//    // BUG-1
+//    @PostConstruct
+//    public void started() {
+//        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+//    }
 
     @Bean
     public RequestContextListener requestContextListener(){

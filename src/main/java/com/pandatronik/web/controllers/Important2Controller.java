@@ -26,54 +26,22 @@ public class Important2Controller extends Resource<Important2DTO> {
     }
 
     @Override
-    @PostMapping("")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Important2DTO save(@PathVariable("username") String username,
-            @Valid @RequestBody Important2DTO important2DTO){
-
+                             @Valid @RequestBody Important2DTO Important2DTO) {
         UserEntity userEntity = userService.findByUserName(username);
-
-//        important2DTO.setUserEntity(userEntity);
-
-        return taskService.save(important2DTO);
+        Important2DTO.setUserEntity(userEntity);
+        return taskService.save(Important2DTO);
     }
 
     @Override
     @PutMapping("/{id}")
-    public Important2DTO update(@PathVariable("username") String username,
-            @PathVariable("id") Long id, @Valid @RequestBody Important2DTO important2DTO) {
-
+    @ResponseStatus(HttpStatus.OK)
+    public Important2DTO update(@PathVariable("username") String username, @PathVariable("id") Long id,
+                               @Valid @RequestBody Important2DTO Important2DTO) {
         UserEntity userEntity = userService.findByUserName(username);
-//        important2DTO.setUserEntity(userEntity);
-
-        return taskService.update(id, important2DTO);
+        Important2DTO.setUserEntity(userEntity);
+        return taskService.update(id, Important2DTO);
     }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

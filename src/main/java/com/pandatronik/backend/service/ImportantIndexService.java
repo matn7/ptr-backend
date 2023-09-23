@@ -32,14 +32,6 @@ public class ImportantIndexService implements IndexService<ImportantIndexDTO> {
         final List<Important2DTO> important2 = important2Service.findByDate(userEntity, year, month);
         final List<Important3DTO> important3 = important3Service.findByDate(userEntity, year, month);
 
-        // sort here
-        Collections.sort(extraordinaries);
-        Collections.sort(days);
-
-        Collections.sort(important);
-        Collections.sort(important2);
-        Collections.sort(important3);
-
         importantIndexDTO.getExtraordinaryDTO().addAll(extraordinaries);
         importantIndexDTO.getDaysDTO().addAll(days);
         importantIndexDTO.getImportantDTO().addAll(important);

@@ -23,6 +23,11 @@ public interface DaysRepository extends CrudRepository<DaysEntity, Long> {
     Optional<DaysEntity> findByDate(@Param("userEntity") UserEntity userEntity, @Param("day") int day,
         @Param("month") int month, @Param("year") int year);
 
+    @Query("SELECT i FROM DaysEntity i WHERE MONTH(i.startDate) = :month AND " +
+            "YEAR(i.startDate) = :year AND i.userEntity = :userEntity")
+    Optional<DaysEntity> findByDateYearMonth(@Param("userEntity") UserEntity userEntity,
+                                    @Param("month") int month, @Param("year") int year);
+
     @Query("SELECT i FROM DaysEntity i WHERE " +
             "MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userEntity = :userEntity")
     List<DaysEntity> findByPartDate(@Param("userEntity") UserEntity userEntity,

@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(AppConstants.BASE_URL + "/{username}/important/1")
 public class ImportantController extends Resource<ImportantDTO> {
 
-    // moze to statyczne zrobic
+    // maybe static?
     public ImportantController(ImportantService importantService, UserService userService) {
         super(importantService, userService);
     }
@@ -32,9 +32,7 @@ public class ImportantController extends Resource<ImportantDTO> {
     public ImportantDTO save(@PathVariable("username") String username,
                              @Valid @RequestBody ImportantDTO importantDTO) {
         UserEntity userEntity = userService.findByUserName(username);
-
-//        importantDTO.setUserEntity(userEntity);
-
+        importantDTO.setUserEntity(userEntity);
         return taskService.save(importantDTO);
     }
 
@@ -44,35 +42,7 @@ public class ImportantController extends Resource<ImportantDTO> {
     public ImportantDTO update(@PathVariable("username") String username, @PathVariable("id") Long id,
                                @Valid @RequestBody ImportantDTO importantDTO) {
         UserEntity userEntity = userService.findByUserName(username);
-//        importantDTO.setUserEntity(userEntity);
-
+        importantDTO.setUserEntity(userEntity);
         return taskService.update(id, importantDTO);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

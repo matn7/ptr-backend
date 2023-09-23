@@ -31,14 +31,6 @@ public class LessImportantIndexService implements IndexService<LessImportantInde
         final List<LessImportant2DTO> lessImportant2 = lessImportant2Service.findByDate(userEntity, year, month);
         final List<LessImportant3DTO> lessImportant3 = lessImportant3Service.findByDate(userEntity, year, month);
 
-        // sort here
-        Collections.sort(extraordinaries);
-        Collections.sort(days);
-
-        Collections.sort(lessImportant);
-        Collections.sort(lessImportant2);
-        Collections.sort(lessImportant3);
-
         lessImportantIndexDTO.getExtraordinaryDTO().addAll(extraordinaries);
         lessImportantIndexDTO.getDaysDTO().addAll(days);
         lessImportantIndexDTO.getLessImportantDTO().addAll(lessImportant);

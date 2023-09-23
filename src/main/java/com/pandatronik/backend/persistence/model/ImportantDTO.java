@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-public class ImportantDTO implements Comparable<ImportantDTO> {
+public class ImportantDTO {
 
     private Long id;
 
@@ -48,12 +48,8 @@ public class ImportantDTO implements Comparable<ImportantDTO> {
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDate startDate;
-//
-//    @JsonIgnore
-//    private UserEntity userEntity;
 
-    @Override
-    public int compareTo(ImportantDTO importantDTO) {
-        return this.startDate.compareTo(importantDTO.startDate);
-    }
+    @JsonIgnore
+    private UserEntity userEntity;
+
 }

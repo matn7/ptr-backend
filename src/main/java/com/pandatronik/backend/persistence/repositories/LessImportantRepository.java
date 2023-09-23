@@ -22,6 +22,7 @@ public interface LessImportantRepository extends CrudRepository<LessImportantEnt
     Optional<LessImportantEntity> findByDate(@Param("userEntity") UserEntity userEntity, @Param("day") int day,
         @Param("month") int month, @Param("year") int year);
 
+    // SELECT * FROM pandatronik_dev.less_important WHERE MONTH(start_date) = 9 AND YEAR(start_date) = 2023 AND user_entity_id = 1;
     @Query("SELECT i FROM LessImportantEntity i WHERE " +
             "MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userEntity = :userEntity")
     List<LessImportantEntity> findByDate(@Param("userEntity") UserEntity userEntity,

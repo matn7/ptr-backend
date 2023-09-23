@@ -32,9 +32,7 @@ public class Important3Controller extends Resource<Important3DTO> {
             @Valid @RequestBody Important3DTO important3DTO){
 
         UserEntity userEntity = userService.findByUserName(username);
-
-//        important3DTO.setUserEntity(userEntity);
-
+        important3DTO.setUserEntity(userEntity);
         return taskService.save(important3DTO);
     }
 
@@ -45,35 +43,8 @@ public class Important3Controller extends Resource<Important3DTO> {
             @PathVariable("id") Long id, @Valid @RequestBody Important3DTO important3DTO) {
 
         UserEntity userEntity = userService.findByUserName(username);
-//        important3DTO.setUserEntity(userEntity);
+        important3DTO.setUserEntity(userEntity);
 
         return taskService.update(id, important3DTO);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
