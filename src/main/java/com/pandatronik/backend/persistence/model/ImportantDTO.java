@@ -25,12 +25,12 @@ public class ImportantDTO {
     private Long id;
 
     @NotNull
-    @NotBlank
-    @Size(min = 1, max = 40)
+    @NotBlank(message = "Title must not be blank")
+    @Size(min = 1, max = 40, message = "Title size must be between 1 and 40")
     private String title;
 
     @NotNull
-    @NotBlank
+    @NotBlank(message = "Body must not be blank")
     @Size(min = 1, max = 255)
     private String body;
 

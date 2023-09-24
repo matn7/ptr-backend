@@ -29,7 +29,7 @@ public class LessImportant2Controller extends Resource<LessImportant2DTO> {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public LessImportant2DTO save(@PathVariable("username") String username,
-            @RequestBody LessImportant2DTO lessImportant2DTO){
+            @Valid @RequestBody LessImportant2DTO lessImportant2DTO){
 
         UserEntity userEntity = userService.findByUserName(username);
 

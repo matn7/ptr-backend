@@ -7,6 +7,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.pandatronik.backend.persistence.domain.UserEntity;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -22,10 +23,12 @@ public class ExtraordinaryDTO {
     private Long id;
 
     @NotNull
-    @Size(min = 1, max = 40)
+    @NotBlank(message = "Title must not be blank")
+    @Size(min = 1, max = 40, message = "Title size must be between 1 and 40")
     private String title;
 
     @NotNull
+    @NotBlank(message = "Body must not be blank")
     @Size(min = 1, max = 255)
     private String body;
 
