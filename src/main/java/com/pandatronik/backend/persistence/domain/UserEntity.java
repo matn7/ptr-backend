@@ -46,13 +46,13 @@ public class UserEntity implements Serializable, UserDetails {
 
 	@NotNull
 	@NotBlank
-	@Size(min = 6, max = 50)
+	@Size(min = 6, max = 20, message = "Username must be between 6 and 20")
 	@Column(unique = true)
 	private String username;
 
 	@NotNull
 	@NotBlank
-	@Size(min = 6, max = 60)
+	@Size(min = 6, max = 20, message = "Password must be between 6 and 20")
 	@Column(name = "password")
 	private String password;
 	// pewnie password po szyfrowanie zwieksza rozmiar dzine ?
@@ -61,19 +61,19 @@ public class UserEntity implements Serializable, UserDetails {
 	private String confirmPassword;
 
 	@NotNull
-	@Email(message = "This not an valid email address")
+	@Email(message = "Email address invalid")
 	@Column(unique = true)
 	private String email;
 
 	@NotNull
 	@NotBlank
-	@Size(max = 50)
+	@Size(max = 20, message = "FirstName must be between 1 and 20")
 	@Column(name = "first_name")
 	private String firstName;
 
 	@NotNull
 	@NotBlank
-	@Size(max = 50)
+	@Size(max = 20, message = "FirstLast must be between 1 and 20")
 	@Column(name = "last_name")
 	private String lastName;
 

@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 @Data
 //@Builder
 @NoArgsConstructor
-public class DaysDTO implements Comparable<DaysDTO> {
+public class DaysDTO {
 
     private Long id;
 
@@ -44,8 +44,4 @@ public class DaysDTO implements Comparable<DaysDTO> {
     @JsonIgnore
     private UserEntity userEntity;
 
-    @Override
-    public int compareTo(DaysDTO daysDTO) {
-        return this.startDate.compareTo(daysDTO.startDate);
-    }
 }
