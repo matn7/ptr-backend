@@ -52,6 +52,6 @@ public class ExtraordinaryEntity implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnore
-    private UserEntity userEntity;
+    private UserEntity userId;
 
 }

@@ -58,5 +58,5 @@ public class LessImportant2Entity implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnore
-    private UserEntity userEntity;
+    private UserEntity userId;
 }

@@ -1,13 +1,11 @@
 package com.pandatronik.backend.persistence.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.enums.MadeEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,7 +17,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
-//@Builder
 @NoArgsConstructor
 public class DaysDTO {
 
@@ -43,7 +40,6 @@ public class DaysDTO {
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDate startDate;
 
-    @JsonIgnore
-    private UserEntity userEntity;
+    private Long userId;
 
 }

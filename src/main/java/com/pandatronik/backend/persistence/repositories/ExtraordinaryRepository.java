@@ -13,19 +13,19 @@ import java.util.Optional;
 @Repository
 public interface ExtraordinaryRepository extends CrudRepository<ExtraordinaryEntity, Long> {
 
-    List<ExtraordinaryEntity> findAllByUserEntity(UserEntity userEntity);
+    List<ExtraordinaryEntity> findAllByUserId(long userId);
 
-    @Query("SELECT i FROM ExtraordinaryEntity i WHERE i.userEntity =:userEntity AND i.id = :id")
-    Optional<ExtraordinaryEntity> findById(@Param("userEntity") UserEntity userEntity, @Param("id") Long id);
+    @Query("SELECT e FROM ExtraordinaryEntity e WHERE e.userId = :userId AND e.id = :id")
+    Optional<ExtraordinaryEntity> findById(@Param("userId") long userId, @Param("id") Long id);
 
-    @Query("SELECT i FROM ExtraordinaryEntity i WHERE DAYOFMONTH(i.startDate) = :day AND " +
-            "MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userEntity = :userEntity")
-    Optional<ExtraordinaryEntity> findByDate(@Param("userEntity") UserEntity userEntity,
+    @Query("SELECT e FROM ExtraordinaryEntity e WHERE DAYOFMONTH(e.startDate) = :day AND " +
+            "MONTH(e.startDate) = :month AND YEAR(e.startDate) = :year AND e.userId = :userId")
+    Optional<ExtraordinaryEntity> findByDate(@Param("userId") long userId,
         @Param("year") int year, @Param("month") int month, @Param("day") int day);
 
-    @Query("SELECT i FROM ExtraordinaryEntity i WHERE " +
-            "MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userEntity = :userEntity")
-    List<ExtraordinaryEntity> findByPartDate(@Param("userEntity") UserEntity userEntity,
+    @Query("SELECT e FROM ExtraordinaryEntity e WHERE " +
+            "MONTH(e.startDate) = :month AND YEAR(e.startDate) = :year AND e.userId = :userId")
+    List<ExtraordinaryEntity> findByPartDate(@Param("userId") long userId,
                                              @Param("year") int year, @Param("month") int month);
 
 }

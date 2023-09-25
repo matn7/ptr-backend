@@ -1,9 +1,7 @@
 package com.pandatronik.web.controllers;
 
-import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.model.LessImportant3DTO;
 import com.pandatronik.backend.service.LessImportant3Service;
-import com.pandatronik.backend.service.user.account.UserService;
 import com.pandatronik.utils.AppConstants;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -21,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(AppConstants.BASE_URL + "/{username}/lessimportant/3")
 public class LessImportant3Controller extends Resource<LessImportant3DTO> {
 
-    public LessImportant3Controller(LessImportant3Service taskService, UserService userService) {
-        super(taskService, userService);
+    public LessImportant3Controller(LessImportant3Service taskService) {
+        super(taskService);
     }
 
     @Override
@@ -31,9 +29,7 @@ public class LessImportant3Controller extends Resource<LessImportant3DTO> {
     public LessImportant3DTO save(@PathVariable("username") String username,
                                   @Valid @RequestBody LessImportant3DTO lessImportant3DTO){
 
-        UserEntity userEntity = userService.findByUserName(username);
-        lessImportant3DTO.setUserEntity(userEntity);
-        return taskService.save(lessImportant3DTO);
+        return taskService.save(username, lessImportant3DTO);
     }
 
     @Override
@@ -41,9 +37,6 @@ public class LessImportant3Controller extends Resource<LessImportant3DTO> {
     @ResponseStatus(HttpStatus.OK)
     public LessImportant3DTO update(@PathVariable("username") String username,
             @PathVariable("id") Long id, @Valid @RequestBody LessImportant3DTO lessImportant3DTO) {
-
-        UserEntity userEntity = userService.findByUserName(username);
-        lessImportant3DTO.setUserEntity(userEntity);
         return taskService.update(id, lessImportant3DTO);
     }
 }

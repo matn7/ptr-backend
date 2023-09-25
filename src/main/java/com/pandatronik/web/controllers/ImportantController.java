@@ -1,9 +1,7 @@
 package com.pandatronik.web.controllers;
 
-import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.model.ImportantDTO;
 import com.pandatronik.backend.service.ImportantService;
-import com.pandatronik.backend.service.user.account.UserService;
 import com.pandatronik.utils.AppConstants;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -21,9 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(AppConstants.BASE_URL + "/{username}/important/1")
 public class ImportantController extends Resource<ImportantDTO> {
 
-    // maybe static?
-    public ImportantController(ImportantService importantService, UserService userService) {
-        super(importantService, userService);
+    public ImportantController(ImportantService importantService) {
+        super(importantService);
     }
 
     @Override
@@ -31,9 +28,7 @@ public class ImportantController extends Resource<ImportantDTO> {
     @ResponseStatus(HttpStatus.CREATED)
     public ImportantDTO save(@PathVariable("username") String username,
                              @Valid @RequestBody ImportantDTO importantDTO) {
-        UserEntity userEntity = userService.findByUserName(username);
-        importantDTO.setUserEntity(userEntity);
-        return taskService.save(importantDTO);
+        return taskService.save(username, importantDTO);
     }
 
     @Override
@@ -41,8 +36,6 @@ public class ImportantController extends Resource<ImportantDTO> {
     @ResponseStatus(HttpStatus.OK)
     public ImportantDTO update(@PathVariable("username") String username, @PathVariable("id") Long id,
                                @Valid @RequestBody ImportantDTO importantDTO) {
-        UserEntity userEntity = userService.findByUserName(username);
-        importantDTO.setUserEntity(userEntity);
         return taskService.update(id, importantDTO);
     }
 }

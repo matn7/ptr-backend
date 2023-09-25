@@ -5,6 +5,7 @@ import com.pandatronik.backend.persistence.domain.core.LessImportant3Entity;
 import com.pandatronik.backend.persistence.mapper.LessImportant3Mapper;
 import com.pandatronik.backend.persistence.model.LessImportant3DTO;
 import com.pandatronik.backend.persistence.repositories.LessImportant3Repository;
+import com.pandatronik.backend.service.user.account.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
@@ -17,33 +18,43 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class LessImportant3Service implements ImportantCrudService<LessImportant3DTO, Long> {
 
+    private final UserService userService;
     private final LessImportant3Mapper lessImportant3Mapper;
     private final LessImportant3Repository lessImportant3Repository;
 
     @Override
-    public LessImportant3DTO findById(UserEntity userEntity, Long id) {
-        return lessImportant3Repository.findById(userEntity, id)
+    public LessImportant3DTO findById(String username, Long id) {
+        UserEntity userEntity = userService.findByUserName(username);
+        long userId = userEntity.getId();
+        return lessImportant3Repository.findById(userId, id)
                 .map(lessImportant3Mapper::lessImportantToLessImportantDTO)
                 .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
-    public LessImportant3DTO findByDate(UserEntity userEntity, int year, int month, int day) {
-        return lessImportant3Repository.findByDate(userEntity, day, month, year)
+    public LessImportant3DTO findByDate(String username, int year, int month, int day) {
+        UserEntity userEntity = userService.findByUserName(username);
+        long userId = userEntity.getId();
+        return lessImportant3Repository.findByDate(userId, day, month, year)
                 .map(lessImportant3Mapper::lessImportantToLessImportantDTO)
                 .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
-    public List<LessImportant3DTO> findByDate(UserEntity userEntity, int year, int month) {
-        return lessImportant3Repository.findByDate(userEntity, year, month)
+    public List<LessImportant3DTO> findByDate(String username, int year, int month) {
+        UserEntity userEntity = userService.findByUserName(username);
+        long userId = userEntity.getId();
+        return lessImportant3Repository.findByDate(userId, year, month)
                 .stream()
                 .map(lessImportant3Mapper::lessImportantToLessImportantDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public LessImportant3DTO save(LessImportant3DTO lessImportant3DTO) {
+    public LessImportant3DTO save(String username, LessImportant3DTO lessImportant3DTO) {
+        UserEntity userEntity = userService.findByUserName(username);
+        long userId = userEntity.getId();
+        lessImportant3DTO.setUserId(userId);
         LessImportant3Entity lessImportant = lessImportant3Mapper.lessImportantDtoToLessImportant(lessImportant3DTO);
         return saveAndReturnDTO(lessImportant);
     }
@@ -56,25 +67,31 @@ public class LessImportant3Service implements ImportantCrudService<LessImportant
     }
 
     @Override
-    public void delete(UserEntity userEntity, Long id) {
-        lessImportant3Repository.findById(userEntity, id).ifPresent(important -> {
-            lessImportant3Repository.delete(important);
-        });
+    public void delete(String username, Long id) {
+        UserEntity userEntity = userService.findByUserName(username);
+        long userId = userEntity.getId();
+        lessImportant3Repository.findById(userId, id).ifPresent(lessImportant3Repository::delete);
     }
 
     @Override
-    public List<Object[]> findCountByYearStat(UserEntity userEntity, int year) {
-        return lessImportant3Repository.findCountByYearStat(userEntity, year);
+    public List<Object[]> findCountByYearStat(String username, int year) {
+        UserEntity userEntity = userService.findByUserName(username);
+        long userId = userEntity.getId();
+        return lessImportant3Repository.findCountByYearStat(userId, year);
     }
 
     @Override
-    public List<Object[]> findAverageByYearStat(UserEntity userEntity, int year) {
-        return lessImportant3Repository.findAverageByYearStat(userEntity, year);
+    public List<Object[]> findAverageByYearStat(String username, int year) {
+        UserEntity userEntity = userService.findByUserName(username);
+        long userId = userEntity.getId();
+        return lessImportant3Repository.findAverageByYearStat(userId, year);
     }
 
     @Override
-    public List<Integer> findCountMadeByStartEnd(UserEntity userEntity, LocalDate startDate, LocalDate endDate) {
-        return lessImportant3Repository.findCountMadeByStartEnd(userEntity, startDate, endDate);
+    public List<Integer> findCountMadeByStartEnd(String username, LocalDate startDate, LocalDate endDate) {
+        UserEntity userEntity = userService.findByUserName(username);
+        long userId = userEntity.getId();
+        return lessImportant3Repository.findCountMadeByStartEnd(userId, startDate, endDate);
     }
 
     private LessImportant3DTO saveAndReturnDTO(LessImportant3Entity lessImportant3Entity) {

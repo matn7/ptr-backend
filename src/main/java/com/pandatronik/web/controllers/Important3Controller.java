@@ -1,9 +1,7 @@
 package com.pandatronik.web.controllers;
 
-import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.model.Important3DTO;
 import com.pandatronik.backend.service.Important3Service;
-import com.pandatronik.backend.service.user.account.UserService;
 import com.pandatronik.utils.AppConstants;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -21,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(AppConstants.BASE_URL + "/{username}/important/3")
 public class Important3Controller extends Resource<Important3DTO> {
 
-    public Important3Controller(Important3Service importantService, UserService userService) {
-        super(importantService, userService);
+    public Important3Controller(Important3Service importantService) {
+        super(importantService);
     }
 
     @Override
@@ -30,10 +28,7 @@ public class Important3Controller extends Resource<Important3DTO> {
     @ResponseStatus(HttpStatus.OK)
     public Important3DTO save(@PathVariable("username") String username,
             @Valid @RequestBody Important3DTO important3DTO){
-
-        UserEntity userEntity = userService.findByUserName(username);
-        important3DTO.setUserEntity(userEntity);
-        return taskService.save(important3DTO);
+        return taskService.save(username, important3DTO);
     }
 
     @Override
@@ -41,10 +36,6 @@ public class Important3Controller extends Resource<Important3DTO> {
     @ResponseStatus(HttpStatus.OK)
     public Important3DTO update(@PathVariable("username") String username,
             @PathVariable("id") Long id, @Valid @RequestBody Important3DTO important3DTO) {
-
-        UserEntity userEntity = userService.findByUserName(username);
-        important3DTO.setUserEntity(userEntity);
-
         return taskService.update(id, important3DTO);
     }
 }

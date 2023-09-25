@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(AppConstants.BASE_URL + "/{username}/important/2")
 public class Important2Controller extends Resource<Important2DTO> {
 
-    public Important2Controller(Important2Service importantService, UserService userService) {
-        super(importantService, userService);
+    public Important2Controller(Important2Service importantService) {
+        super(importantService);
     }
 
     @Override
@@ -30,9 +30,7 @@ public class Important2Controller extends Resource<Important2DTO> {
     @ResponseStatus(HttpStatus.CREATED)
     public Important2DTO save(@PathVariable("username") String username,
                              @Valid @RequestBody Important2DTO Important2DTO) {
-        UserEntity userEntity = userService.findByUserName(username);
-        Important2DTO.setUserEntity(userEntity);
-        return taskService.save(Important2DTO);
+        return taskService.save(username, Important2DTO);
     }
 
     @Override
@@ -40,8 +38,6 @@ public class Important2Controller extends Resource<Important2DTO> {
     @ResponseStatus(HttpStatus.OK)
     public Important2DTO update(@PathVariable("username") String username, @PathVariable("id") Long id,
                                @Valid @RequestBody Important2DTO Important2DTO) {
-        UserEntity userEntity = userService.findByUserName(username);
-        Important2DTO.setUserEntity(userEntity);
         return taskService.update(id, Important2DTO);
     }
 }

@@ -63,6 +63,6 @@ public class Important2Entity implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnore
-    private UserEntity userEntity;
+    private UserEntity userId;
 
 }

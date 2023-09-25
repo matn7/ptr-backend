@@ -5,6 +5,7 @@ import com.pandatronik.backend.persistence.domain.core.LessImportant2Entity;
 import com.pandatronik.backend.persistence.mapper.LessImportant2Mapper;
 import com.pandatronik.backend.persistence.model.LessImportant2DTO;
 import com.pandatronik.backend.persistence.repositories.LessImportant2Repository;
+import com.pandatronik.backend.service.user.account.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
@@ -17,33 +18,43 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class LessImportant2Service implements ImportantCrudService<LessImportant2DTO, Long> {
 
+    private final UserService userService;
     private final LessImportant2Mapper lessImportant2Mapper;
     private final LessImportant2Repository lessImportant2Repository;
 
     @Override
-    public LessImportant2DTO findById(UserEntity userEntity, Long id) {
-        return lessImportant2Repository.findById(userEntity, id)
+    public LessImportant2DTO findById(String username, Long id) {
+        UserEntity userEntity = userService.findByUserName(username);
+        long userId = userEntity.getId();
+        return lessImportant2Repository.findById(userId, id)
                 .map(lessImportant2Mapper::lessImportantToLessImportantDTO)
                 .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
-    public LessImportant2DTO findByDate(UserEntity userEntity, int year, int month, int day) {
-        return lessImportant2Repository.findByDate(userEntity, day, month, year)
+    public LessImportant2DTO findByDate(String username, int year, int month, int day) {
+        UserEntity userEntity = userService.findByUserName(username);
+        long userId = userEntity.getId();
+        return lessImportant2Repository.findByDate(userId, day, month, year)
                 .map(lessImportant2Mapper::lessImportantToLessImportantDTO)
                 .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
-    public List<LessImportant2DTO> findByDate(UserEntity userEntity, int year, int month) {
-        return lessImportant2Repository.findByDate(userEntity, year, month)
+    public List<LessImportant2DTO> findByDate(String username, int year, int month) {
+        UserEntity userEntity = userService.findByUserName(username);
+        long userId = userEntity.getId();
+        return lessImportant2Repository.findByDate(userId, year, month)
                 .stream()
                 .map(lessImportant2Mapper::lessImportantToLessImportantDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public LessImportant2DTO save(LessImportant2DTO lessImportant2DTO) {
+    public LessImportant2DTO save(String username, LessImportant2DTO lessImportant2DTO) {
+        UserEntity userEntity = userService.findByUserName(username);
+        long userId = userEntity.getId();
+        lessImportant2DTO.setUserId(userId);
         LessImportant2Entity lessImportant = lessImportant2Mapper.lessImportantDtoToLessImportant(lessImportant2DTO);
         return saveAndReturnDTO(lessImportant);
     }
@@ -56,25 +67,31 @@ public class LessImportant2Service implements ImportantCrudService<LessImportant
     }
 
     @Override
-    public void delete(UserEntity userEntity, Long id) {
-        lessImportant2Repository.findById(userEntity, id).ifPresent(important -> {
-            lessImportant2Repository.delete(important);
-        });
+    public void delete(String username, Long id) {
+        UserEntity userEntity = userService.findByUserName(username);
+        long userId = userEntity.getId();
+        lessImportant2Repository.findById(userId, id).ifPresent(lessImportant2Repository::delete);
     }
 
     @Override
-    public List<Object[]> findCountByYearStat(UserEntity userEntity, int year) {
-        return lessImportant2Repository.findCountByYearStat(userEntity, year);
+    public List<Object[]> findCountByYearStat(String username, int year) {
+        UserEntity userEntity = userService.findByUserName(username);
+        long userId = userEntity.getId();
+        return lessImportant2Repository.findCountByYearStat(userId, year);
     }
 
     @Override
-    public List<Object[]> findAverageByYearStat(UserEntity userEntity, int year) {
-        return lessImportant2Repository.findAverageByYearStat(userEntity, year);
+    public List<Object[]> findAverageByYearStat(String username, int year) {
+        UserEntity userEntity = userService.findByUserName(username);
+        long userId = userEntity.getId();
+        return lessImportant2Repository.findAverageByYearStat(userId, year);
     }
 
     @Override
-    public List<Integer> findCountMadeByStartEnd(UserEntity userEntity, LocalDate startDate, LocalDate endDate) {
-        return lessImportant2Repository.findCountMadeByStartEnd(userEntity, startDate, endDate);
+    public List<Integer> findCountMadeByStartEnd(String username, LocalDate startDate, LocalDate endDate) {
+        UserEntity userEntity = userService.findByUserName(username);
+        long userId = userEntity.getId();
+        return lessImportant2Repository.findCountMadeByStartEnd(userId, startDate, endDate);
     }
 
     private LessImportant2DTO saveAndReturnDTO(LessImportant2Entity lessImportant2Entity) {

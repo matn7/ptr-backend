@@ -14,31 +14,31 @@ import java.util.Optional;
 @Repository
 public interface LessImportantRepository extends CrudRepository<LessImportantEntity, Long> {
 
-    @Query("SELECT i FROM LessImportantEntity i WHERE i.userEntity =:userEntity AND i.id = :id")
-    Optional<LessImportantEntity> findById(@Param("userEntity") UserEntity userEntity, @Param("id") Long id);
+    @Query("SELECT i FROM LessImportantEntity i WHERE i.userId = :userId AND i.id = :id")
+    Optional<LessImportantEntity> findById(@Param("userId") long userId, @Param("id") Long id);
 
     @Query("SELECT i FROM LessImportantEntity i WHERE DAYOFMONTH(i.startDate) = :day AND " +
-            "MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userEntity = :userEntity")
-    Optional<LessImportantEntity> findByDate(@Param("userEntity") UserEntity userEntity, @Param("day") int day,
+            "MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userId = :userId")
+    Optional<LessImportantEntity> findByDate(@Param("userId") long userId, @Param("day") int day,
         @Param("month") int month, @Param("year") int year);
 
     // SELECT * FROM pandatronik_dev.less_important WHERE MONTH(start_date) = 9 AND YEAR(start_date) = 2023 AND user_entity_id = 1;
     @Query("SELECT i FROM LessImportantEntity i WHERE " +
-            "MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userEntity = :userEntity")
-    List<LessImportantEntity> findByDate(@Param("userEntity") UserEntity userEntity,
+            "MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userId = :userId")
+    List<LessImportantEntity> findByDate(@Param("userId") long userId,
                                              @Param("year") int year, @Param("month") int month);
 
     // statistics
     @Query("SELECT made, COUNT(made) FROM LessImportantEntity i WHERE YEAR(i.startDate) = :year " +
-            "AND i.userEntity = :userEntity GROUP BY i.made")
-    List<Object[]> findCountByYearStat(@Param("userEntity") UserEntity userEntity, @Param("year") int year);
+            "AND i.userId = :userId GROUP BY i.made")
+    List<Object[]> findCountByYearStat(@Param("userId") long userId, @Param("year") int year);
 
     @Query("SELECT MONTH(i.startDate), AVG(made) FROM LessImportantEntity i WHERE YEAR(i.startDate) = :year " +
-            "AND i.userEntity = :userEntity GROUP BY MONTH(i.startDate)")
-    List<Object[]> findAverageByYearStat(@Param("userEntity") UserEntity userEntity, @Param("year") int year);
+            "AND i.userId = :userId GROUP BY MONTH(i.startDate)")
+    List<Object[]> findAverageByYearStat(@Param("userId") long userId, @Param("year") int year);
 
     @Query("SELECT made FROM LessImportantEntity i WHERE i.startDate >= :startDate and i.startDate <= :endDate"
-            + " AND i.userEntity = :userEntity")
-    List<Integer> findCountMadeByStartEnd(@Param("userEntity") UserEntity userEntity, @Param("startDate") LocalDate startDate,
+            + " AND i.userId = :userId")
+    List<Integer> findCountMadeByStartEnd(@Param("userId") long userId, @Param("startDate") LocalDate startDate,
                                           @Param("endDate") LocalDate endDate);
 }

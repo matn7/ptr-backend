@@ -1,10 +1,8 @@
 package com.pandatronik.web.controllers;
 
-import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.model.ExtraordinaryDTO;
 import com.pandatronik.backend.persistence.model.ExtraordinaryListDTO;
 import com.pandatronik.backend.service.ExtraordinaryService;
-import com.pandatronik.backend.service.user.account.UserService;
 import com.pandatronik.utils.AppConstants;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -27,27 +25,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class ExtraordinaryController {
 
     private final ExtraordinaryService extraordinaryService;
-    private final UserService userService;
 
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
     public ExtraordinaryListDTO findAll(@PathVariable("username") String username) {
-
-        UserEntity userEntity = userService.findByUserName(username);
-
         ExtraordinaryListDTO extraordinaryListDTO = new ExtraordinaryListDTO();
-        extraordinaryListDTO.getExtraordinaryList().addAll(extraordinaryService.findAll(userEntity));
-
+        extraordinaryListDTO.getExtraordinaryList().addAll(extraordinaryService.findAll(username));
         return extraordinaryListDTO;
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ExtraordinaryDTO findById(@PathVariable("username") String username, @PathVariable("id") Long id) {
-
-        UserEntity userEntity = userService.findByUserName(username);
-
-        return extraordinaryService.findById(userEntity, id);
+        return extraordinaryService.findById(username, id);
 
     }
 
@@ -55,41 +45,27 @@ public class ExtraordinaryController {
     @ResponseStatus(HttpStatus.OK)
     public ExtraordinaryDTO findByDate(@PathVariable("username") String username, @PathVariable("year") int year,
                                        @PathVariable("month") int month, @PathVariable("day") int day) {
-
-        UserEntity userEntity = userService.findByUserName(username);
-
-        return extraordinaryService.findByDate(userEntity, day, month, year);
+        return extraordinaryService.findByDate(username, day, month, year);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ExtraordinaryDTO save(@PathVariable("username") String username,
                                  @Valid @RequestBody ExtraordinaryDTO extraordinaryDTO) {
-
-        UserEntity userEntity = userService.findByUserName(username);
-
-        extraordinaryDTO.setUserEntity(userEntity);
-        return extraordinaryService.save(extraordinaryDTO);
+        return extraordinaryService.save(username, extraordinaryDTO);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ExtraordinaryDTO update(@PathVariable("username") String username,
                                    @PathVariable("id") Long id, @Valid @RequestBody ExtraordinaryDTO extraordinaryDTO) {
-
-        UserEntity userEntity = userService.findByUserName(username);
-        extraordinaryDTO.setUserEntity(userEntity);
-
         return extraordinaryService.update(id, extraordinaryDTO);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable("username") String username, @PathVariable("id") Long id) {
-
-        UserEntity userEntity = userService.findByUserName(username);
-
-        extraordinaryService.delete(userEntity, id);
+        extraordinaryService.delete(username, id);
     }
 
 }

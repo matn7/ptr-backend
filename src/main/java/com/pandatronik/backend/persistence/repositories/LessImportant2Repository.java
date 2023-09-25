@@ -1,6 +1,5 @@
 package com.pandatronik.backend.persistence.repositories;
 
-import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.LessImportant2Entity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -14,31 +13,31 @@ import java.util.Optional;
 @Repository
 public interface LessImportant2Repository extends CrudRepository<LessImportant2Entity, Long> {
 
-    @Query("SELECT i FROM LessImportant2Entity i WHERE i.userEntity =:userEntity AND i.id = :id")
-    Optional<LessImportant2Entity> findById(@Param("userEntity") UserEntity userEntity, @Param("id") Long id);
+    @Query("SELECT i FROM LessImportant2Entity i WHERE i.userId = :userId AND i.id = :id")
+    Optional<LessImportant2Entity> findById(@Param("userId") long userId, @Param("id") Long id);
 
     @Query("SELECT i FROM LessImportant2Entity i WHERE DAYOFMONTH(i.startDate) = :day AND " +
-            "MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userEntity = :userEntity")
-    Optional<LessImportant2Entity> findByDate(@Param("userEntity") UserEntity userEntity, @Param("day") int day,
+            "MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userId = :userId")
+    Optional<LessImportant2Entity> findByDate(@Param("userId") long userId, @Param("day") int day,
                                               @Param("month") int month, @Param("year") int year);
 
     @Query("SELECT i FROM LessImportant2Entity i WHERE " +
-            "MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userEntity = :userEntity")
-    List<LessImportant2Entity> findByDate(@Param("userEntity") UserEntity userEntity,
+            "MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userId = :userId")
+    List<LessImportant2Entity> findByDate(@Param("userId") long userId,
                                               @Param("year") int year, @Param("month") int month);
 
     // statistics
     @Query("SELECT made, COUNT(made) FROM LessImportant2Entity i WHERE YEAR(i.startDate) = :year " +
-            "AND i.userEntity = :userEntity GROUP BY i.made")
-    List<Object[]> findCountByYearStat(@Param("userEntity") UserEntity userEntity, @Param("year") int year);
+            "AND i.userId = :userId GROUP BY i.made")
+    List<Object[]> findCountByYearStat(@Param("userId") long userId, @Param("year") int year);
 
     @Query("SELECT MONTH(i.startDate), AVG(made) FROM LessImportant2Entity i WHERE YEAR(i.startDate) = :year " +
-            "AND i.userEntity = :userEntity GROUP BY MONTH(i.startDate)")
-    List<Object[]> findAverageByYearStat(@Param("userEntity") UserEntity userEntity, @Param("year") int year);
+            "AND i.userId = :userId GROUP BY MONTH(i.startDate)")
+    List<Object[]> findAverageByYearStat(@Param("userId") long userId, @Param("year") int year);
 
     @Query("SELECT made FROM LessImportant2Entity i WHERE i.startDate >= :startDate and i.startDate <= :endDate"
-            + " AND i.userEntity = :userEntity")
-    List<Integer> findCountMadeByStartEnd(@Param("userEntity") UserEntity userEntity, @Param("startDate") LocalDate startDate,
+            + " AND i.userId = :userId")
+    List<Integer> findCountMadeByStartEnd(@Param("userId") long userId, @Param("startDate") LocalDate startDate,
                                           @Param("endDate") LocalDate endDate);
 
 }
