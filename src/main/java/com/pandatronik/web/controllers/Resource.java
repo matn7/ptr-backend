@@ -1,6 +1,7 @@
 package com.pandatronik.web.controllers;
 
 import com.pandatronik.backend.service.ImportantCrudService;
+import com.pandatronik.backend.service.ResourceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,29 +12,29 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @RequiredArgsConstructor
-public abstract class Resource<T> {
+public abstract class Resource<DTO, Entity, ID> {
 
-    protected final ImportantCrudService<T, Long> taskService;
+    protected final ResourceService<DTO, Entity, Long> taskService;
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public T findById(@PathVariable("username") String username, @PathVariable("id") Long id) {
+    public DTO findById(@PathVariable("username") String username, @PathVariable("id") Long id) {
         return taskService.findById(username, id);
     }
 
     @GetMapping("/{year}/{month}/{day}")
     @ResponseStatus(HttpStatus.OK)
-    public T findByDate(@PathVariable("username") String username,
+    public DTO findByDate(@PathVariable("username") String username,
             @PathVariable("year") int year, @PathVariable("month") int month, @PathVariable("day") int day) {
 
         return taskService.findByDate(username, year, month, day);
     }
 
-    public abstract T save(@PathVariable("username") String username,
-                                                @Valid @RequestBody T entity);
+    public abstract DTO save(@PathVariable("username") String username,
+                                                @Valid @RequestBody DTO dto);
 
-    public abstract T update(@PathVariable("username") String username,
-        @Valid @RequestBody T entity);
+    public abstract DTO update(@PathVariable("username") String username,
+        @Valid @RequestBody DTO dto);
 
 
     @DeleteMapping("/{id}")

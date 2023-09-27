@@ -1,9 +1,9 @@
 package com.pandatronik.backend.persistence.mapper;
 
-public interface CustomMapper<D, E> {
+public interface EntityMapper<DTO, Entity> {
 
-    D dtoToEntity(E importantEntity);
+    DTO entityToDto(Entity entity);
 
-    E entityToDto(D importantDTO);
+    Entity dtoToEntity(DTO dto);
 
 }

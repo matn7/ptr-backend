@@ -1,6 +1,7 @@
 package com.pandatronik.backend.persistence.repositories;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
+import com.pandatronik.backend.persistence.domain.core.ImportantEntity;
 import com.pandatronik.backend.persistence.domain.core.LessImportant2Entity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface LessImportant2Repository extends CrudRepository<LessImportant2Entity, Long> {
+public interface LessImportant2Repository extends CrudRepository<LessImportant2Entity, Long>, EntityRepository<LessImportant2Entity, Long> {
 
     @Query("SELECT i FROM LessImportant2Entity i WHERE i.userId = :userId AND i.id = :id")
     Optional<LessImportant2Entity> findById(@Param("userId") UserEntity userId, @Param("id") Long id);

@@ -2,6 +2,7 @@ package com.pandatronik.backend.persistence.repositories;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.Important3Entity;
+import com.pandatronik.backend.persistence.domain.core.ImportantEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface Important3Repository extends CrudRepository<Important3Entity, Long> {
+public interface Important3Repository extends CrudRepository<Important3Entity, Long>, EntityRepository<Important3Entity, Long>{
 
     @Query("SELECT i FROM Important3Entity i WHERE i.userId =:userId AND i.id = :id")
     Optional<Important3Entity> findById(@Param("userId") UserEntity userId, @Param("id") Long id);

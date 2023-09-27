@@ -7,14 +7,16 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface Important2Mapper {
+public interface Important2Mapper extends EntityMapper<Important2DTO, Important2Entity> {
 
     Important2Mapper INSTANCE = Mappers.getMapper(Important2Mapper.class);
 
+    @Override
     @Mapping(target = "userId", ignore = true)
-    Important2DTO importantToImportantDTO(Important2Entity importantEntity);
+    Important2DTO entityToDto(Important2Entity importantEntity);
 
+    @Override
     @Mapping(target = "userId", ignore = true)
-    Important2Entity importantDtoToImportant(Important2DTO importantDTO);
+    Important2Entity dtoToEntity(Important2DTO importantDTO);
 
 }
