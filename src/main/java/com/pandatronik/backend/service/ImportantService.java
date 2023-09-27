@@ -5,6 +5,7 @@ import com.pandatronik.backend.persistence.domain.core.ImportantEntity;
 import com.pandatronik.backend.persistence.mapper.ImportantMapper;
 import com.pandatronik.backend.persistence.model.ImportantDTO;
 import com.pandatronik.backend.persistence.repositories.ImportantRepository;
+import com.pandatronik.backend.service.user.account.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
@@ -17,25 +18,29 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ImportantService implements ImportantCrudService<ImportantDTO, Long> {
 
+    private final UserService userService;
     private final ImportantMapper importantMapper;
     private final ImportantRepository importantRepository;
 
     @Override
-    public ImportantDTO findById(UserEntity userEntity, Long id) {
+    public ImportantDTO findById(String username, Long id) {
+        UserEntity userEntity = userService.findByUserName(username);
         return importantRepository.findById(userEntity, id)
                 .map(importantMapper::importantToImportantDTO)
                 .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
-    public ImportantDTO findByDate(UserEntity userEntity, int year, int month, int day) {
+    public ImportantDTO findByDate(String username, int year, int month, int day) {
+        UserEntity userEntity = userService.findByUserName(username);
         return importantRepository.findByDate(userEntity, day, month, year)
                 .map(importantMapper::importantToImportantDTO)
                 .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
-    public List<ImportantDTO> findByDate(UserEntity userEntity, int year, int month) {
+    public List<ImportantDTO> findByDate(String username, int year, int month) {
+        UserEntity userEntity = userService.findByUserName(username);
         return importantRepository.findByDate(userEntity, year, month)
                 .stream()
                 .map(importantMapper::importantToImportantDTO)
@@ -43,8 +48,12 @@ public class ImportantService implements ImportantCrudService<ImportantDTO, Long
     }
 
     @Override
-    public ImportantDTO save(ImportantDTO importantDTO) {
+    public ImportantDTO save(String username, ImportantDTO importantDTO) {
+        UserEntity userEntity = userService.findByUserName(username);
+        long userId = userEntity.getId();
+        importantDTO.setUserId(userId);
         ImportantEntity important = importantMapper.importantDtoToImportant(importantDTO);
+        important.setUserId(userEntity);
         return saveAndReturnDTO(important);
     }
 
@@ -56,22 +65,25 @@ public class ImportantService implements ImportantCrudService<ImportantDTO, Long
     }
 
     @Override
-    public void delete(UserEntity userEntity, Long id) {
+    public void delete(String username, Long id) {
         importantRepository.deleteById(id);
     }
 
     @Override
-    public List<Object[]> findCountByYearStat(UserEntity userEntity, int year) {
+    public List<Object[]> findCountByYearStat(String username, int year) {
+        UserEntity userEntity = userService.findByUserName(username);
         return importantRepository.findCountByYearStat(userEntity, year);
     }
 
     @Override
-    public List<Object[]> findAverageByYearStat(UserEntity userEntity, int year) {
+    public List<Object[]> findAverageByYearStat(String username, int year) {
+        UserEntity userEntity = userService.findByUserName(username);
         return importantRepository.findAverageByYearStat(userEntity, year);
     }
 
     @Override
-    public List<Integer> findCountMadeByStartEnd(UserEntity userEntity, LocalDate startDate, LocalDate endDate) {
+    public List<Integer> findCountMadeByStartEnd(String username, LocalDate startDate, LocalDate endDate) {
+        UserEntity userEntity = userService.findByUserName(username);
         return importantRepository.findCountMadeByStartEnd(userEntity, startDate, endDate);
     }
 

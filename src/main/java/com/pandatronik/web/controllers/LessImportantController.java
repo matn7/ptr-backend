@@ -1,9 +1,7 @@
 package com.pandatronik.web.controllers;
 
-import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.model.LessImportantDTO;
 import com.pandatronik.backend.service.LessImportantService;
-import com.pandatronik.backend.service.user.account.UserService;
 import com.pandatronik.utils.AppConstants;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -21,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(AppConstants.BASE_URL + "/{username}/lessimportant/1")
 public class LessImportantController extends Resource<LessImportantDTO> {
 
-    public LessImportantController(LessImportantService taskService, UserService userService) {
-        super(taskService, userService);
+    public LessImportantController(LessImportantService taskService) {
+        super(taskService);
     }
 
     @Override
@@ -30,21 +28,15 @@ public class LessImportantController extends Resource<LessImportantDTO> {
     @ResponseStatus(HttpStatus.CREATED)
     public LessImportantDTO save(@PathVariable("username") String username,
                                  @Valid @RequestBody LessImportantDTO lessImportantDTO){
-
-        UserEntity userEntity = userService.findByUserName(username);
-        lessImportantDTO.setUserEntity(userEntity);
-        return taskService.save(lessImportantDTO);
+        return taskService.save(username, lessImportantDTO);
     }
 
     @Override
-    @PutMapping("/{id}")
+    @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public LessImportantDTO update(@PathVariable("username") String username, @PathVariable("id") Long id,
+    public LessImportantDTO update(@PathVariable("username") String username,
                                    @Valid @RequestBody LessImportantDTO lessImportantDTO) {
-
-        UserEntity userEntity = userService.findByUserName(username);
-        lessImportantDTO.setUserEntity(userEntity);
-        return taskService.update(id, lessImportantDTO);
+        return taskService.save(username, lessImportantDTO);
     }
 }
 

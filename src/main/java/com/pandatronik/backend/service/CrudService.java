@@ -6,15 +6,15 @@ import java.util.List;
 
 public interface CrudService<T, ID> {
 
-    T findById(UserEntity userEntity, ID id);
+    T findById(String username, ID id);
 
-    T findByDate(UserEntity userEntity, int year, int month, int day);
+    T findByDate(String username, int year, int month, int day);
 
-    List<T> findByDate(UserEntity userEntity, int year, int month);
+    List<T> findByDate(String username, int year, int month);
 
-    T save(T object);
+    T save(String username, T object);
 
     T update(ID id, T object);
 
-    void delete(UserEntity userEntity, ID id);
+    void delete(String username, ID id);
 }

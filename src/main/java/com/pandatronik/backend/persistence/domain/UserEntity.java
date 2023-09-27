@@ -52,10 +52,11 @@ public class UserEntity implements Serializable, UserDetails {
 
 	@NotNull
 	@NotBlank
-	@Size(min = 6, max = 20, message = "Password size must be between 6 and 20")
+	@Size(min = 6, max = 60, message = "Password size must be between 6 and 20")
 	@Column(name = "password")
 	private String password;
-	// pewnie password po szyfrowanie zwieksza rozmiar dzine ?
+	// Password is stored in DB table in such format (60 chars), that why max should be different in DTO:
+	// $2a$10$3MK16ys612eX0KzFqs7aUOc6Ffji/UoXhJ0JsYC.srNhbbzAHydWC
 
 	@Transient
 	private String confirmPassword;
@@ -94,28 +95,28 @@ public class UserEntity implements Serializable, UserDetails {
 	private Set<PasswordResetToken> passwordResetTokens = new HashSet<>();
 
 	// Tesks, Days
-    @OneToMany(mappedBy = "userEntity", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
     private List<ImportantEntity> importantEntity;
 
-	@OneToMany(mappedBy = "userEntity", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
 	private List<Important2Entity> important2Entity;
 
-	@OneToMany(mappedBy = "userEntity", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
     private List<Important3Entity> important3Entity;
 
-	@OneToMany(mappedBy = "userEntity", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
 	private List<LessImportantEntity> lessImportantEntity;
 
-	@OneToMany(mappedBy = "userEntity", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
 	private List<LessImportant2Entity> lessImportant2Entity;
 
-	@OneToMany(mappedBy = "userEntity", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
 	private List<LessImportant3Entity> lessImportant3Entity;
 
-	@OneToMany(mappedBy = "userEntity", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
     private List<DaysEntity> daysEntity;
 
-	@OneToMany(mappedBy = "userEntity", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
     private List<ExtraordinaryEntity> extraordinaryEntity;
 
 	public Set<PasswordResetToken> getPasswordResetTokens() {

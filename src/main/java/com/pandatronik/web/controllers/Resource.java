@@ -1,8 +1,6 @@
 package com.pandatronik.web.controllers;
 
-import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.service.ImportantCrudService;
-import com.pandatronik.backend.service.user.account.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,13 +14,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public abstract class Resource<T> {
 
     protected final ImportantCrudService<T, Long> taskService;
-    protected final UserService userService;
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public T findById(@PathVariable("username") String username, @PathVariable("id") Long id) {
-        UserEntity userEntity = userService.findByUserName(username);
-        return taskService.findById(userEntity, id);
+        return taskService.findById(username, id);
     }
 
     @GetMapping("/{year}/{month}/{day}")
@@ -30,24 +26,20 @@ public abstract class Resource<T> {
     public T findByDate(@PathVariable("username") String username,
             @PathVariable("year") int year, @PathVariable("month") int month, @PathVariable("day") int day) {
 
-        UserEntity userEntity = userService.findByUserName(username);
-        // This looks does not works, i think on I
-        return taskService.findByDate(userEntity, year, month, day);
+        return taskService.findByDate(username, year, month, day);
     }
 
     public abstract T save(@PathVariable("username") String username,
                                                 @Valid @RequestBody T entity);
 
     public abstract T update(@PathVariable("username") String username,
-        @PathVariable("id") Long id, @Valid @RequestBody T entity);
+        @Valid @RequestBody T entity);
 
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable("username") String username, @PathVariable("id") Long id) {
-
-        UserEntity userEntity = userService.findByUserName(username);
-        taskService.delete(userEntity, id);
+        taskService.delete(username, id);
     }
 
 }

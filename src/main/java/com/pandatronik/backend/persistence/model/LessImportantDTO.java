@@ -49,7 +49,6 @@ public class LessImportantDTO {
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDate startDate;
 
-    @JsonIgnore
-    private UserEntity userEntity;
+    private long userId;
 
 }

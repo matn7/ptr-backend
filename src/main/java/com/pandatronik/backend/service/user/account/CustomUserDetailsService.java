@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
@@ -30,13 +32,13 @@ public class CustomUserDetailsService implements UserDetailsService {
 	@Transactional
 	public UserEntity loadUserById(Long id) {
 
-		UserEntity user = userRepository.getById(id);
+		Optional<UserEntity> user = userRepository.findById(id);
 
-		if (user == null) {
+		if (user.isEmpty()) {
 			throw new UsernameNotFoundException("User not found");
 		}
 
-		return user;
+		return user.get();
 	}
 
 }

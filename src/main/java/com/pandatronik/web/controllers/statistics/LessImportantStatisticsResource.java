@@ -37,11 +37,7 @@ public class LessImportantStatisticsResource {
     public ResponseEntity<?> findCountByYearTask1(@PathVariable("username") String username,
                                                   @PathVariable("year") int year) {
 
-        UserEntity userEntity = userService.findByUserName(username);
-
-        checkUser(userEntity);
-
-        List<Object[]> result =  lessImportantService.findCountByYearStat(userEntity, year);
+        List<Object[]> result =  lessImportantService.findCountByYearStat(username, year);
         Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(collect)) {
             return ResponseEntity.ok(collect);
@@ -55,11 +51,8 @@ public class LessImportantStatisticsResource {
     @GetMapping("/2/count/{year}")
     public ResponseEntity<?> findCountByYearTask2(@PathVariable("username") String username,
                                               @PathVariable("year") int year) {
-        UserEntity userEntity = userService.findByUserName(username);
 
-        checkUser(userEntity);
-
-        List<Object[]> result =  lessImportant2Service.findCountByYearStat(userEntity, year);
+        List<Object[]> result =  lessImportant2Service.findCountByYearStat(username, year);
         Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(collect)) {
             return ResponseEntity.ok(collect);
@@ -74,11 +67,7 @@ public class LessImportantStatisticsResource {
     public ResponseEntity<?> findCountByYearTask3(@PathVariable("username") String username,
                                               @PathVariable("year") int year) {
 
-        UserEntity userEntity = userService.findByUserName(username);
-
-        checkUser(userEntity);
-
-        List<Object[]> result =  lessImportant3Service.findCountByYearStat(userEntity, year);
+        List<Object[]> result =  lessImportant3Service.findCountByYearStat(username, year);
         Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(collect)) {
             return ResponseEntity.ok(collect);
@@ -92,11 +81,8 @@ public class LessImportantStatisticsResource {
     @GetMapping("/1/avg/{year}")
     public ResponseEntity<?> findAverageByYearTask1(@PathVariable("username") String username,
                                             @PathVariable("year") int year) {
-        UserEntity userEntity = userService.findByUserName(username);
 
-        checkUser(userEntity);
-
-        List<Object[]> result = lessImportantService.findAverageByYearStat(userEntity, year);
+        List<Object[]> result = lessImportantService.findAverageByYearStat(username, year);
         Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(result)) {
             return ResponseEntity.ok(collect);
@@ -110,11 +96,8 @@ public class LessImportantStatisticsResource {
     @GetMapping("/2/avg/{year}")
     public ResponseEntity<?> avgTask2MadeInMonthYear(@PathVariable("username") String username,
                                                 @PathVariable("year") int year) {
-        UserEntity userEntity = userService.findByUserName(username);
 
-        checkUser(userEntity);
-
-        List<Object[]> result = lessImportant2Service.findAverageByYearStat(userEntity, year);
+        List<Object[]> result = lessImportant2Service.findAverageByYearStat(username, year);
         Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(result)) {
             return ResponseEntity.ok(collect);
@@ -129,11 +112,7 @@ public class LessImportantStatisticsResource {
     public ResponseEntity<?> avgTask3MadeInMonthYear(@PathVariable("username") String username,
                                                 @PathVariable("year") int year) {
 
-        UserEntity userEntity = userService.findByUserName(username);
-
-        checkUser(userEntity);
-
-        List<Object[]> result = lessImportant3Service.findAverageByYearStat(userEntity, year);
+        List<Object[]> result = lessImportant3Service.findAverageByYearStat(username, year);
         Map<Object, Object> collect = result.stream().collect(Collectors.toMap(elem -> elem[0], elem -> elem[1]));
         if (nonNull(result)) {
             return ResponseEntity.ok(collect);
@@ -147,11 +126,8 @@ public class LessImportantStatisticsResource {
     @PostMapping("/1/startEnd")
     public ResponseEntity<?> findCountMadeByStartEnd(@PathVariable("username") String username,
                                                       @RequestBody StartEndRequest startEndRequest) {
-        UserEntity userEntity = userService.findByUserName(username);
 
-        checkUser(userEntity);
-
-        List<Integer> countMadeByStartEnd = lessImportantService.findCountMadeByStartEnd(userEntity,
+        List<Integer> countMadeByStartEnd = lessImportantService.findCountMadeByStartEnd(username,
                 startEndRequest.getStartDate(), startEndRequest.getEndDate());
 
         Map<Integer, Long> collect = countMadeByStartEnd.stream()
@@ -169,11 +145,8 @@ public class LessImportantStatisticsResource {
     @PostMapping("/2/startEnd")
     public ResponseEntity<?> findCountMadeByStartEnd2(@PathVariable("username") String username,
                                                       @RequestBody StartEndRequest startEndRequest) {
-        UserEntity userEntity = userService.findByUserName(username);
 
-        checkUser(userEntity);
-
-        List<Integer> countMadeByStartEnd = lessImportant2Service.findCountMadeByStartEnd(userEntity,
+        List<Integer> countMadeByStartEnd = lessImportant2Service.findCountMadeByStartEnd(username,
                 startEndRequest.getStartDate(), startEndRequest.getEndDate());
 
         Map<Integer, Long> collect = countMadeByStartEnd.stream()
@@ -192,11 +165,8 @@ public class LessImportantStatisticsResource {
     @PostMapping("/3/startEnd")
     public ResponseEntity<?> findCountMadeByStartEnd3(@PathVariable("username") String username,
                                                       @RequestBody StartEndRequest startEndRequest) {
-        UserEntity userEntity = userService.findByUserName(username);
 
-        checkUser(userEntity);
-
-        List<Integer> countMadeByStartEnd = lessImportant3Service.findCountMadeByStartEnd(userEntity,
+        List<Integer> countMadeByStartEnd = lessImportant3Service.findCountMadeByStartEnd(username,
                 startEndRequest.getStartDate(), startEndRequest.getEndDate());
 
         Map<Integer, Long> collect = countMadeByStartEnd.stream()
@@ -210,14 +180,6 @@ public class LessImportantStatisticsResource {
                             , LocaleContextHolder.getLocale())));
         }
 
-    }
-
-    // TODO: make annotation
-    private void checkUser(UserEntity userEntity) {
-        if (isNull(userEntity)) {
-            throw new UserNotFoundException(messageSource.getMessage("user.not.found.message", null
-                    , LocaleContextHolder.getLocale()));
-        }
     }
 
 }

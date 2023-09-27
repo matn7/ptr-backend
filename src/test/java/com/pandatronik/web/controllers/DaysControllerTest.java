@@ -77,7 +77,7 @@ public class DaysControllerTest {
         day.setRateDay(MadeEnum.HUNDRED);
 
         when(userService.findByUserName(anyString())).thenReturn(user);
-        when(daysService.findById(user, 1L)).thenReturn(day);
+        when(daysService.findById(any(), 1L)).thenReturn(day);
 
         mockMvc.perform(get(AppConstants.BASE_URL + "/someuser/days/1")
                 .accept(MediaType.APPLICATION_JSON)
@@ -88,14 +88,14 @@ public class DaysControllerTest {
                 .andExpect(jsonPath("$.rateDay", equalTo(MadeEnum.HUNDRED.getValue())));
 
         verify(userService).findByUserName(anyString());
-        verify(daysService).findById(user, 1L);
+        verify(daysService).findById(any(), 1L);
     }
 
     @Test
     public void findByIdNotFound() throws Exception {
         UserEntity user = UserEntity.builder().build();
         when(userService.findByUserName(anyString())).thenReturn(user);
-        when(daysService.findById(user, 1L)).thenThrow(ResourceNotFoundException.class);
+        when(daysService.findById(any(), 1L)).thenThrow(ResourceNotFoundException.class);
 
         mockMvc.perform(get(AppConstants.BASE_URL + "/someuser/days/1")
                 .accept(MediaType.APPLICATION_JSON)
@@ -104,7 +104,7 @@ public class DaysControllerTest {
                 .andExpect(jsonPath("$.body", equalTo("Resource Not Fount")));
 
         verify(userService).findByUserName(anyString());
-        verify(daysService).findById(user, 1L);
+        verify(daysService).findById(any(), 1L);
     }
 
     @Test
@@ -117,7 +117,7 @@ public class DaysControllerTest {
         day.setRateDay(MadeEnum.HUNDRED);
 
         when(userService.findByUserName(anyString())).thenReturn(user);
-        when(daysService.findByDate(user, 20, 10, 1991)).thenReturn(day);
+        when(daysService.findByDate(any(), 20, 10, 1991)).thenReturn(day);
 
 //        int[] res = {1991, 10, 20};
 //        Expected :[<1991>, <10>, <20>]
@@ -133,7 +133,7 @@ public class DaysControllerTest {
                 .andExpect(jsonPath("$.rateDay", equalTo(MadeEnum.HUNDRED.getValue())));
 
         verify(userService).findByUserName(anyString());
-        verify(daysService).findByDate(user, 20, 10, 1991);
+        verify(daysService).findByDate(any(), 20, 10, 1991);
     }
 
     @Test
@@ -141,7 +141,7 @@ public class DaysControllerTest {
         UserEntity user = UserEntity.builder().build();
 
         when(userService.findByUserName(anyString())).thenReturn(user);
-        when(daysService.findByDate(user, 20, 10, 1991)).thenThrow(ResourceNotFoundException.class);
+        when(daysService.findByDate(any(), 20, 10, 1991)).thenThrow(ResourceNotFoundException.class);
 
         mockMvc.perform(get(AppConstants.BASE_URL + "/someuser/days/1991/10/20")
                 .accept(MediaType.APPLICATION_JSON)
@@ -150,7 +150,7 @@ public class DaysControllerTest {
                 .andExpect(jsonPath("$.body", equalTo("Resource Not Fount")));
 
         verify(userService).findByUserName(anyString());
-        verify(daysService).findByDate(user, 20, 10, 1991);
+        verify(daysService).findByDate(any(), 20, 10, 1991);
     }
 
     @Test
@@ -163,7 +163,7 @@ public class DaysControllerTest {
         day.setRateDay(MadeEnum.HUNDRED);
 
         when(userService.findByUserName(anyString())).thenReturn(user);
-        when(daysService.save(any())).thenReturn(day);
+        when(daysService.save(any(), any())).thenReturn(day);
 
         String jsonRequest = new JSONObject()
                 .put("body", "Some Day")
@@ -182,7 +182,7 @@ public class DaysControllerTest {
                 .andExpect(jsonPath("$.rateDay", equalTo(MadeEnum.HUNDRED.getValue())));
 
         verify(userService).findByUserName(anyString());
-        verify(daysService).save(any());
+        verify(daysService).save(any(), any());
     }
 
     @Test
@@ -195,7 +195,7 @@ public class DaysControllerTest {
         day.setRateDay(MadeEnum.HUNDRED);
 
         when(userService.findByUserName(anyString())).thenReturn(user);
-        when(daysService.save(any())).thenReturn(day);
+        when(daysService.save(any(), any())).thenReturn(day);
 
         String jsonRequest = new JSONObject()
                 .put("id", "1")
@@ -228,7 +228,7 @@ public class DaysControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
-        verify(daysService).delete(user, 1L);
+        verify(daysService).delete(any(), 1L);
     }
 
     @Test
@@ -242,7 +242,7 @@ public class DaysControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
-        verify(daysService).delete(user, 1L);
+        verify(daysService).delete(any(), 1L);
     }
 
 //    @Test
