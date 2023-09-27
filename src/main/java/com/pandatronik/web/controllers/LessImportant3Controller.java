@@ -33,10 +33,10 @@ public class LessImportant3Controller extends Resource<LessImportant3DTO> {
     }
 
     @Override
-    @PutMapping("/{id}")
+    @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public LessImportant3DTO update(@PathVariable("username") String username,
-            @PathVariable("id") Long id, @Valid @RequestBody LessImportant3DTO lessImportant3DTO) {
-        return taskService.update(id, lessImportant3DTO);
+                                    @Valid @RequestBody LessImportant3DTO lessImportant3DTO) {
+        return taskService.save(username, lessImportant3DTO);
     }
 }

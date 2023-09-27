@@ -42,4 +42,12 @@ public class DaysDTO {
 
     private Long userId;
 
+    public DaysDTO(Long id, @NotNull String body, @NotNull MadeEnum rateDay, LocalDateTime postedOn, LocalDate startDate, Long userId) {
+        this.id = id;
+        this.body = body;
+        this.rateDay = rateDay;
+        this.postedOn = postedOn;
+        this.startDate = startDate;
+        this.userId = userId;
+    }
 }

@@ -1,8 +1,10 @@
 package com.pandatronik.backend.service;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
+import com.pandatronik.backend.persistence.domain.core.DaysEntity;
 import com.pandatronik.backend.persistence.domain.core.ExtraordinaryEntity;
 import com.pandatronik.backend.persistence.mapper.ExtraordinaryMapper;
+import com.pandatronik.backend.persistence.model.DaysDTO;
 import com.pandatronik.backend.persistence.model.ExtraordinaryDTO;
 import com.pandatronik.backend.persistence.repositories.ExtraordinaryRepository;
 import com.pandatronik.backend.service.user.account.UserService;
@@ -34,8 +36,7 @@ public class ExtraordinaryService implements ExtraordinaryCrudService<Extraordin
     @Override
     public List<ExtraordinaryDTO> findByDate(String username, int year, int month) {
         UserEntity userEntity = userService.findByUserName(username);
-        long userId = userEntity.getId();
-        return extraordinaryRepository.findByPartDate(userId, year, month)
+        return extraordinaryRepository.findByPartDate(userEntity, year, month)
                 .stream()
                 .map(extraordinaryMapper::extraordinaryToExtraordinaryDTO)
                 .collect(Collectors.toList());
@@ -44,8 +45,7 @@ public class ExtraordinaryService implements ExtraordinaryCrudService<Extraordin
     @Override
     public ExtraordinaryDTO findById(String username, Long id) {
         UserEntity userEntity = userService.findByUserName(username);
-        long userId = userEntity.getId();
-        return extraordinaryRepository.findById(userId, id)
+        return extraordinaryRepository.findById(userEntity, id)
                 .map(extraordinaryMapper::extraordinaryToExtraordinaryDTO)
                 .orElseThrow(ResourceNotFoundException::new);
     }
@@ -53,8 +53,7 @@ public class ExtraordinaryService implements ExtraordinaryCrudService<Extraordin
     @Override
     public ExtraordinaryDTO findByDate(String username, int year, int month, int day) {
         UserEntity userEntity = userService.findByUserName(username);
-        long userId = userEntity.getId();
-        return extraordinaryRepository.findByDate(userId, year, month, day)
+        return extraordinaryRepository.findByDate(userEntity, year, month, day)
                 .map(extraordinaryMapper::extraordinaryToExtraordinaryDTO)
                 .orElseThrow(ResourceNotFoundException::new);
     }
@@ -64,8 +63,9 @@ public class ExtraordinaryService implements ExtraordinaryCrudService<Extraordin
         UserEntity userEntity = userService.findByUserName(username);
         long userId = userEntity.getId();
         extraordinaryDTO.setUserId(userId);
-        ExtraordinaryEntity extraordinary = extraordinaryMapper.extraordinaryDtoToExtraordinary(extraordinaryDTO);
-        return saveAndReturnDTO(extraordinary);
+        ExtraordinaryEntity days = extraordinaryMapper.extraordinaryDtoToExtraordinary(extraordinaryDTO);
+        days.setUserId(userEntity);
+        return saveAndReturnDTO(days);
     }
 
     @Override

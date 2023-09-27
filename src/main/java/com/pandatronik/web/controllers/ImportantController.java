@@ -2,6 +2,7 @@ package com.pandatronik.web.controllers;
 
 import com.pandatronik.backend.persistence.model.ImportantDTO;
 import com.pandatronik.backend.service.ImportantService;
+import com.pandatronik.backend.service.ResourceService;
 import com.pandatronik.utils.AppConstants;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -32,10 +33,10 @@ public class ImportantController extends Resource<ImportantDTO> {
     }
 
     @Override
-    @PutMapping("/{id}")
+    @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public ImportantDTO update(@PathVariable("username") String username, @PathVariable("id") Long id,
+    public ImportantDTO update(@PathVariable("username") String username,
                                @Valid @RequestBody ImportantDTO importantDTO) {
-        return taskService.update(id, importantDTO);
+        return taskService.save(username, importantDTO);
     }
 }

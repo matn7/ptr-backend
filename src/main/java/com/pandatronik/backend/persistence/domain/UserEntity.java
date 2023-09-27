@@ -95,28 +95,28 @@ public class UserEntity implements Serializable, UserDetails {
 	private Set<PasswordResetToken> passwordResetTokens = new HashSet<>();
 
 	// Tesks, Days
-    @OneToMany(mappedBy = "userId", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
     private List<ImportantEntity> importantEntity;
 
-	@OneToMany(mappedBy = "userId", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
 	private List<Important2Entity> important2Entity;
 
-	@OneToMany(mappedBy = "userId", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
     private List<Important3Entity> important3Entity;
 
-	@OneToMany(mappedBy = "userId", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
 	private List<LessImportantEntity> lessImportantEntity;
 
-	@OneToMany(mappedBy = "userId", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
 	private List<LessImportant2Entity> lessImportant2Entity;
 
-	@OneToMany(mappedBy = "userId", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
 	private List<LessImportant3Entity> lessImportant3Entity;
 
-	@OneToMany(mappedBy = "userId", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
     private List<DaysEntity> daysEntity;
 
-	@OneToMany(mappedBy = "userId", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
     private List<ExtraordinaryEntity> extraordinaryEntity;
 
 	public Set<PasswordResetToken> getPasswordResetTokens() {

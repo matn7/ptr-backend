@@ -3,7 +3,6 @@ package com.pandatronik.backend.service;
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.DaysEntity;
 import com.pandatronik.backend.persistence.mapper.DaysMapper;
-import com.pandatronik.backend.persistence.mapper.DaysMapperV2;
 import com.pandatronik.backend.persistence.model.DaysDTO;
 import com.pandatronik.backend.persistence.repositories.DaysRepository;
 import com.pandatronik.backend.service.user.account.UserService;
@@ -26,8 +25,7 @@ public class DaysService implements DaysCrudService<DaysDTO, Long> {
     @Override
     public DaysDTO findById(String username, Long id) {
         UserEntity userEntity = userService.findByUserName(username);
-        long userId = userEntity.getId();
-        return daysRepository.findById(userId, id)
+        return daysRepository.findById(userEntity, id)
                 .map(daysMapper::daysToDaysDTO)
                 .orElseThrow(ResourceNotFoundException::new);
     }
@@ -36,7 +34,7 @@ public class DaysService implements DaysCrudService<DaysDTO, Long> {
     public List<DaysDTO> findByDate(String username, int year, int month) {
         UserEntity userEntity = userService.findByUserName(username);
         long userId = userEntity.getId();
-        return daysRepository.findByPartDate(userId, year, month)
+        return daysRepository.findByPartDate(userEntity, year, month)
                 .stream()
                 .map(daysMapper::daysToDaysDTO)
                 .collect(Collectors.toList());
@@ -46,9 +44,11 @@ public class DaysService implements DaysCrudService<DaysDTO, Long> {
     public DaysDTO findByDate(String username, int day, int month, int year) {
         UserEntity userEntity = userService.findByUserName(username);
         long userId = userEntity.getId();
-        return daysRepository.findByDate(userId, day, month, year)
-                .map(daysMapper::daysToDaysDTO)
-                .orElseThrow(ResourceNotFoundException::new);
+        DaysDTO byDateDto = daysRepository.findByDateDto(userId, day, month, year);
+//        DaysDTO daysDTO = daysRepository.findByDate(userEntity, day, month, year)
+//                .map(daysMapper::daysToDaysDTO)
+//                .orElseThrow(ResourceNotFoundException::new);
+        return byDateDto;
     }
 
     @Override
@@ -57,6 +57,7 @@ public class DaysService implements DaysCrudService<DaysDTO, Long> {
         long userId = userEntity.getId();
         daysDTO.setUserId(userId);
         DaysEntity days = daysMapper.daysDtoToDays(daysDTO);
+        days.setUserId(userEntity);
         return saveAndReturnDTO(days);
     }
 
@@ -77,29 +78,25 @@ public class DaysService implements DaysCrudService<DaysDTO, Long> {
     @Override
     public List<Integer> findByYearData(String username, int year) {
         UserEntity userEntity = userService.findByUserName(username);
-        long userId = userEntity.getId();
-        return  daysRepository.findByYearData(userId, year);
+        return  daysRepository.findByYearData(userEntity, year);
     }
 
     @Override
     public List<Object[]> findAverageByYearData(String username, int year) {
         UserEntity userEntity = userService.findByUserName(username);
-        long userId = userEntity.getId();
-        return  daysRepository.findAverageByYearData(userId, year);
+        return  daysRepository.findAverageByYearData(userEntity, year);
     }
 
     @Override
     public List<Object[]> findByMonthAndYearData(String username, int month, int year) {
         UserEntity userEntity = userService.findByUserName(username);
-        long userId = userEntity.getId();
-        return daysRepository.findByMonthAndYearData(userId, month, year);
+        return daysRepository.findByMonthAndYearData(userEntity, month, year);
     }
 
     @Override
     public Optional<List<Integer>> findByMonthAndYearDailyData(String username, int year, int month) {
         UserEntity userEntity = userService.findByUserName(username);
-        long userId = userEntity.getId();
-        return daysRepository.findByMonthAndYearDailyData(userId, year, month);
+        return daysRepository.findByMonthAndYearDailyData(userEntity, year, month);
     }
 
     private DaysDTO saveAndReturnDTO(DaysEntity daysEntity) {

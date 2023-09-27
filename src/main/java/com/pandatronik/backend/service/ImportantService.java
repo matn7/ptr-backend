@@ -25,8 +25,7 @@ public class ImportantService implements ImportantCrudService<ImportantDTO, Long
     @Override
     public ImportantDTO findById(String username, Long id) {
         UserEntity userEntity = userService.findByUserName(username);
-        long userId = userEntity.getId();
-        return importantRepository.findById(userId, id)
+        return importantRepository.findById(userEntity, id)
                 .map(importantMapper::importantToImportantDTO)
                 .orElseThrow(ResourceNotFoundException::new);
     }
@@ -34,8 +33,7 @@ public class ImportantService implements ImportantCrudService<ImportantDTO, Long
     @Override
     public ImportantDTO findByDate(String username, int year, int month, int day) {
         UserEntity userEntity = userService.findByUserName(username);
-        long userId = userEntity.getId();
-        return importantRepository.findByDate(userId, day, month, year)
+        return importantRepository.findByDate(userEntity, day, month, year)
                 .map(importantMapper::importantToImportantDTO)
                 .orElseThrow(ResourceNotFoundException::new);
     }
@@ -43,8 +41,7 @@ public class ImportantService implements ImportantCrudService<ImportantDTO, Long
     @Override
     public List<ImportantDTO> findByDate(String username, int year, int month) {
         UserEntity userEntity = userService.findByUserName(username);
-        long userId = userEntity.getId();
-        return importantRepository.findByDate(userId, year, month)
+        return importantRepository.findByDate(userEntity, year, month)
                 .stream()
                 .map(importantMapper::importantToImportantDTO)
                 .collect(Collectors.toList());
@@ -56,6 +53,7 @@ public class ImportantService implements ImportantCrudService<ImportantDTO, Long
         long userId = userEntity.getId();
         importantDTO.setUserId(userId);
         ImportantEntity important = importantMapper.importantDtoToImportant(importantDTO);
+        important.setUserId(userEntity);
         return saveAndReturnDTO(important);
     }
 
@@ -74,22 +72,19 @@ public class ImportantService implements ImportantCrudService<ImportantDTO, Long
     @Override
     public List<Object[]> findCountByYearStat(String username, int year) {
         UserEntity userEntity = userService.findByUserName(username);
-        long userId = userEntity.getId();
-        return importantRepository.findCountByYearStat(userId, year);
+        return importantRepository.findCountByYearStat(userEntity, year);
     }
 
     @Override
     public List<Object[]> findAverageByYearStat(String username, int year) {
         UserEntity userEntity = userService.findByUserName(username);
-        long userId = userEntity.getId();
-        return importantRepository.findAverageByYearStat(userId, year);
+        return importantRepository.findAverageByYearStat(userEntity, year);
     }
 
     @Override
     public List<Integer> findCountMadeByStartEnd(String username, LocalDate startDate, LocalDate endDate) {
         UserEntity userEntity = userService.findByUserName(username);
-        long userId = userEntity.getId();
-        return importantRepository.findCountMadeByStartEnd(userId, startDate, endDate);
+        return importantRepository.findCountMadeByStartEnd(userEntity, startDate, endDate);
     }
 
     private ImportantDTO saveAndReturnDTO(ImportantEntity importantEntity) {

@@ -32,10 +32,10 @@ public class Important3Controller extends Resource<Important3DTO> {
     }
 
     @Override
-    @PutMapping("/{id}")
+    @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public Important3DTO update(@PathVariable("username") String username,
-            @PathVariable("id") Long id, @Valid @RequestBody Important3DTO important3DTO) {
-        return taskService.update(id, important3DTO);
+            @Valid @RequestBody Important3DTO important3DTO) {
+        return taskService.save(username, important3DTO);
     }
 }

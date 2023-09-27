@@ -33,8 +33,6 @@ public class JwtAuthenticationRestController {
     public ResponseEntity<?> refreshAndGetAuthenticationToken(HttpServletRequest request) {
         String authToken = request.getHeader(tokenHeader);
         final String token = authToken.substring(7);
-        String username = jwtTokenProvider.getUsernameFromToken(token);
-        UserEntity user = (UserEntity) customUserDetailsService.loadUserByUsername(username);
 
         if (jwtTokenProvider.canTokenBeRefreshed(token)) {
             String refreshedToken = jwtTokenProvider.refreshToken(token);

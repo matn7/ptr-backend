@@ -35,11 +35,11 @@ public class LessImportant2Controller extends Resource<LessImportant2DTO> {
     }
 
     @Override
-    @PutMapping("/{id}")
+    @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public LessImportant2DTO update(@PathVariable("username") String username, @PathVariable("id") Long id,
+    public LessImportant2DTO update(@PathVariable("username") String username,
                                     @Valid @RequestBody LessImportant2DTO lessImportant2DTO) {
-        return taskService.update(id, lessImportant2DTO);
+        return taskService.save(username, lessImportant2DTO);
     }
 }
 

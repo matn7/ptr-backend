@@ -55,11 +55,11 @@ public class ExtraordinaryController {
         return extraordinaryService.save(username, extraordinaryDTO);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public ExtraordinaryDTO update(@PathVariable("username") String username,
-                                   @PathVariable("id") Long id, @Valid @RequestBody ExtraordinaryDTO extraordinaryDTO) {
-        return extraordinaryService.update(id, extraordinaryDTO);
+                                   @Valid @RequestBody ExtraordinaryDTO extraordinaryDTO) {
+        return extraordinaryService.save(username, extraordinaryDTO);
     }
 
     @DeleteMapping("/{id}")

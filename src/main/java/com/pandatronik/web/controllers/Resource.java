@@ -33,7 +33,7 @@ public abstract class Resource<T> {
                                                 @Valid @RequestBody T entity);
 
     public abstract T update(@PathVariable("username") String username,
-        @PathVariable("id") Long id, @Valid @RequestBody T entity);
+        @Valid @RequestBody T entity);
 
 
     @DeleteMapping("/{id}")

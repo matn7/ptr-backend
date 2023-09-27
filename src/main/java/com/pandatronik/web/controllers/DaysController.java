@@ -46,10 +46,10 @@ public class DaysController {
         return daysService.save(username, daysDTO);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public DaysDTO update(@PathVariable("username") String username,
-                          @PathVariable("id") Long id, @Valid @RequestBody DaysDTO daysDTO) throws URISyntaxException {
+                          @Valid @RequestBody DaysDTO daysDTO) throws URISyntaxException {
 
         return daysService.save(username, daysDTO);
     }

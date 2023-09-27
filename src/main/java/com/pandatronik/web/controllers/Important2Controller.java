@@ -34,10 +34,10 @@ public class Important2Controller extends Resource<Important2DTO> {
     }
 
     @Override
-    @PutMapping("/{id}")
+    @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public Important2DTO update(@PathVariable("username") String username, @PathVariable("id") Long id,
+    public Important2DTO update(@PathVariable("username") String username,
                                @Valid @RequestBody Important2DTO Important2DTO) {
-        return taskService.update(id, Important2DTO);
+        return taskService.save(username, Important2DTO);
     }
 }
