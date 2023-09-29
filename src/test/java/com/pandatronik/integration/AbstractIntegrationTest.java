@@ -7,6 +7,7 @@ import com.pandatronik.backend.persistence.domain.UserRole;
 import com.pandatronik.backend.persistence.repositories.user.account.PlanRepository;
 import com.pandatronik.backend.persistence.repositories.user.account.RoleRepository;
 import com.pandatronik.backend.persistence.repositories.user.account.UserRepository;
+import com.pandatronik.backend.service.user.account.EmailService;
 import com.pandatronik.enums.PlansEnum;
 import com.pandatronik.enums.RolesEnum;
 import com.pandatronik.utils.UserUtils;
@@ -25,6 +26,9 @@ public abstract class AbstractIntegrationTest {
 
     @Autowired
     protected UserRepository userRepository;
+
+    @Autowired
+    protected EmailService emailService;
 
     protected Plan createPlan(PlansEnum plansEnum) {
         return new Plan(plansEnum);

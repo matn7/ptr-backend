@@ -6,11 +6,13 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper
-public interface DaysMapper {
+public interface DaysMapper extends EntityMapper<DaysDTO, DaysEntity> {
 
+    @Override
     @Mapping(target = "userId", ignore = true)
-    DaysDTO daysToDaysDTO(DaysEntity daysEntity);
+    DaysDTO entityToDto(DaysEntity daysEntity);
 
+    @Override
     @Mapping(target = "userId", ignore = true)
-    DaysEntity daysDtoToDays(DaysDTO daysDTO);
+    DaysEntity dtoToEntity(DaysDTO daysDTO);
 }

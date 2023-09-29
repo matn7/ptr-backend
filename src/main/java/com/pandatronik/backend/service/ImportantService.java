@@ -28,6 +28,7 @@ public class ImportantService extends ResourceService<ImportantDTO, ImportantEnt
         super(userService, entityRepository, entityMapper);
     }
 
+    // Handle UserEntity to Long mapper in Mapstruct
     public ImportantDTO save(String username, ImportantDTO importantDTO) {
         UserEntity userEntity = userService.findByUserName(username);
         long userId = userEntity.getId();
@@ -35,12 +36,5 @@ public class ImportantService extends ResourceService<ImportantDTO, ImportantEnt
         ImportantEntity important = entityMapper.dtoToEntity(importantDTO);
         important.setUserId(userEntity);
         return saveAndReturnDTO(important);
-    }
-
-
-    private ImportantDTO saveAndReturnDTO(ImportantEntity importantEntity) {
-        ImportantEntity savedImportant = entityRepository.save(importantEntity);
-        ImportantDTO returnDto = entityMapper.entityToDto(savedImportant);
-        return returnDto;
     }
 }

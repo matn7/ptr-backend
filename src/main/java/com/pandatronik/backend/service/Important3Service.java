@@ -40,9 +40,4 @@ public class Important3Service extends ResourceService<Important3DTO, Important3
         return saveAndReturnDTO(important);
     }
 
-    private Important3DTO saveAndReturnDTO(Important3Entity important3Entity) {
-        Important3Entity savedImportant = entityRepository.save(important3Entity);
-        Important3DTO returnDto = entityMapper.entityToDto(savedImportant);
-        return returnDto;
-    }
 }

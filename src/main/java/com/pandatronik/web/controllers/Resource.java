@@ -1,15 +1,10 @@
 package com.pandatronik.web.controllers;
 
-import com.pandatronik.backend.service.ImportantCrudService;
 import com.pandatronik.backend.service.ResourceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 public abstract class Resource<DTO, Entity, ID> {
@@ -30,11 +25,19 @@ public abstract class Resource<DTO, Entity, ID> {
         return taskService.findByDate(username, year, month, day);
     }
 
-    public abstract DTO save(@PathVariable("username") String username,
-                                                @Valid @RequestBody DTO dto);
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public DTO save(@PathVariable("username") String username,
+                             @Valid @RequestBody DTO dto) {
+        return taskService.save(username, dto);
+    }
 
-    public abstract DTO update(@PathVariable("username") String username,
-        @Valid @RequestBody DTO dto);
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    public DTO update(@PathVariable("username") String username,
+                               @Valid @RequestBody DTO dto) {
+        return taskService.save(username, dto);
+    }
 
 
     @DeleteMapping("/{id}")

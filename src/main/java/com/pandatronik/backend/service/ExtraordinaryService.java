@@ -3,9 +3,11 @@ package com.pandatronik.backend.service;
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.DaysEntity;
 import com.pandatronik.backend.persistence.domain.core.ExtraordinaryEntity;
+import com.pandatronik.backend.persistence.mapper.EntityMapper;
 import com.pandatronik.backend.persistence.mapper.ExtraordinaryMapper;
 import com.pandatronik.backend.persistence.model.DaysDTO;
 import com.pandatronik.backend.persistence.model.ExtraordinaryDTO;
+import com.pandatronik.backend.persistence.repositories.EntityRepository;
 import com.pandatronik.backend.persistence.repositories.ExtraordinaryRepository;
 import com.pandatronik.backend.service.user.account.UserService;
 import lombok.AllArgsConstructor;
@@ -16,46 +18,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
-public class ExtraordinaryService implements ExtraordinaryCrudService<ExtraordinaryDTO, Long> {
+public class ExtraordinaryService extends ResourceService<ExtraordinaryDTO, ExtraordinaryEntity, Long>  {
 
-    private final UserService userService;
-    private final ExtraordinaryMapper extraordinaryMapper;
-    private final ExtraordinaryRepository extraordinaryRepository;
-
-    @Override
-    public List<ExtraordinaryDTO> findAll(String username) {
-        UserEntity userEntity = userService.findByUserName(username);
-        long userId = userEntity.getId();
-        return extraordinaryRepository.findAllByUserId(userId)
-                .stream()
-                .map(extraordinaryMapper::extraordinaryToExtraordinaryDTO)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<ExtraordinaryDTO> findByDate(String username, int year, int month) {
-        UserEntity userEntity = userService.findByUserName(username);
-        return extraordinaryRepository.findByPartDate(userEntity, year, month)
-                .stream()
-                .map(extraordinaryMapper::extraordinaryToExtraordinaryDTO)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public ExtraordinaryDTO findById(String username, Long id) {
-        UserEntity userEntity = userService.findByUserName(username);
-        return extraordinaryRepository.findById(userEntity, id)
-                .map(extraordinaryMapper::extraordinaryToExtraordinaryDTO)
-                .orElseThrow(ResourceNotFoundException::new);
-    }
-
-    @Override
-    public ExtraordinaryDTO findByDate(String username, int year, int month, int day) {
-        UserEntity userEntity = userService.findByUserName(username);
-        return extraordinaryRepository.findByDate(userEntity, year, month, day)
-                .map(extraordinaryMapper::extraordinaryToExtraordinaryDTO)
-                .orElseThrow(ResourceNotFoundException::new);
+    public ExtraordinaryService(UserService userService,
+                                EntityRepository<ExtraordinaryEntity, Long> entityRepository,
+                                EntityMapper<ExtraordinaryDTO, ExtraordinaryEntity> entityMapper) {
+        super(userService, entityRepository, entityMapper);
     }
 
     @Override
@@ -63,27 +31,9 @@ public class ExtraordinaryService implements ExtraordinaryCrudService<Extraordin
         UserEntity userEntity = userService.findByUserName(username);
         long userId = userEntity.getId();
         extraordinaryDTO.setUserId(userId);
-        ExtraordinaryEntity days = extraordinaryMapper.extraordinaryDtoToExtraordinary(extraordinaryDTO);
+        ExtraordinaryEntity days = entityMapper.dtoToEntity(extraordinaryDTO);
         days.setUserId(userEntity);
         return saveAndReturnDTO(days);
     }
-
-    @Override
-    public ExtraordinaryDTO update(Long id, ExtraordinaryDTO extraordinaryDTO) {
-        ExtraordinaryEntity extraordinary = extraordinaryMapper.extraordinaryDtoToExtraordinary(extraordinaryDTO);
-        extraordinary.setId(id);
-        return saveAndReturnDTO(extraordinary);
-    }
-
-    @Override
-    public void delete(String username, Long id) {
-        extraordinaryRepository.deleteById(id);
-    }
-
-    private ExtraordinaryDTO saveAndReturnDTO(ExtraordinaryEntity extraordinaryEntity) {
-        ExtraordinaryEntity savedExtraordinary = extraordinaryRepository.save(extraordinaryEntity);
-        ExtraordinaryDTO returnDto = extraordinaryMapper.extraordinaryToExtraordinaryDTO(savedExtraordinary);
-        return returnDto;
-    }
-
+    
 }

@@ -2,6 +2,7 @@ package com.pandatronik.backend.persistence.repositories;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.DaysEntity;
+import com.pandatronik.backend.persistence.domain.core.Important2Entity;
 import com.pandatronik.backend.persistence.model.DaysDTO;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface DaysRepository extends CrudRepository<DaysEntity, Long> {
+public interface DaysRepository extends CrudRepository<DaysEntity, Long>, EntityRepository<DaysEntity, Long> {
 
 //    Iterable<DaysEntity> findAll();
 
@@ -41,7 +42,7 @@ public interface DaysRepository extends CrudRepository<DaysEntity, Long> {
 
     @Query("SELECT d FROM DaysEntity d WHERE " +
             "MONTH(d.startDate) = :month AND YEAR(d.startDate) = :year AND d.userId = :userId")
-    List<DaysEntity> findByPartDate(@Param("userId") UserEntity userEntity,
+    List<DaysEntity> findByDate(@Param("userId") UserEntity userEntity,
                                     @Param("year") int year, @Param("month") int month);
 
     // statistics

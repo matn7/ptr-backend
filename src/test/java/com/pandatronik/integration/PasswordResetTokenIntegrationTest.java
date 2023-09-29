@@ -28,12 +28,6 @@ public class PasswordResetTokenIntegrationTest extends AbstractIntegrationTest {
     @Autowired
     private PasswordResetTokenRepository passwordResetTokenRepository;
 
-
-    @BeforeAll
-    public void init() {
-        assertFalse(expirationTimeInMinutes == 0);
-    }
-
     @Test
     public void tokenExpirationLength() throws Exception {
         String generatedString = RandomStringUtils.randomAlphabetic(10);

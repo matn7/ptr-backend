@@ -38,10 +38,4 @@ public class LessImportant3Service extends ResourceService<LessImportant3DTO, Le
         important.setUserId(userEntity);
         return saveAndReturnDTO(important);
     }
-
-    private LessImportant3DTO saveAndReturnDTO(LessImportant3Entity lessImportant3Entity) {
-        LessImportant3Entity savedLessImportant = entityRepository.save(lessImportant3Entity);
-        LessImportant3DTO returnDto = entityMapper.entityToDto(savedLessImportant);
-        return returnDto;
-    }
 }

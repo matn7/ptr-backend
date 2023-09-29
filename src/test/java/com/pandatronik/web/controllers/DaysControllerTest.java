@@ -9,6 +9,7 @@ import com.pandatronik.exceptions.CustomResponseEntityExceptionHandler;
 import com.pandatronik.utils.AppConstants;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -58,7 +59,7 @@ public class DaysControllerTest {
 
     MockMvc mockMvc;
 
-    @BeforeAll
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 

@@ -36,12 +36,7 @@ public class Important2Service extends ResourceService<Important2DTO, Important2
         importantDTO.setUserId(userId);
         Important2Entity important = entityMapper.dtoToEntity(importantDTO);
         important.setUserId(userEntity);
-        return saveAndReturn(important);
+        return saveAndReturnDTO(important);
     }
 
-    private Important2DTO saveAndReturn(Important2Entity important2Entity) {
-        Important2Entity savedImportant = entityRepository.save(important2Entity);
-        Important2DTO returnDto = entityMapper.entityToDto(savedImportant);
-        return returnDto;
-    }
 }

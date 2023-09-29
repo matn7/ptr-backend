@@ -39,9 +39,4 @@ public class LessImportantService extends ResourceService<LessImportantDTO, Less
         return saveAndReturnDTO(important);
     }
 
-    private LessImportantDTO saveAndReturnDTO(LessImportantEntity lessImportantEntity) {
-        LessImportantEntity savedLessImportant = entityRepository.save(lessImportantEntity);
-        LessImportantDTO returnDto = entityMapper.entityToDto(savedLessImportant);
-        return returnDto;
-    }
 }
