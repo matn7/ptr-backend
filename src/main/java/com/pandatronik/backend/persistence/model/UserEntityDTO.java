@@ -25,13 +25,13 @@ public class UserEntityDTO {
     private long id;
 
     @NotNull
-    @NotBlank
+    @NotBlank(message = "Username must not be blank")
     @Size(min = 6, max = 20, message = "Username size must be between 6 and 20")
     @Column(unique = true)
     private String username;
 
     @NotNull
-    @NotBlank
+    @NotBlank(message = "Password must not be blank")
     @Size(min = 6, max = 60, message = "Password size must be between 6 and 20")
     @Column(name = "password")
     private String password;
@@ -42,18 +42,19 @@ public class UserEntityDTO {
     private String confirmPassword;
 
     @NotNull
+    @NotBlank(message = "Email must not be blank")
     @Email(message = "Email address invalid")
     @Column(unique = true)
     private String email;
 
     @NotNull
-    @NotBlank
+    @NotBlank(message = "FirstName must not be blank")
     @Size(max = 20, message = "FirstName size must be between 1 and 20")
     @Column(name = "first_name")
     private String firstName;
 
     @NotNull
-    @NotBlank
+    @NotBlank(message = "LastName must not be blank")
     @Size(max = 20, message = "LastName size must be between 1 and 20")
     @Column(name = "last_name")
     private String lastName;

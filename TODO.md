@@ -1,0 +1,4 @@
+- Reduce size of pandatronik_ui image, probably remove nodes_module
+- manage somehow ddl-auto:create validate to not recreate DB every time?
+- Notification does not come from backend to ui (for instance for user registration yellow window)
+- insert ROLES and PLAN during container startup (test with manually added data)

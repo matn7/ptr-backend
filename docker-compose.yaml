@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  pandatronik-mysql:
+    container_name: pandatronik-mysql
+    image: pandatronik-mysql:1.0-SNAPSHOT
+    env_file:
+      - ./docker/env/mysql.env
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 10s
+      retries: 10
+  pandatronik-backend:
+    container_name: pandatronik-backend
+    image: com.pandatronik.rest/pandatronik.rest:1.0-SNAPSHOT
+    ports:
+      - '8080:8080'
+    depends_on:
+      pandatronik-mysql:
+        condition: service_healthy
+  pandatronik-ui:
+    container_name: pandatronik-ui
+    image: pandatronik-ui:1.0-SNAPSHOT
+    ports:
+      - '4200:4200'
+    volumes:
+      - /home/mati/code/pandatronik/ptr-ui/src:/app/src
+    stdin_open: true
+    tty: true
+    depends_on:
+      - pandatronik-backend

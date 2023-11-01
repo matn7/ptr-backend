@@ -58,12 +58,12 @@ public interface DaysRepository extends CrudRepository<DaysEntity, Long>, Entity
     List<Object[]> findByMonthAndYearData(@Param("userId") UserEntity userEntity, @Param("month") int month,
                                              @Param("year") int year);
 
-    @Query("SELECT d.rateDay "
-            + " FROM CalendarEntity c"
-            + " LEFT JOIN c.days d WITH d.userId = :userId"
-            + " WHERE YEAR(c.calendarDate) = :year AND MONTH(c.calendarDate) = :month"
-            + " ORDER BY c.calendarDate")
-    Optional<List<Integer>> findByMonthAndYearDailyData(@Param("userId") UserEntity userEntity,
-        @Param("year") int year, @Param("month") int month);
+//    @Query("SELECT d.rateDay "
+//            + " FROM CalendarEntity c"
+//            + " LEFT JOIN c.days d WITH d.userId = :userId"
+//            + " WHERE YEAR(c.calendarDate) = :year AND MONTH(c.calendarDate) = :month"
+//            + " ORDER BY c.calendarDate")
+//    Optional<List<Integer>> findByMonthAndYearDailyData(@Param("userId") UserEntity userEntity,
+//        @Param("year") int year, @Param("month") int month);
 
 }

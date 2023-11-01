@@ -9,8 +9,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableJpaRepositories(basePackages = "com.pandatronik.backend.persistence.repositories")
 @EntityScan(basePackages = "com.pandatronik.backend.persistence.domain")
-@PropertySource("file:///${user.home}/.pandatronik/application-common.properties")
-@PropertySource("file:///${user.home}/.pandatronik/stripe.properties")
+// todo: move application-common.properties to docker
+//@PropertySource("file:///${user.home}/.pandatronik/application-common.properties")
+//@PropertySource("file:///${user.home}/.pandatronik/stripe.properties")
 @EnableTransactionManagement
 public class ApplicationConfig {
 

@@ -70,6 +70,12 @@ COMMIT;
 
 ```sql
 UPDATE `pandatronik_dev`.`user_entity` SET `enabled` = 1 WHERE (`id` = 1);
+
+UPDATE `pandatronik_dev_docker`.`user_entity` SET `enabled` = 1 WHERE (`id` = 1);
+UPDATE `pandatronik_dev_docker`.`user_entity` SET `enabled` = 0 WHERE (`id` = 1);
+
+
+UPDATE `pandatronik_dev_docker`.`user_entity` SET `enabled` = 1 WHERE (`id` = 2);
 ```
 
 # UI
