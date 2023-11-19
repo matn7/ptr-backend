@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ptr-backend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ptr-backend
+  template:
+    metadata:
+      labels:
+        app: ptr-backend
+    spec:
+      containers:
+        - name: ptr-backend
+          image: mateusznowak/kub-ptr-backend:latest
+          env:
+            - name: MYSQL_ADDRESS
+              value: "ptr-mysql-service.default"
+              #value: "10.107.231.160"
+            - name: MYSQL_PORT
+              value: "3306"

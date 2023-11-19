@@ -3,6 +3,7 @@ services:
   pandatronik-mysql:
     container_name: pandatronik-mysql
     image: pandatronik-mysql:1.0-SNAPSHOT
+    #image: mateusznowak/kub-ptr-mysql:latest
     env_file:
       - ./docker/env/mysql.env
     healthcheck:
@@ -12,6 +13,9 @@ services:
   pandatronik-backend:
     container_name: pandatronik-backend
     image: com.pandatronik.rest/pandatronik.rest:1.0-SNAPSHOT
+#    image: mateusznowak/kub-ptr-backend:latest
+    env_file:
+      - ./docker/env/ptr-backend.env
     ports:
       - '8080:8080'
     depends_on:
@@ -20,6 +24,7 @@ services:
   pandatronik-ui:
     container_name: pandatronik-ui
     image: pandatronik-ui:1.0-SNAPSHOT
+#    image: mateusznowak/kub-ptr-ui:latest
     ports:
       - '4200:4200'
     volumes:
