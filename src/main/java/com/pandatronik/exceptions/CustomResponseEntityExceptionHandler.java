@@ -2,6 +2,7 @@ package com.pandatronik.exceptions;
 
 import com.pandatronik.payload.ExceptionResponse;
 import com.pandatronik.web.controllers.users.UserController;
+import jakarta.mail.AuthenticationFailedException;
 import jakarta.validation.ConstraintViolationException;
 import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.slf4j.Logger;
@@ -35,9 +36,9 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
 //    public ResponseEntity<String> handleAuthenticationException(AuthenticationException e) {
 //        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
 //    }
-
+    
     @ExceptionHandler({ResourceNotFoundException.class})
-    public ResponseEntity<Object> handleNotFoundException(Exception exception, WebRequest request) {
+    public ResponseEntity<Object> handleNotFoundxception(Exception exception, WebRequest request) {
         return new ResponseEntity<>(ExceptionResponse.builder().body("Resource Not Found").build(),
                 new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
@@ -117,7 +118,7 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
 
     @ExceptionHandler({DataIntegrityViolationException.class})
     protected ResponseEntity<Object> handleDataIntegrityException(Exception exception, WebRequest request) {
-        LOG.info("Login succeeded");
+        LOG.info("Duplicate username");
         // Duplicate entry 'matek_1991'
         List<String> errorMessages = new ArrayList<>();
         Set<String> affectedFields = new HashSet<>();
@@ -132,5 +133,24 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
                 .build();
         return new ResponseEntity<>(responseModel,
                 new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({AuthenticationFailedException.class})
+    protected ResponseEntity<Object> handleRegistrationEmailException(Exception exception, WebRequest request) {
+        LOG.info("Failure during registration process");
+        // Duplicate entry 'matek_1991'
+        List<String> errorMessages = new ArrayList<>();
+        Set<String> affectedFields = new HashSet<>();
+        errorMessages.add("Internal pandatronik error during registration process!");
+        affectedFields.add("");
+        ExceptionResponse responseModel = ExceptionResponse
+                .builder()
+                .errorMessages(errorMessages)
+                .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .affectedFields(affectedFields)
+                .build();
+        return new ResponseEntity<>(responseModel,
+                new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

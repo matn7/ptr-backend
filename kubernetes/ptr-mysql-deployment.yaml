@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ptr-mysql-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ptr-mysql
+  template:
+    metadata:
+      labels:
+        app: ptr-mysql
+    spec:
+      containers:
+        - name: ptr-mysql
+          image: mateusznowak/kub-ptr-mysql:latest
+          env:
+            - name: MYSQL_DATABASE
+              value: "pandatronik_dev_docker"
+            - name: MYSQL_PASSWORD
+              value: "password"
+            - name: MYSQL_ROOT_PASSWORD
+              value: "password"
