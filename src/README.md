@@ -153,3 +153,17 @@ ng g c index/Important
 ng g c index/LessImportant
 ng g c index/ImportantCreate
 ```
+
+**Locations**
+
+/home/mati/code/full-stack/ecommerce-project/frontend/angular-ecommerce
+
+/home/mati/code/spring/spring-boot-unit-testing/spring-boot-unit-testing-main/4.00-starting-project
+
+/home/mati/code/spring/spring-boot-3/09-spring-boot-jpa-advanced-mappings/crud-demo
+
+/home/mati/code/full-stack/ecommerce-project/backend/spring-boot-ecommerce
+
+/home/mati/code/spring/spring-boot-3/10-spring-boot-aop/aopdemo
+
+/home/mati/code/tdd/unit-testing-java

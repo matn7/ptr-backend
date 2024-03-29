@@ -19,11 +19,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ImportantService extends ResourceService<ImportantDTO, ImportantEntity, Long> {
+public class ImportantService extends ResourceService<ImportantDTO, ImportantEntity> {
 
 
     public ImportantService(UserService userService,
-                            EntityRepository<ImportantEntity, Long> entityRepository,
+                            EntityRepository<ImportantEntity> entityRepository,
                             EntityMapper<ImportantDTO, ImportantEntity> entityMapper) {
         super(userService, entityRepository, entityMapper);
     }

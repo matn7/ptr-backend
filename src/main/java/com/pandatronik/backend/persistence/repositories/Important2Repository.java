@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface Important2Repository extends CrudRepository<Important2Entity, Long>, EntityRepository<Important2Entity, Long> {
+public interface Important2Repository extends CrudRepository<Important2Entity, Long>, EntityRepository<Important2Entity> {
 
     @Query("SELECT i FROM Important2Entity i WHERE i.userId = :userId AND i.id = :id")
     Optional<Important2Entity> findById(@Param("userId") UserEntity userId, @Param("id") Long id);

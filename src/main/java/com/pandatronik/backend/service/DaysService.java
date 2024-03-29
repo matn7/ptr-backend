@@ -11,6 +11,7 @@ import com.pandatronik.backend.persistence.repositories.DaysRepository;
 import com.pandatronik.backend.persistence.repositories.EntityRepository;
 import com.pandatronik.backend.service.user.account.UserService;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -19,10 +20,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class DaysService extends ResourceService<DaysDTO, DaysEntity, Long> {
+public class DaysService extends ResourceService<DaysDTO, DaysEntity> {
 
     public DaysService(UserService userService,
-                       EntityRepository<DaysEntity, Long> entityRepository,
+                       EntityRepository<DaysEntity> entityRepository,
                        EntityMapper<DaysDTO, DaysEntity> entityMapper) {
         super(userService, entityRepository, entityMapper);
     }

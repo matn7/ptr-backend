@@ -50,6 +50,10 @@ kubectl delete -f=ptr-ui-deployment.yaml -f=ptr-ui-service.yaml
 kubectl delete -f=ptr-backend-deployment.yaml -f=ptr-backend-service.yaml
 kubectl delete -f=ptr-mysql-deployment.yaml -f=ptr-mysql-service.yaml
 
+
+kubectl get pods
+kubectl logs <POD-NAME>
+
 ###################################
 
 **Build docker image**

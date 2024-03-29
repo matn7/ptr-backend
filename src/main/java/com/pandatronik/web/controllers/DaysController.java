@@ -25,7 +25,7 @@ import java.net.URISyntaxException;
 @Validated
 @RestController
 @RequestMapping(AppConstants.BASE_URL + "/{username}/days")
-public class DaysController extends Resource<DaysDTO, DaysEntity, Long>  {
+public class DaysController extends Resource<DaysDTO, DaysEntity>  {
 
     public DaysController(DaysService daysService) {
         super(daysService);

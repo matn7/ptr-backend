@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ExtraordinaryRepository extends CrudRepository<ExtraordinaryEntity, Long>, EntityRepository<ExtraordinaryEntity, Long> {
+public interface ExtraordinaryRepository extends CrudRepository<ExtraordinaryEntity, Long>, EntityRepository<ExtraordinaryEntity> {
 
     List<ExtraordinaryEntity> findAllByUserId(long userId);
 

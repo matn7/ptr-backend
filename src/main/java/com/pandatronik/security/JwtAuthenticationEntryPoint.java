@@ -24,6 +24,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
                          AuthenticationException e) throws IOException, ServletException {
+        // Unauthorized request goes here
         InvalidLoginResponse loginResponse = new InvalidLoginResponse();
         if (nonNull(httpServletResponse.getHeader(TOKEN_EXPIRED.getId()))) {
             loginResponse.setTokenExpired(TOKEN_EXPIRED.getMessage());

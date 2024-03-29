@@ -13,13 +13,16 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface DaysRepository extends CrudRepository<DaysEntity, Long>, EntityRepository<DaysEntity, Long> {
+public interface DaysRepository extends CrudRepository<DaysEntity, Long>, EntityRepository<DaysEntity> {
 
 //    Iterable<DaysEntity> findAll();
 
     @Query("SELECT d FROM DaysEntity d WHERE d.userId = :userId AND d.id = :id")
     Optional<DaysEntity> findById(@Param("userId") UserEntity userEntity, @Param("id") Long id);
 
+    // all entries created by a single user
+    @Query("SELECT d FROM DaysEntity d WHERE d.userId = :userId")
+    Optional<List<DaysEntity>> findByUserId(@Param("userId") UserEntity userEntity);
 
     @Query("SELECT NEW com.pandatronik.backend.persistence.model.DaysDTO(d.id, d.body, d.rateDay, d.postedOn, d.startDate, u.id) " +
             "FROM UserEntity u " +

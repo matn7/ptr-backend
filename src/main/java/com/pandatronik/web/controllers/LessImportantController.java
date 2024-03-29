@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 @RequestMapping(AppConstants.BASE_URL + "/{username}/lessimportant/1")
-public class LessImportantController extends Resource<LessImportantDTO, LessImportantEntity, Long> {
+public class LessImportantController extends Resource<LessImportantDTO, LessImportantEntity> {
 
     public LessImportantController(LessImportantService taskService) {
         super(taskService);

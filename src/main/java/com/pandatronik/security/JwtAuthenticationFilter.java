@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -21,8 +22,8 @@ import static com.pandatronik.enums.TokenEnum.TOKEN_EXPIRED;
 import static com.pandatronik.security.SecurityConstants.HEADER_STRING;
 import static com.pandatronik.security.SecurityConstants.TOKEN_PREFIX;
 
-
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
     @Autowired
     private JwtTokenProvider tokenProvider;
 

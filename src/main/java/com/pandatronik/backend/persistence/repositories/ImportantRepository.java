@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ImportantRepository extends CrudRepository<ImportantEntity, Long>, EntityRepository<ImportantEntity, Long> {
+public interface ImportantRepository extends CrudRepository<ImportantEntity, Long>, EntityRepository<ImportantEntity> {
 
     @Override
     @Query("SELECT i FROM ImportantEntity i WHERE i.userId = :userId AND i.id = :id")

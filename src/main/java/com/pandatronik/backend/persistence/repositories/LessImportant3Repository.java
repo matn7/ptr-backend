@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface LessImportant3Repository extends CrudRepository<LessImportant3Entity, Long>, EntityRepository<LessImportant3Entity, Long> {
+public interface LessImportant3Repository extends CrudRepository<LessImportant3Entity, Long>, EntityRepository<LessImportant3Entity> {
 
     @Query("SELECT i FROM LessImportant3Entity i WHERE i.userId = :userId AND i.id = :id")
     Optional<LessImportant3Entity> findById(@Param("userId") UserEntity userId, @Param("id") Long id);

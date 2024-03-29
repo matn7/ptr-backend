@@ -18,10 +18,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ExtraordinaryService extends ResourceService<ExtraordinaryDTO, ExtraordinaryEntity, Long>  {
+public class ExtraordinaryService extends ResourceService<ExtraordinaryDTO, ExtraordinaryEntity>  {
 
     public ExtraordinaryService(UserService userService,
-                                EntityRepository<ExtraordinaryEntity, Long> entityRepository,
+                                EntityRepository<ExtraordinaryEntity> entityRepository,
                                 EntityMapper<ExtraordinaryDTO, ExtraordinaryEntity> entityMapper) {
         super(userService, entityRepository, entityMapper);
     }

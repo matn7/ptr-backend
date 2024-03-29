@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 @RequestMapping(AppConstants.BASE_URL + "/{username}/important/1")
-public class ImportantController extends Resource<ImportantDTO, ImportantEntity, Long> {
+public class ImportantController extends Resource<ImportantDTO, ImportantEntity> {
 
     public ImportantController(ImportantService importantService) {
         super(importantService);

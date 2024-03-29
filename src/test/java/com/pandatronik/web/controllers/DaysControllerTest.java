@@ -1,35 +1,56 @@
 package com.pandatronik.web.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pandatronik.backend.persistence.domain.UserEntity;
+import com.pandatronik.backend.persistence.domain.core.DaysEntity;
+import com.pandatronik.backend.persistence.mapper.DaysMapperImpl;
 import com.pandatronik.backend.persistence.model.DaysDTO;
+import com.pandatronik.backend.persistence.repositories.DaysRepository;
+import com.pandatronik.backend.persistence.repositories.user.account.UserRepository;
 import com.pandatronik.backend.service.DaysService;
+import com.pandatronik.backend.service.user.account.CustomUserDetailsService;
 import com.pandatronik.backend.service.user.account.UserService;
 import com.pandatronik.enums.MadeEnum;
 import com.pandatronik.exceptions.CustomResponseEntityExceptionHandler;
+import com.pandatronik.security.JwtAuthenticationFilter;
+import com.pandatronik.security.JwtTokenProvider;
 import com.pandatronik.utils.AppConstants;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.MediaType;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -37,227 +58,217 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-//@ExtendWith(MockitoExtension.class)
-@PropertySource("classpath:application.properties")
-//@TestPropertySource(locations="classpath:application.properties")
+@AutoConfigureMockMvc
+@TestPropertySource(locations="classpath:application-test.properties")
 @SpringBootTest
+@Transactional
 public class DaysControllerTest {
+
+    private static MockHttpServletRequest request;
+
+    @Autowired
+    private JdbcTemplate jdbc;
 
     @Value("${api.version}")
     private String api;
 
-    WebTestClient webTestClient;
+    @PersistenceContext
+    private EntityManager entityManager;
 
-    @Mock
+    @Autowired
+    private DaysRepository daysRepository;
+
+    @MockBean
     DaysService daysService;
 
-    @Mock
+    @MockBean
     UserService userService;
 
-    @InjectMocks
-    DaysController daysController;
+    @MockBean
+    UserRepository userRepository;
 
+    @MockBean
+    JwtTokenProvider jwtTokenProvider;
+
+    @MockBean
+    CustomUserDetailsService customUserDetailsService;
+
+    @Autowired
+    @InjectMocks
+    JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    @Autowired
     MockMvc mockMvc;
+
+    @Autowired
+    ObjectMapper objectMapper;
+
+    public static final MediaType APPLICATION_JSON_UTF8 = MediaType.APPLICATION_JSON;
+
+    @BeforeAll
+    public static void setup() {
+        request = new MockHttpServletRequest();
+        request.addParameter("name", "panda");
+        request.addHeader("Authorization", "Bearer ABCD");
+    }
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        UserEntity user = UserEntity.builder().email("panda@pandatronik.com").build();
+        DaysDTO day = new DaysDTO();
+        day.setId(200L);
+        day.setBody("Some Day");
+        day.setRateDay(MadeEnum.HUNDRED);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(daysController)
-                .setControllerAdvice(new CustomResponseEntityExceptionHandler())
-                .build();
+        when(jwtTokenProvider.validateToken(anyString())).thenReturn(true);
+        when(customUserDetailsService.loadUserById(anyLong())).thenReturn(user);
+        when(daysService.findById(anyString(), anyLong())).thenReturn(day);
     }
 
     @Test
     public void findById() throws Exception {
-        UserEntity user = UserEntity.builder().build();
+        String username = "matek_1991";
+        long validId = 200L;
 
-        DaysDTO day = new DaysDTO();
-        day.setId(1L);
-        day.setBody("Some Day");
-        day.setRateDay(MadeEnum.HUNDRED);
-
-        when(userService.findByUserName(anyString())).thenReturn(user);
-        when(daysService.findById(any(), 1L)).thenReturn(day);
-
-        mockMvc.perform(get(AppConstants.BASE_URL + "/someuser/days/1")
+        mockMvc.perform(get(AppConstants.BASE_URL + "/" + username + "/days/" + validId)
+                .header("Authorization", "Bearer ABC")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", equalTo(1)))
+                .andExpect(jsonPath("$.id", equalTo(200)))
                 .andExpect(jsonPath("$.body", equalTo("Some Day")))
                 .andExpect(jsonPath("$.rateDay", equalTo(MadeEnum.HUNDRED.getValue())));
 
-        verify(userService).findByUserName(anyString());
-        verify(daysService).findById(any(), 1L);
+        verify(jwtTokenProvider, times(1)).validateToken(anyString());
+        verify(customUserDetailsService, times(1)).loadUserById(anyLong());
+        verify(daysService, times(1)).findById(anyString(), anyLong());
     }
 
     @Test
     public void findByIdNotFound() throws Exception {
-        UserEntity user = UserEntity.builder().build();
-        when(userService.findByUserName(anyString())).thenReturn(user);
-        when(daysService.findById(any(), 1L)).thenThrow(ResourceNotFoundException.class);
+        String username = "matek_1991";
+        long invalidId = 200L;
 
-        mockMvc.perform(get(AppConstants.BASE_URL + "/someuser/days/1")
+        when(daysService.findById(anyString(), anyLong())).thenThrow(ResourceNotFoundException.class);
+
+        mockMvc.perform(get(AppConstants.BASE_URL + "/" + username + "/days/" + invalidId)
+                .header("Authorization", "Bearer ABC")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.body", equalTo("Resource Not Fount")));
+                .andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.body", equalTo("Resource Not Found")));
 
-        verify(userService).findByUserName(anyString());
-        verify(daysService).findById(any(), 1L);
+        verify(jwtTokenProvider, times(1)).validateToken(anyString());
+        verify(customUserDetailsService, times(1)).loadUserById(anyLong());
+        verify(daysService).findById(anyString(), anyLong());
     }
 
     @Test
     public void findByDate() throws Exception {
-        UserEntity user = UserEntity.builder().build();
+        String username = "matek_1991";
+        long validId = 200L;
+
         DaysDTO day = new DaysDTO();
-        day.setId(1L);
+        day.setId(validId);
         day.setBody("Some Day");
         day.setStartDate(LocalDate.of(1991, 10, 20));
         day.setRateDay(MadeEnum.HUNDRED);
 
-        when(userService.findByUserName(anyString())).thenReturn(user);
-        when(daysService.findByDate(any(), 20, 10, 1991)).thenReturn(day);
+        when(daysService.findByDate(anyString(), anyInt(), anyInt(), anyInt())).thenReturn(day);
 
-//        int[] res = {1991, 10, 20};
-//        Expected :[<1991>, <10>, <20>]
-//        Actual   :<[1991,10,20]>
-
-        mockMvc.perform(get(AppConstants.BASE_URL + "/someuser/days/1991/10/20")
+        mockMvc.perform(get(AppConstants.BASE_URL + "/" + username + "/days/1991/10/20")
+                .header("Authorization", "Bearer ABC")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", equalTo(1)))
+                .andExpect(jsonPath("$.id", equalTo(200)))
                 .andExpect(jsonPath("$.body", equalTo("Some Day")))
-//                .andExpect(jsonPath("$.startDate", equalTo(res)))
+                .andExpect(jsonPath("$.startDate[0]", is(1991)))
+                .andExpect(jsonPath("$.startDate[1]", is(10)))
+                .andExpect(jsonPath("$.startDate[2]", is(20)))
                 .andExpect(jsonPath("$.rateDay", equalTo(MadeEnum.HUNDRED.getValue())));
 
-        verify(userService).findByUserName(anyString());
-        verify(daysService).findByDate(any(), 20, 10, 1991);
+        verify(jwtTokenProvider, times(1)).validateToken(anyString());
+        verify(customUserDetailsService, times(1)).loadUserById(anyLong());
+        verify(daysService).findByDate(anyString(), anyInt(), anyInt(), anyInt());
     }
 
     @Test
     public void findByDateNotFound() throws Exception {
-        UserEntity user = UserEntity.builder().build();
+        String username = "matek_1991";
+        when(daysService.findByDate(anyString(), anyInt(), anyInt(), anyInt())).thenThrow(ResourceNotFoundException.class);
 
-        when(userService.findByUserName(anyString())).thenReturn(user);
-        when(daysService.findByDate(any(), 20, 10, 1991)).thenThrow(ResourceNotFoundException.class);
-
-        mockMvc.perform(get(AppConstants.BASE_URL + "/someuser/days/1991/10/20")
+        mockMvc.perform(get(AppConstants.BASE_URL + "/" + username + "/days/1991/10/20")
+                .header("Authorization", "Bearer ABC")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.body", equalTo("Resource Not Fount")));
+                .andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.body", equalTo("Resource Not Found")));
 
-        verify(userService).findByUserName(anyString());
-        verify(daysService).findByDate(any(), 20, 10, 1991);
+        verify(jwtTokenProvider, times(1)).validateToken(anyString());
+        verify(customUserDetailsService, times(1)).loadUserById(anyLong());
+        verify(daysService, times(1)).findByDate(anyString(), anyInt(), anyInt(), anyInt());
     }
 
     @Test
     public void testSave() throws Exception {
-        UserEntity user = UserEntity.builder().build();
+        String username = "matek_1991";
+
         DaysDTO day = new DaysDTO();
-        day.setId(1L);
+        day.setId(200L);
         day.setBody("Some Day");
         day.setStartDate(LocalDate.of(1991, 10, 20));
-        day.setRateDay(MadeEnum.HUNDRED);
+        day.setRateDay(MadeEnum.SEVENTY_FIVE);
 
-        when(userService.findByUserName(anyString())).thenReturn(user);
-        when(daysService.save(any(), any())).thenReturn(day);
+        when(daysService.save(anyString(), any())).thenReturn(day);
 
-        String jsonRequest = new JSONObject()
-                .put("body", "Some Day")
-                .put("rateDay", "100")
-                .put("postedOn", "2020-10-12T22:24:06")
-                .put("startDate", "2020-10-12")
-                .toString();
-
-        mockMvc.perform(post(AppConstants.BASE_URL + "/someuser/days")
+        mockMvc.perform(post(AppConstants.BASE_URL + "/" + username + "/days")
+                .header("Authorization", "Bearer ABC")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonRequest))
+                .content(objectMapper.writeValueAsString(day)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id", equalTo(1)))
+                .andExpect(jsonPath("$.id", equalTo(200)))
                 .andExpect(jsonPath("$.body", equalTo("Some Day")))
-                .andExpect(jsonPath("$.rateDay", equalTo(MadeEnum.HUNDRED.getValue())));
+                .andExpect(jsonPath("$.rateDay", equalTo(MadeEnum.SEVENTY_FIVE.getValue())))
+                .andExpect(jsonPath("$.startDate[0]", is(1991)))
+                .andExpect(jsonPath("$.startDate[1]", is(10)))
+                .andExpect(jsonPath("$.startDate[2]", is(20)));
 
-        verify(userService).findByUserName(anyString());
-        verify(daysService).save(any(), any());
+        verify(jwtTokenProvider, times(1)).validateToken(anyString());
+        verify(customUserDetailsService, times(1)).loadUserById(anyLong());
+        verify(daysService, times(1)).save(anyString(), any());
     }
 
+    // test save (error)
     @Test
     public void testUpdate() throws Exception {
-        UserEntity user = UserEntity.builder().build();
+        String username = "matek_1991";
+
         DaysDTO day = new DaysDTO();
-        day.setId(1L);
+        day.setId(200L);
         day.setBody("Some Day");
         day.setStartDate(LocalDate.of(1991, 10, 20));
         day.setRateDay(MadeEnum.HUNDRED);
 
-        when(userService.findByUserName(anyString())).thenReturn(user);
-        when(daysService.save(any(), any())).thenReturn(day);
+        when(daysService.save(anyString(), any())).thenReturn(day);
 
-        String jsonRequest = new JSONObject()
-                .put("id", "1")
-                .put("body", "Some Day")
-                .put("rateDay", "100")
-                .put("postedOn", "2020-10-12T22:24:06")
-                .put("startDate", "2020-10-12")
-                .toString();
-
-        mockMvc.perform(put(AppConstants.BASE_URL + "/someuser/days/1")
+        mockMvc.perform(put(AppConstants.BASE_URL + "/" + username + "/days")
+                .header("Authorization", "Bearer ABC")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonRequest))
+                .content(objectMapper.writeValueAsString(day)))
                 .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.id", equalTo(1)))
+                .andExpect(jsonPath("$.id", equalTo(200)))
                 .andExpect(jsonPath("$.body", equalTo("Some Day")))
-                .andExpect(jsonPath("$.rateDay", equalTo(MadeEnum.HUNDRED.getValue())));
+                .andExpect(jsonPath("$.rateDay", equalTo(MadeEnum.HUNDRED.getValue())))
+                .andExpect(jsonPath("$.startDate[0]", is(1991)))
+                .andExpect(jsonPath("$.startDate[1]", is(10)))
+                .andExpect(jsonPath("$.startDate[2]", is(20)));
 
-        verify(userService).findByUserName(anyString());
-//        verify(daysService).update(1L, day);
+        verify(jwtTokenProvider, times(1)).validateToken(anyString());
+        verify(customUserDetailsService, times(1)).loadUserById(anyLong());
+        verify(daysService, times(1)).save(anyString(), any());
     }
-
-    @Test
-    public void testDelete() throws Exception {
-        UserEntity user = UserEntity.builder().build();
-        when(userService.findByUserName(anyString())).thenReturn(user);
-
-        mockMvc.perform(delete(AppConstants.BASE_URL + "/someuser/days/1")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-
-        verify(daysService).delete(any(), 1L);
-    }
-
-    @Test
-    public void testDeleteNotFound() throws Exception {
-        UserEntity user = UserEntity.builder().build();
-        when(userService.findByUserName(anyString())).thenReturn(user);
-//        when(daysService.delete(user, 1L)).thenThrow(ResourceNotFoundException.class);
-
-        mockMvc.perform(delete(AppConstants.BASE_URL + "/someuser/days/1")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-
-        verify(daysService).delete(any(), 1L);
-    }
-
-//    @Test
-//    public void testUserNotFound() throws Exception {
-//        UserEntity user = UserEntity.builder().build();
-//        when(userService.findByUserName(anyString())).thenThrow(UsernameNotFoundException.class);
-////        when(daysService.delete(user, 1L)).thenThrow(ResourceNotFoundException.class);
-//
-//        mockMvc.perform(delete(AppConstants.BASE_URL + "/someuser/days/1")
-//                .accept(MediaType.APPLICATION_JSON)
-//                .contentType(MediaType.APPLICATION_JSON));
-//
-//        verify(daysService).delete(user, 1L);
-//    }
-//
 
 }

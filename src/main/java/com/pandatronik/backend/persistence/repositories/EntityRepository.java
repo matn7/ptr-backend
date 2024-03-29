@@ -6,8 +6,8 @@ import com.pandatronik.backend.persistence.domain.core.ImportantEntity;
 import java.util.List;
 import java.util.Optional;
 
-public interface EntityRepository<Entity, ID> {
-    Optional<Entity> findById(UserEntity userId, ID id);
+public interface EntityRepository<Entity> {
+    Optional<Entity> findById(UserEntity userId, Long id);
 
     Optional<Entity> findByDate(UserEntity userId, int day, int month, int year);
 
@@ -15,6 +15,6 @@ public interface EntityRepository<Entity, ID> {
 
     <S extends Entity> S save(S entity);
 
-    void deleteById(ID id);
+    void deleteById(Long id);
 
 }

@@ -1,26 +1,25 @@
 package com.pandatronik.backend.service;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
-import com.pandatronik.backend.persistence.domain.core.ImportantEntity;
 import com.pandatronik.backend.persistence.mapper.EntityMapper;
-import com.pandatronik.backend.persistence.model.ImportantDTO;
 import com.pandatronik.backend.persistence.repositories.EntityRepository;
 import com.pandatronik.backend.service.user.account.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public abstract class ResourceService<DTO, Entity, ID> {
+public abstract class ResourceService<DTO, Entity> {
 
     protected final UserService userService;
-    protected final EntityRepository<Entity, ID> entityRepository;
+    protected final EntityRepository<Entity> entityRepository;
     protected final EntityMapper<DTO, Entity> entityMapper;
 
-    public DTO findById(String username, ID id) {
+    public DTO findById(String username, Long id) {
         UserEntity userEntity = userService.findByUserName(username);
         Entity entity = entityRepository.findById(userEntity, id).orElseThrow(ResourceNotFoundException::new);
         return entityMapper.entityToDto(entity);
@@ -56,14 +55,19 @@ public abstract class ResourceService<DTO, Entity, ID> {
                 .collect(Collectors.toList());
     }
 
-
     public DTO update(Long id, DTO dto) {
         Entity entity = entityMapper.dtoToEntity(dto);
         return null;
     }
 
-    public void delete(String username, ID id) {
+    public DTO delete(String username, Long id) {
+        DTO resource = findById(username, id);
+//        UserEntity userEntity = userService.findByUserName(username);
+//        if (userEntity == null) {
+//            throw new UsernameNotFoundException("Username not found");
+//        }
         entityRepository.deleteById(id);
+        return resource;
     }
 
     public List<Object[]> findCountByYearStat(String username, int year) {
@@ -80,6 +84,8 @@ public abstract class ResourceService<DTO, Entity, ID> {
         UserEntity userEntity = userService.findByUserName(username);
         return null;
     }
+
+
 //
 //    private ImportantDTO saveAndReturnDTO(ImportantEntity importantEntity) {
 //        ImportantEntity savedImportant = importantRepository.save(importantEntity);
