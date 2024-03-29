@@ -2,9 +2,15 @@ package com.pandatronik.backend.service;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.Important2Entity;
+import com.pandatronik.backend.persistence.domain.core.ImportantEntity;
+import com.pandatronik.backend.persistence.mapper.EntityMapper;
 import com.pandatronik.backend.persistence.mapper.Important2Mapper;
 import com.pandatronik.backend.persistence.model.Important2DTO;
+import com.pandatronik.backend.persistence.model.ImportantDTO;
+import com.pandatronik.backend.persistence.repositories.EntityRepository;
 import com.pandatronik.backend.persistence.repositories.Important2Repository;
+import com.pandatronik.backend.service.user.account.CustomUserDetailsService;
+import com.pandatronik.backend.service.user.account.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
@@ -14,70 +20,23 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
-public class Important2Service implements ImportantCrudService<Important2DTO, Long> {
+public class Important2Service extends ResourceService<Important2DTO, Important2Entity> {
 
-    private final Important2Mapper important2Mapper;
-    private final Important2Repository importantRepository;
 
-    @Override
-    public Important2DTO findById(UserEntity userEntity, Long id) {
-        return importantRepository.findById(userEntity, id)
-                .map(important2Mapper::importantToImportantDTO)
-                .orElseThrow(ResourceNotFoundException::new);
+    public Important2Service(UserService userService,
+                             EntityRepository<Important2Entity> entityRepository,
+                             EntityMapper<Important2DTO, Important2Entity> entityMapper) {
+        super(userService, entityRepository, entityMapper);
     }
 
     @Override
-    public Important2DTO findByDate(UserEntity userEntity, int year, int month, int day) {
-        return importantRepository.findByDate(userEntity, day, month, year)
-                .map(important2Mapper::importantToImportantDTO)
-                .orElseThrow(ResourceNotFoundException::new);
+    public Important2DTO save(String username, Important2DTO importantDTO) {
+        UserEntity userEntity = userService.findByUserName(username);
+        long userId = userEntity.getId();
+        importantDTO.setUserId(userId);
+        Important2Entity important = entityMapper.dtoToEntity(importantDTO);
+        important.setUserId(userEntity);
+        return saveAndReturnDTO(important);
     }
 
-    @Override
-    public List<Important2DTO> findByDate(UserEntity userEntity, int year, int month) {
-        return importantRepository.findByDate(userEntity, year, month)
-                .stream()
-                .map(important2Mapper::importantToImportantDTO)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public Important2DTO save(Important2DTO important2DTO) {
-        Important2Entity important = important2Mapper.importantDtoToImportant(important2DTO);
-        return saveAndReturn(important);
-    }
-
-    @Override
-    public Important2DTO update(Long id, Important2DTO important2DTO) {
-        Important2Entity important = important2Mapper.importantDtoToImportant(important2DTO);
-        important.setId(id);
-        return saveAndReturn(important);
-    }
-
-    @Override
-    public void delete(UserEntity userEntity, Long id) {
-        importantRepository.deleteById(id);
-    }
-
-    @Override
-    public List<Object[]> findCountByYearStat(UserEntity userEntity, int year) {
-        return importantRepository.findCountByYearStat(userEntity, year);
-    }
-
-    @Override
-    public List<Object[]> findAverageByYearStat(UserEntity userEntity, int year) {
-        return importantRepository.findAverageByYearStat(userEntity, year);
-    }
-
-    @Override
-    public List<Integer> findCountMadeByStartEnd(UserEntity userEntity, LocalDate startDate, LocalDate endDate) {
-        return importantRepository.findCountMadeByStartEnd(userEntity, startDate, endDate);
-    }
-
-    private Important2DTO saveAndReturn(Important2Entity important2Entity) {
-        Important2Entity savedImportant = importantRepository.save(important2Entity);
-        Important2DTO returnDto = important2Mapper.importantToImportantDTO(savedImportant);
-        return returnDto;
-    }
 }

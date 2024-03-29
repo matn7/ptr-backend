@@ -1,19 +1,10 @@
 package com.pandatronik.backend.persistence.domain;
 
-import com.google.common.base.Preconditions;
 import com.pandatronik.converters.LocalDateTimeAttributeConverter;
+import jakarta.persistence.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -44,10 +35,6 @@ public class TokenEntity implements Serializable {
     public TokenEntity() {}
 
     public TokenEntity(String token, UserEntity user, LocalDateTime creationDateTime, int expirationInMinutes) {
-        Preconditions.checkNotNull(token);
-        Preconditions.checkNotNull(user);
-        Preconditions.checkNotNull(creationDateTime);
-        Preconditions.checkNotNull(expirationInMinutes);
 
         if ((null == token) || (null == user) || (null == creationDateTime)) {
             throw new IllegalArgumentException("token, user and creation date time can't be null");

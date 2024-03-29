@@ -1,54 +1,46 @@
 package com.pandatronik.web.controllers;
 
-import com.pandatronik.backend.persistence.domain.UserEntity;
-import com.pandatronik.backend.service.ImportantCrudService;
-import com.pandatronik.backend.service.user.account.UserService;
+import com.pandatronik.backend.service.ResourceService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
-import javax.validation.Valid;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
-public abstract class Resource<T> {
+public abstract class Resource<DTO, Entity> {
 
-    protected final ImportantCrudService<T, Long> taskService;
-    protected final UserService userService;
+    protected final ResourceService<DTO, Entity> resourceService;
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public T findById(@PathVariable("username") String username, @PathVariable("id") Long id) {
-        UserEntity userEntity = userService.findByUserName(username);
-        return taskService.findById(userEntity, id);
+    public DTO findById(@PathVariable("username") String username, @PathVariable("id") Long id) {
+        return resourceService.findById(username, id);
     }
 
     @GetMapping("/{year}/{month}/{day}")
     @ResponseStatus(HttpStatus.OK)
-    public T findByDate(@PathVariable("username") String username,
+    public DTO findByDate(@PathVariable("username") String username,
             @PathVariable("year") int year, @PathVariable("month") int month, @PathVariable("day") int day) {
-
-        UserEntity userEntity = userService.findByUserName(username);
-        // This looks does not works, i think on I
-        return taskService.findByDate(userEntity, year, month, day);
+        return resourceService.findByDate(username, year, month, day);
     }
 
-    public abstract T save(@PathVariable("username") String username,
-                                                @Valid @RequestBody T entity);
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public DTO save(@PathVariable("username") String username, @Valid @RequestBody DTO dto) {
+        return resourceService.save(username, dto);
+    }
 
-    public abstract T update(@PathVariable("username") String username,
-        @PathVariable("id") Long id, @Valid @RequestBody T entity);
-
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    public DTO update(@PathVariable("username") String username, @Valid @RequestBody DTO dto) {
+        return resourceService.save(username, dto);
+    }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable("username") String username, @PathVariable("id") Long id) {
-
-        UserEntity userEntity = userService.findByUserName(username);
-        taskService.delete(userEntity, id);
+    public DTO delete(@PathVariable("username") String username, @PathVariable("id") Long id) {
+        DTO delete = resourceService.delete(username, id);
+        return delete;
     }
 
 }

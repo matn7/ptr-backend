@@ -5,38 +5,24 @@ import com.pandatronik.backend.persistence.domain.Plan;
 import com.pandatronik.backend.persistence.domain.Role;
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.UserRole;
-import com.pandatronik.backend.persistence.repositories.user.account.PlanRepository;
-import com.pandatronik.backend.persistence.repositories.user.account.RoleRepository;
-import com.pandatronik.backend.persistence.repositories.user.account.UserRepository;
 import com.pandatronik.enums.PlansEnum;
 import com.pandatronik.enums.RolesEnum;
-import com.pandatronik.utils.UserUtils;
-import org.assertj.core.internal.bytebuddy.utility.RandomString;
-import org.junit.*;
-import org.junit.rules.TestName;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@RunWith(SpringRunner.class)
+import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest(classes = PandatronikRestApplication.class)
 public class UserRepositoryIntegrationTest extends AbstractIntegrationTest {
 
-
-
-    @Rule public TestName testName = new TestName();
-
-
-    @Before
+    @BeforeAll
     public void init() {
-        Assert.assertNotNull(planRepository);
-        Assert.assertNotNull(roleRepository);
-        Assert.assertNotNull(userRepository);
+        assertNotNull(planRepository);
+        assertNotNull(roleRepository);
+        assertNotNull(userRepository);
     }
 
     @Test
@@ -44,7 +30,7 @@ public class UserRepositoryIntegrationTest extends AbstractIntegrationTest {
         Plan basicPlan = createPlan(PlansEnum.BASIC);
         planRepository.save(basicPlan);
         Plan retrievedPlan = planRepository.findById(PlansEnum.BASIC.getId()).get();
-        Assert.assertNotNull(retrievedPlan);
+        assertNotNull(retrievedPlan);
     }
 
     @Test
@@ -54,26 +40,26 @@ public class UserRepositoryIntegrationTest extends AbstractIntegrationTest {
         roleRepository.save(userRole);
 
         Role retrievedRole = roleRepository.findById(RolesEnum.BASIC.getId()).get();
-        Assert.assertNotNull(retrievedRole);
+        assertNotNull(retrievedRole);
     }
 
     @Test
     public void createNewUser() throws Exception {
 
-        String username = testName.getMethodName();
-        String email = testName.getMethodName() + "@devopsbuddy.com";
+        String username = "testName";
+        String email = "testName" + "@pandatronik.com";
 
         UserEntity basicUser = createUser(username, email);
 
         UserEntity newlyCreatedUser = userRepository.findById(basicUser.getId()).get();
-        Assert.assertNotNull(newlyCreatedUser);
-        Assert.assertTrue(newlyCreatedUser.getId() != 0);
-        Assert.assertNotNull(newlyCreatedUser.getPlan());
-        Assert.assertNotNull(newlyCreatedUser.getPlan().getId());
+        assertNotNull(newlyCreatedUser);
+        assertTrue(newlyCreatedUser.getId() != 0);
+        assertNotNull(newlyCreatedUser.getPlan());
+        assertNotNull(newlyCreatedUser.getPlan().getId());
         Set<UserRole> newlyCreatedUserUserRoles = newlyCreatedUser.getUserRoles();
         for (UserRole ur : newlyCreatedUserUserRoles) {
-            Assert.assertNotNull(ur.getRole());
-            Assert.assertNotNull(ur.getRole().getId());
+            assertNotNull(ur.getRole());
+            assertNotNull(ur.getRole().getId());
         }
 
     }
@@ -81,8 +67,8 @@ public class UserRepositoryIntegrationTest extends AbstractIntegrationTest {
     @Test
     public void testDeleteUser() throws Exception {
 
-        String username = testName.getMethodName();
-        String email = testName.getMethodName() + "@devopsbuddy.com";
+        String username = "testName";
+        String email = "testName" + "@devopsbuddy.com";
 
         UserEntity basicUser = createUser(username, email);
         userRepository.deleteById(basicUser.getId());
@@ -90,27 +76,24 @@ public class UserRepositoryIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testGetUserByEmail() throws Exception {
-        UserEntity user = createUser(testName);
+        UserEntity user = createUser("testName");
 
         UserEntity newlyFoundUser = userRepository.findByEmail(user.getEmail());
-        Assert.assertNotNull(newlyFoundUser);
-        Assert.assertNotNull(newlyFoundUser.getId());
+        assertNotNull(newlyFoundUser);
+        assertNotNull(newlyFoundUser.getId());
     }
 
     @Test
     public void testUpdateUserPassword() throws Exception {
-        UserEntity user = createUser(testName);
-        Assert.assertNotNull(user);
-        Assert.assertNotNull(user.getId());
+        UserEntity user = createUser("testName");
+        assertNotNull(user);
+        assertNotNull(user.getId());
 
         String newPassword = UUID.randomUUID().toString();
 
         userRepository.updateUserPassword(user.getId(), newPassword);
 
         user = userRepository.findById(user.getId()).get();
-        Assert.assertEquals(newPassword, user.getPassword());
-
+        assertEquals(newPassword, user.getPassword());
     }
-
-
 }

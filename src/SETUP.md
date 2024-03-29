@@ -6,7 +6,9 @@
 **Create database**
 
 ```sql
-CREATE DATABASE pandatronik_dev
+CREATE DATABASE pandatronik_dev;
+
+USE pandatronik_dev;
 ```
 
 **Prepare schema**
@@ -64,6 +66,18 @@ INSERT INTO role VALUES (3, 'ROLE_ADMIN');
 COMMIT;
 ```
 
+- Activate dummy user
+
+```sql
+UPDATE `pandatronik_dev`.`user_entity` SET `enabled` = 1 WHERE (`id` = 1);
+
+UPDATE `pandatronik_dev_docker`.`user_entity` SET `enabled` = 1 WHERE (`id` = 1);
+UPDATE `pandatronik_dev_docker`.`user_entity` SET `enabled` = 0 WHERE (`id` = 1);
+
+
+UPDATE `pandatronik_dev_docker`.`user_entity` SET `enabled` = 1 WHERE (`id` = 2);
+```
+
 # UI
 
 **Pull code from github**
@@ -72,6 +86,8 @@ COMMIT;
 
 ```console
 npm install
+
+npm start
 ```
 
 ## Way to update mysql primary key

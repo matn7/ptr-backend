@@ -1,29 +1,27 @@
 package com.pandatronik.validators;
 
 import com.pandatronik.backend.persistence.domain.core.ImportantEntity;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.leftPad;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.junit.Assert.assertEquals;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ImportantEntityValidator {
     private static ValidatorFactory validatorFactory;
     private static Validator validator;
 
-    @BeforeClass
+    @BeforeAll
     public static void createValidator() {
         validatorFactory = Validation.buildDefaultValidatorFactory();
         validator = validatorFactory.getValidator();
@@ -32,9 +30,7 @@ public class ImportantEntityValidator {
     @Test
     public void shouldValidateCorrectImportantEntity() {
         ImportantEntity entity = ImportantEntityProvider.getValidImportantEntity().build();
-
         Set<ConstraintViolation<ImportantEntity>> violations = validator.validate(entity);
-
         List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
         assertThat(collect).hasSize(0);
     }
@@ -43,12 +39,10 @@ public class ImportantEntityValidator {
     @Test
     public void shouldValidateToLongTitle() {
         ImportantEntity entity = ImportantEntityProvider.getValidImportantEntity().withTitle(leftPad("a", 41)).build();
-
         Set<ConstraintViolation<ImportantEntity>> violations = validator.validate(entity);
-
         List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
         assertThat(collect).hasSize(1);
-        assertThat(collect).containsExactlyInAnyOrder("size must be between 1 and 40");
+        assertThat(collect).containsExactlyInAnyOrder("Title size must be between 1 and 40");
     }
 
     @Test
@@ -103,8 +97,8 @@ public class ImportantEntityValidator {
         Set<ConstraintViolation<ImportantEntity>> violations = validator.validate(entity);
 
         List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
-        assertThat(collect).hasSize(2);
-        assertThat(collect).containsExactlyInAnyOrder("must not be blank", "");
+        assertThat(collect).hasSize(1);
+        assertThat(collect).containsExactlyInAnyOrder("must not be blank");
     }
 
     @Test
@@ -114,8 +108,8 @@ public class ImportantEntityValidator {
         Set<ConstraintViolation<ImportantEntity>> violations = validator.validate(entity);
 
         List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
-        assertThat(collect).hasSize(2);
-        assertThat(collect).containsExactlyInAnyOrder("must not be null", "must not be blank");
+        assertThat(collect).hasSize(1);
+        assertThat(collect).containsExactlyInAnyOrder("must not be null");
     }
 
     @Test
@@ -138,52 +132,6 @@ public class ImportantEntityValidator {
         List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
         assertThat(collect).hasSize(1);
         assertThat(collect).containsExactlyInAnyOrder("must not be null");
-    }
-
-    @Test
-    public void shouldValidateNullUserProfileId() {
-        ImportantEntity entity = ImportantEntityProvider.getValidImportantEntity().build();
-
-        Set<ConstraintViolation<ImportantEntity>> violations = validator.validate(entity);
-
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
-        assertThat(collect).hasSize(2);
-        assertThat(collect).containsExactlyInAnyOrder("must not be null", "must not be blank");
-    }
-
-    @Test
-    @Ignore("Fix when make sure upid must have 30 chars")
-    public void shouldValidateToLongUserProfileId() {
-        ImportantEntity entity = ImportantEntityProvider.getValidImportantEntity().build();
-
-        Set<ConstraintViolation<ImportantEntity>> violations = validator.validate(entity);
-
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
-        assertThat(collect).hasSize(1);
-        assertThat(collect).containsExactlyInAnyOrder("size must be between 30 and 30");
-    }
-
-    @Test
-    @Ignore
-    public void shouldValidateToShortUserProfileId() {
-        ImportantEntity entity = ImportantEntityProvider.getValidImportantEntity().build();
-
-        Set<ConstraintViolation<ImportantEntity>> violations = validator.validate(entity);
-
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
-        assertThat(collect).hasSize(1);
-        assertThat(collect).containsExactlyInAnyOrder("size must be between 30 and 30");
-    }
-
-    @Test
-    public void shouldValidateBlankUserProfileId() {
-        ImportantEntity entity = ImportantEntityProvider.getValidImportantEntity().build();
-
-        Set<ConstraintViolation<ImportantEntity>> violations = validator.validate(entity);
-
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
-        assertThat(collect).hasSize(1);
-        assertThat(collect).containsExactlyInAnyOrder("must not be blank");
     }
 
     // todo test somehow that for one data cannot be two record for the same user

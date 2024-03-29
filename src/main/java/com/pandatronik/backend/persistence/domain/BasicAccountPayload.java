@@ -1,8 +1,7 @@
 package com.pandatronik.backend.persistence.domain;
 
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Email;
-
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 public class BasicAccountPayload implements Serializable {

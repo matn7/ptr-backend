@@ -1,10 +1,9 @@
 package com.pandatronik.backend.persistence.domain;
 
-import com.google.common.base.Preconditions;
 import com.pandatronik.enums.PlansEnum;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.io.Serializable;
 
 @Entity
@@ -22,7 +21,6 @@ public class Plan implements Serializable {
     }
 
     public Plan(PlansEnum plansEnum) {
-    	Preconditions.checkNotNull(plansEnum);
         this.id = plansEnum.getId();
         this.name = plansEnum.getPlanName();
     }

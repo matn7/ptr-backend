@@ -32,7 +32,7 @@ public interface UserRepository extends CrudRepository<UserEntity, Long> {
 
 	@Transactional
 	@Modifying
-	@Query("update UserEntity u set u.enabled = 1 where u.id = :userId")
+	@Query("update UserEntity u set u.enabled = true where u.id = :userId")
 	void activateUser(@Param("userId") long userId);
 
 //	@Transactional

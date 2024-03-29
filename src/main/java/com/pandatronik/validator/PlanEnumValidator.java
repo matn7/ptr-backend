@@ -1,9 +1,8 @@
 package com.pandatronik.validator;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
-
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class PlanEnumValidator implements ConstraintValidator<PlanEnumConstraint, UserEntity> {
 

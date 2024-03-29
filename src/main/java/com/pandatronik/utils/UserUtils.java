@@ -4,8 +4,7 @@ import com.pandatronik.backend.persistence.domain.BasicAccountPayload;
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.web.controllers.users.ForgotMyPasswordResource;
 import com.pandatronik.web.controllers.users.SignupResource;
-
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class UserUtils {
 

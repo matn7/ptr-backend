@@ -5,18 +5,11 @@ import com.pandatronik.backend.persistence.domain.PasswordResetToken;
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.repositories.user.account.PasswordResetTokenRepository;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.assertj.core.internal.bytebuddy.utility.RandomString;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TestName;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -25,7 +18,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@RunWith(SpringRunner.class)
+import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest(classes = PandatronikRestApplication.class)
 public class PasswordResetTokenIntegrationTest extends AbstractIntegrationTest {
     @Value("${token.expiration.length.minutes}")
@@ -34,21 +28,13 @@ public class PasswordResetTokenIntegrationTest extends AbstractIntegrationTest {
     @Autowired
     private PasswordResetTokenRepository passwordResetTokenRepository;
 
-    @Rule
-    public TestName testName = new TestName();
-
-    @Before
-    public void init() {
-        Assert.assertFalse(expirationTimeInMinutes == 0);
-    }
-
     @Test
     public void tokenExpirationLength() throws Exception {
         String generatedString = RandomStringUtils.randomAlphabetic(10);
 
         UserEntity user = createUser(generatedString);
-        Assert.assertNotNull(user);
-        Assert.assertNotNull(user.getId());
+        assertNotNull(user);
+        assertNotNull(user.getId());
 
         LocalDateTime now = LocalDateTime.now(Clock.systemUTC());
         String token = UUID.randomUUID().toString();
@@ -58,8 +44,8 @@ public class PasswordResetTokenIntegrationTest extends AbstractIntegrationTest {
         PasswordResetToken passwordResetToken = createPasswordResetToken(token, user, now);
 
         LocalDateTime actualTime = passwordResetToken.getExpiryDate();
-        Assert.assertNotNull(actualTime);
-        Assert.assertEquals(expectedTime, actualTime);
+        assertNotNull(actualTime);
+        assertEquals(expectedTime, actualTime);
     }
 
     @Test
@@ -73,9 +59,9 @@ public class PasswordResetTokenIntegrationTest extends AbstractIntegrationTest {
         createPasswordResetToken(token, user, now);
 
         PasswordResetToken retrievedPasswordResetToken = passwordResetTokenRepository.findByToken(token);
-        Assert.assertNotNull(retrievedPasswordResetToken);
-        Assert.assertNotNull(retrievedPasswordResetToken.getId());
-        Assert.assertNotNull(retrievedPasswordResetToken.getUser());
+        assertNotNull(retrievedPasswordResetToken);
+        assertNotNull(retrievedPasswordResetToken.getId());
+        assertNotNull(retrievedPasswordResetToken.getUser());
     }
 
     @Test
@@ -91,7 +77,7 @@ public class PasswordResetTokenIntegrationTest extends AbstractIntegrationTest {
         passwordResetTokenRepository.deleteById(tokenId);
 
         PasswordResetToken shouldNotExistToken = passwordResetTokenRepository.findById(tokenId).get();
-        Assert.assertNull(shouldNotExistToken);
+        assertNull(shouldNotExistToken);
     }
 
     @Test
@@ -108,7 +94,7 @@ public class PasswordResetTokenIntegrationTest extends AbstractIntegrationTest {
         userRepository.deleteById(user.getId());
 
         Set<PasswordResetToken> shouldBeEmpty = passwordResetTokenRepository.findAllByUserId(user.getId());
-        Assert.assertTrue(shouldBeEmpty.isEmpty());
+        assertTrue(shouldBeEmpty.isEmpty());
 
 
     }
@@ -134,10 +120,10 @@ public class PasswordResetTokenIntegrationTest extends AbstractIntegrationTest {
         UserEntity foundUser = userRepository.findById(user.getId()).get();
 
         Set<PasswordResetToken> actualTokens = passwordResetTokenRepository.findAllByUserId(foundUser.getId());
-        Assert.assertTrue(actualTokens.size() == tokens.size());
+        assertTrue(actualTokens.size() == tokens.size());
         List<String> tokensAsList = tokens.stream().map(prt -> prt.getToken()).collect(Collectors.toList());
         List<String> actualTokensAsList = actualTokens.stream().map(prt -> prt.getToken()).collect(Collectors.toList());
-        Assert.assertEquals(tokensAsList, actualTokensAsList);
+        assertEquals(tokensAsList, actualTokensAsList);
 
     }
 
@@ -145,7 +131,7 @@ public class PasswordResetTokenIntegrationTest extends AbstractIntegrationTest {
 
         PasswordResetToken passwordResetToken = new PasswordResetToken(token, user, now, expirationTimeInMinutes);
         passwordResetTokenRepository.save(passwordResetToken);
-        Assert.assertNotNull(passwordResetToken.getId());
+        assertNotNull(passwordResetToken.getId());
         return passwordResetToken;
     }
 }

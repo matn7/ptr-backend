@@ -1,6 +1,7 @@
 package com.pandatronik.backend.persistence.repositories;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
+import com.pandatronik.backend.persistence.domain.core.DaysEntity;
 import com.pandatronik.backend.persistence.domain.core.ExtraordinaryEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -11,21 +12,26 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ExtraordinaryRepository extends CrudRepository<ExtraordinaryEntity, Long> {
+public interface ExtraordinaryRepository extends CrudRepository<ExtraordinaryEntity, Long>, EntityRepository<ExtraordinaryEntity> {
 
-    List<ExtraordinaryEntity> findAllByUserEntity(UserEntity userEntity);
+    List<ExtraordinaryEntity> findAllByUserId(long userId);
 
-    @Query("SELECT i FROM ExtraordinaryEntity i WHERE i.userEntity =:userEntity AND i.id = :id")
-    Optional<ExtraordinaryEntity> findById(@Param("userEntity") UserEntity userEntity, @Param("id") Long id);
+    @Query("SELECT e FROM ExtraordinaryEntity e WHERE e.userId = :userId AND e.id = :id")
+    Optional<ExtraordinaryEntity> findById(@Param("userId") UserEntity userId, @Param("id") Long id);
 
-    @Query("SELECT i FROM ExtraordinaryEntity i WHERE DAYOFMONTH(i.startDate) = :day AND " +
-            "MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userEntity = :userEntity")
-    Optional<ExtraordinaryEntity> findByDate(@Param("userEntity") UserEntity userEntity,
+    @Query("SELECT e FROM ExtraordinaryEntity e WHERE DAYOFMONTH(e.startDate) = :day AND " +
+            "MONTH(e.startDate) = :month AND YEAR(e.startDate) = :year AND e.userId = :userId")
+    Optional<ExtraordinaryEntity> findByDate(@Param("userId") UserEntity userId,
         @Param("year") int year, @Param("month") int month, @Param("day") int day);
 
-    @Query("SELECT i FROM ExtraordinaryEntity i WHERE " +
-            "MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userEntity = :userEntity")
-    List<ExtraordinaryEntity> findByPartDate(@Param("userEntity") UserEntity userEntity,
+    @Query("SELECT e FROM ExtraordinaryEntity e WHERE " +
+            "MONTH(e.startDate) = :month AND YEAR(e.startDate) = :year AND e.userId = :userId")
+    List<ExtraordinaryEntity> findByDate(@Param("userId") UserEntity userId,
+                                             @Param("year") int year, @Param("month") int month);
+
+    @Query("SELECT e FROM ExtraordinaryEntity e WHERE " +
+            "MONTH(e.startDate) = :month AND YEAR(e.startDate) = :year AND e.userId = :userId")
+    List<ExtraordinaryEntity> findByPartDate(@Param("userId") UserEntity userId,
                                              @Param("year") int year, @Param("month") int month);
 
 }

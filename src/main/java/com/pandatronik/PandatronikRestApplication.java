@@ -1,14 +1,16 @@
 package com.pandatronik;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 
-import javax.annotation.PostConstruct;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -24,11 +26,11 @@ public class PandatronikRestApplication {
     @Value("${webmaster.email}")
     private String webmasterEmail;
 
-    // BUG-1
-    @PostConstruct
-    public void started() {
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-    }
+//    // BUG-1
+//    @PostConstruct
+//    public void started() {
+//        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+//    }
 
     @Bean
     public RequestContextListener requestContextListener(){
@@ -36,13 +38,13 @@ public class PandatronikRestApplication {
         return requestContextListener;
     }
 
-
-    @Bean
-    public LocaleResolver localeResolver() {
-        AcceptHeaderLocaleResolver localeResolver = new AcceptHeaderLocaleResolver();
-        localeResolver.setDefaultLocale(Locale.US);
-        return localeResolver;
-    }
+//    @Bean
+//    @Primary
+//    public LocaleResolver localeResolver() {
+//        AcceptHeaderLocaleResolver localeResolver = new AcceptHeaderLocaleResolver();
+//        localeResolver.setDefaultLocale(Locale.US);
+//        return localeResolver;
+//    }
 
     public static void main(String[] args) {
         SpringApplication.run(PandatronikRestApplication.class, args);

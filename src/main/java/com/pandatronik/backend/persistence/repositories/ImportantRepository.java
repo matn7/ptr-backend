@@ -12,33 +12,37 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ImportantRepository extends CrudRepository<ImportantEntity, Long> {
+public interface ImportantRepository extends CrudRepository<ImportantEntity, Long>, EntityRepository<ImportantEntity> {
 
-    @Query("SELECT i FROM ImportantEntity i WHERE i.userEntity =:userEntity AND i.id = :id")
-    Optional<ImportantEntity> findById(@Param("userEntity") UserEntity userEntity, @Param("id") Long id);
+    @Override
+    @Query("SELECT i FROM ImportantEntity i WHERE i.userId = :userId AND i.id = :id")
+    Optional<ImportantEntity> findById(@Param("userId") UserEntity userId, @Param("id") Long id);
 
+
+    @Override
     @Query("SELECT i FROM ImportantEntity i WHERE DAYOFMONTH(i.startDate) = :day AND " +
-            "MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userEntity = :userEntity")
-    Optional<ImportantEntity> findByDate(@Param("userEntity") UserEntity userEntity, @Param("day") int day,
+            "MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userId = :userId")
+    Optional<ImportantEntity> findByDate(@Param("userId") UserEntity userId, @Param("day") int day,
         @Param("month") int month, @Param("year") int year);
 
+    @Override
     @Query("SELECT i FROM ImportantEntity i WHERE " +
-            "MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userEntity = :userEntity")
-    List<ImportantEntity> findByDate(@Param("userEntity") UserEntity userEntity,
+            "MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userId = :userId")
+    List<ImportantEntity> findByDate(@Param("userId") UserEntity userId,
                                          @Param("year") int year, @Param("month") int month);
 
     // statistics
     @Query("SELECT made, COUNT(made) FROM ImportantEntity i WHERE YEAR(i.startDate) = :year " +
-            "AND i.userEntity =:userEntity GROUP BY i.made")
-    List<Object[]> findCountByYearStat(@Param("userEntity") UserEntity userEntity, @Param("year") int year);
+            "AND i.userId = :userId GROUP BY i.made")
+    List<Object[]> findCountByYearStat(@Param("userId") UserEntity userId, @Param("year") int year);
 
     @Query("SELECT MONTH(i.startDate), AVG(made) FROM ImportantEntity i WHERE YEAR(i.startDate) = :year " +
-            "AND i.userEntity =:userEntity GROUP BY MONTH(i.startDate)")
-    List<Object[]> findAverageByYearStat(@Param("userEntity") UserEntity userEntity, @Param("year") int year);
+            "AND i.userId = :userId GROUP BY MONTH(i.startDate)")
+    List<Object[]> findAverageByYearStat(@Param("userId") UserEntity userId, @Param("year") int year);
 
     @Query("SELECT made FROM ImportantEntity i WHERE i.startDate >= :startDate and i.startDate <= :endDate"
-            + " AND i.userEntity = :userEntity")
-    List<Integer> findCountMadeByStartEnd(@Param("userEntity") UserEntity userEntity, @Param("startDate") LocalDate startDate,
+            + " AND i.userId = :userId")
+    List<Integer> findCountMadeByStartEnd(@Param("userId") UserEntity userId, @Param("startDate") LocalDate startDate,
                                           @Param("endDate") LocalDate endDate);
 
 

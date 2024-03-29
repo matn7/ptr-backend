@@ -2,10 +2,16 @@ package com.pandatronik.backend.service;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.DaysEntity;
+import com.pandatronik.backend.persistence.domain.core.Important2Entity;
 import com.pandatronik.backend.persistence.mapper.DaysMapper;
+import com.pandatronik.backend.persistence.mapper.EntityMapper;
 import com.pandatronik.backend.persistence.model.DaysDTO;
+import com.pandatronik.backend.persistence.model.Important2DTO;
 import com.pandatronik.backend.persistence.repositories.DaysRepository;
+import com.pandatronik.backend.persistence.repositories.EntityRepository;
+import com.pandatronik.backend.service.user.account.UserService;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -14,76 +20,22 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
-public class DaysService implements DaysCrudService<DaysDTO, Long> {
+public class DaysService extends ResourceService<DaysDTO, DaysEntity> {
 
-    private final DaysRepository daysRepository;
-    private final DaysMapper daysMapper;
-
-    @Override
-    public DaysDTO findById(UserEntity userEntity, Long id) {
-        return daysRepository.findById(userEntity, id)
-                .map(daysMapper::daysToDaysDTO)
-                .orElseThrow(ResourceNotFoundException::new);
+    public DaysService(UserService userService,
+                       EntityRepository<DaysEntity> entityRepository,
+                       EntityMapper<DaysDTO, DaysEntity> entityMapper) {
+        super(userService, entityRepository, entityMapper);
     }
 
     @Override
-    public List<DaysDTO> findByDate(UserEntity userEntity, int year, int month) {
-        return daysRepository.findByPartDate(userEntity, year, month)
-                .stream()
-                .map(daysMapper::daysToDaysDTO)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public DaysDTO findByDate(UserEntity userEntity, int day, int month, int year) {
-        return daysRepository.findByDate(userEntity, day, month, year)
-                .map(daysMapper::daysToDaysDTO)
-                .orElseThrow(ResourceNotFoundException::new);
-    }
-
-    @Override
-    public DaysDTO save(DaysDTO daysDTO) {
-        DaysEntity days = daysMapper.daysDtoToDays(daysDTO);
+    public DaysDTO save(String username, DaysDTO daysDTO) {
+        UserEntity userEntity = userService.findByUserName(username);
+        long userId = userEntity.getId();
+        daysDTO.setUserId(userId);
+        DaysEntity days = entityMapper.dtoToEntity(daysDTO);
+        days.setUserId(userEntity);
         return saveAndReturnDTO(days);
     }
 
-    @Override
-    public DaysDTO update(Long id, DaysDTO daysDTO) {
-        DaysEntity days = daysMapper.daysDtoToDays(daysDTO);
-        days.setId(id);
-        return saveAndReturnDTO(days);
-    }
-
-    @Override
-    public void delete(UserEntity userEntity, Long id) {
-        // check whether user can delete other users record known its id
-        daysRepository.deleteById(id);
-    }
-
-    @Override
-    public List<Integer> findByYearData(UserEntity userEntity, int year) {
-        return  daysRepository.findByYearData(userEntity, year);
-    }
-
-    @Override
-    public List<Object[]> findAverageByYearData(UserEntity userEntity, int year) {
-        return  daysRepository.findAverageByYearData(userEntity, year);
-    }
-
-    @Override
-    public List<Object[]> findByMonthAndYearData(UserEntity userEntity, int month, int year) {
-        return daysRepository.findByMonthAndYearData(userEntity, month, year);
-    }
-
-    @Override
-    public Optional<List<Integer>> findByMonthAndYearDailyData(UserEntity userEntity, int year, int month) {
-        return daysRepository.findByMonthAndYearDailyData(userEntity, year, month);
-    }
-
-    private DaysDTO saveAndReturnDTO(DaysEntity daysEntity) {
-        DaysEntity savedDays = daysRepository.save(daysEntity);
-        DaysDTO returnDto = daysMapper.daysToDaysDTO(savedDays);
-        return returnDto;
-    }
 }

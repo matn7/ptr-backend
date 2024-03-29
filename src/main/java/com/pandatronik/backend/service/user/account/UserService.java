@@ -78,7 +78,7 @@ public class UserService {
 	
 	public UserEntity findByUserName(String username) {
 		return userRepository.findByUsername(username)
-				.orElseThrow(() -> new UsernameNotFoundException("Username " + username + " no found"));
+				.orElseThrow(() -> new UsernameNotFoundException("Username " + username + " not found"));
 	}
 
 	public UserEntity findByEmail(String email) {
@@ -122,7 +122,7 @@ public class UserService {
 
     @Transactional
 	public void activateUser(long userId) {
-		userRepository.activateUser(userId);
+//		userRepository.activateUser(userId);
 		LOG.debug("User id {} activated successfully", userId);
 
 		Set<TokenEntity> activateToken = tokenRepository.findAllByUserId(userId);

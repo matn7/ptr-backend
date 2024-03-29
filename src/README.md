@@ -1,7 +1,5 @@
 # pandatronik setup
 
-- pandatronik - application to monitor your decisions
-
 ## Setup database
 
 - Fill calendar entity table
@@ -51,10 +49,10 @@ DROP user 'pandatronik-dev-user'@'localhost';
 
 SHOW VARIABLES LIKE 'validate_password%';
 
-SET GLOBAL validate_password_length = 10;
-SET GLOBAL validate_password_number_count = 3;
-SET GLOBAL validate_password_policy = 2;
-SET GLOBAL validate_password_special_char_count = 0;
+SET GLOBAL validate_password.length = 10;
+SET GLOBAL validate_password.number_count = 3;
+SET GLOBAL validate_password.policy = 2;
+SET GLOBAL validate_password.special_char_count = 0;
 
 CREATE USER 'ptrdevuser'@'localhost' IDENTIFIED BY '1yvS8lEnD5';
 
@@ -62,6 +60,12 @@ GRANT SELECT ON pandatronik_dev.* to 'ptrdevuser'@'localhost';
 GRANT INSERT ON pandatronik_dev.* to 'ptrdevuser'@'localhost';
 GRANT DELETE ON pandatronik_dev.* to 'ptrdevuser'@'localhost';
 GRANT UPDATE ON pandatronik_dev.* to 'ptrdevuser'@'localhost';
+```
+
+- Activate dummy user
+
+```sql
+UPDATE `pandatronik_dev`.`user_entity` SET `enabled` = 1 WHERE (`id` = 1);
 ```
 
 ***
@@ -149,3 +153,17 @@ ng g c index/Important
 ng g c index/LessImportant
 ng g c index/ImportantCreate
 ```
+
+**Locations**
+
+/home/mati/code/full-stack/ecommerce-project/frontend/angular-ecommerce
+
+/home/mati/code/spring/spring-boot-unit-testing/spring-boot-unit-testing-main/4.00-starting-project
+
+/home/mati/code/spring/spring-boot-3/09-spring-boot-jpa-advanced-mappings/crud-demo
+
+/home/mati/code/full-stack/ecommerce-project/backend/spring-boot-ecommerce
+
+/home/mati/code/spring/spring-boot-3/10-spring-boot-aop/aopdemo
+
+/home/mati/code/tdd/unit-testing-java

@@ -5,6 +5,11 @@ import com.pandatronik.backend.persistence.domain.core.*;
 import com.pandatronik.validator.NoPandaInUsernameConstraint;
 import com.pandatronik.validator.PasswordConstraint;
 import com.pandatronik.validator.UsernameConstraint;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -14,22 +19,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
-import javax.persistence.Transient;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
@@ -42,7 +32,6 @@ import java.util.Set;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-//@ToString
 @Builder
 @UsernameConstraint
 @PasswordConstraint
@@ -57,34 +46,35 @@ public class UserEntity implements Serializable, UserDetails {
 
 	@NotNull
 	@NotBlank
-	@Size(min = 6, max = 50)
+	@Size(min = 6, max = 20, message = "Username size must be between 6 and 20")
 	@Column(unique = true)
 	private String username;
 
 	@NotNull
 	@NotBlank
-	@Size(min = 6, max = 60)
+	@Size(min = 6, max = 60, message = "Password size must be between 6 and 20")
 	@Column(name = "password")
 	private String password;
-	// pewnie password po szyfrowanie zwieksza rozmiar dzine ?
+	// Password is stored in DB table in such format (60 chars), that why max should be different in DTO:
+	// $2a$10$3MK16ys612eX0KzFqs7aUOc6Ffji/UoXhJ0JsYC.srNhbbzAHydWC
 
 	@Transient
 	private String confirmPassword;
 
 	@NotNull
-	@Email(message = "This not an valid email address")
+	@Email(message = "Email address invalid")
 	@Column(unique = true)
 	private String email;
 
 	@NotNull
 	@NotBlank
-	@Size(max = 50)
+	@Size(max = 20, message = "FirstName size must be between 1 and 20")
 	@Column(name = "first_name")
 	private String firstName;
 
 	@NotNull
 	@NotBlank
-	@Size(max = 50)
+	@Size(max = 20, message = "LastName size must be between 1 and 20")
 	@Column(name = "last_name")
 	private String lastName;
 
@@ -100,33 +90,33 @@ public class UserEntity implements Serializable, UserDetails {
 	private Set<UserRole> userRoles = new HashSet<>();
 
 	@OneToMany(cascade = CascadeType.ALL, // if we delete user we want to their token be deleted too
-			fetch = FetchType.LAZY,
+			fetch = FetchType.EAGER,
 			mappedBy = "user")
 	private Set<PasswordResetToken> passwordResetTokens = new HashSet<>();
 
 	// Tesks, Days
-    @OneToMany(mappedBy = "userEntity")
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
     private List<ImportantEntity> importantEntity;
 
-	@OneToMany(mappedBy = "userEntity")
+	@OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
 	private List<Important2Entity> important2Entity;
 
-    @OneToMany(mappedBy = "userEntity")
+	@OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
     private List<Important3Entity> important3Entity;
 
-	@OneToMany(mappedBy = "userEntity")
+	@OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
 	private List<LessImportantEntity> lessImportantEntity;
 
-	@OneToMany(mappedBy = "userEntity")
+	@OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
 	private List<LessImportant2Entity> lessImportant2Entity;
 
-	@OneToMany(mappedBy = "userEntity")
+	@OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
 	private List<LessImportant3Entity> lessImportant3Entity;
 
-	@OneToMany(mappedBy = "userEntity")
+	@OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
     private List<DaysEntity> daysEntity;
 
-    @OneToMany(mappedBy = "userEntity")
+	@OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
     private List<ExtraordinaryEntity> extraordinaryEntity;
 
 	public Set<PasswordResetToken> getPasswordResetTokens() {

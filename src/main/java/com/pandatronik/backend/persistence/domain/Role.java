@@ -1,12 +1,8 @@
 package com.pandatronik.backend.persistence.domain;
 
 import com.pandatronik.enums.RolesEnum;
+import jakarta.persistence.*;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,7 +17,7 @@ public class Role implements Serializable {
 
 	private String name;
 
-	@OneToMany(mappedBy = "role", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "role", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<UserRole> userRoles = new HashSet<>();
 
 	public Role() {

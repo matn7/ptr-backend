@@ -9,29 +9,28 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.enums.MadeEnum;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-public class LessImportant2DTO implements Comparable<LessImportant2DTO> {
+public class LessImportant2DTO {
 
     private Long id;
 
     @NotNull
-    @NotBlank
-    @Size(min = 1, max = 40)
+    @NotBlank(message = "Title must not be blank")
+    @Size(min = 1, max = 40, message = "Title size must be between 1 and 40")
     private String title;
 
     @NotNull
-    @NotBlank
+    @NotBlank(message = "Body must not be blank")
     @Size(min = 1, max = 255)
     private String body;
 
@@ -50,11 +49,6 @@ public class LessImportant2DTO implements Comparable<LessImportant2DTO> {
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDate startDate;
 
-    @JsonIgnore
-    private UserEntity userEntity;
+    private long userId;
 
-    @Override
-    public int compareTo(LessImportant2DTO lessImportant2DTO) {
-        return this.startDate.compareTo(lessImportant2DTO.startDate);
-    }
 }

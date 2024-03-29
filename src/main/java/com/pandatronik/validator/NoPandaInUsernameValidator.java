@@ -1,10 +1,9 @@
 package com.pandatronik.validator;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import org.apache.commons.lang3.StringUtils;
-
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
 
 public class NoPandaInUsernameValidator implements ConstraintValidator<NoPandaInUsernameConstraint, UserEntity> {
     @Override

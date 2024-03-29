@@ -16,12 +16,12 @@ public class SecurityConstants {
 
     public static final String H2_URL = "h2-console/**";
 
-    public static final String SECRET = "SecretKeyToGenJWTs";
+    public static final String SECRET = "D8279C398FD697394AB756621A4A8218855F7369B4DF7D6EEF9C3D93A853FEDFB71BF92255ACE43CDBB4D93";
 
     public static final String TOKEN_PREFIX = "Bearer ";
 
     public static final String HEADER_STRING = "Authorization";
 
-    public static final long EXPIRATION_TIME = 600_000;
+    public static final long EXPIRATION_TIME = 1800_000;
 
 }

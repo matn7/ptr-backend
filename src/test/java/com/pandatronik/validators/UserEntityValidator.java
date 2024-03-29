@@ -1,14 +1,14 @@
 package com.pandatronik.validators;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -20,7 +20,7 @@ public class UserEntityValidator {
     private static ValidatorFactory validatorFactory;
     private static Validator validator;
 
-    @BeforeClass
+    @BeforeAll
     public static void createValidator() {
         validatorFactory = Validation.buildDefaultValidatorFactory();
         validator = validatorFactory.getValidator();
@@ -147,7 +147,7 @@ public class UserEntityValidator {
     }
 
     @Test
-    @Ignore("fix this")
+    @Disabled("fix this")
     public void shouldValidateInCorrectEmail_3() {
         UserEntity entity = UserEntityProvider.getValidUserEntity().withEmail("panda@panda").build();
 

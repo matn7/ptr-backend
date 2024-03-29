@@ -1,0 +1,16 @@
+{
+  "errorStatus": 400,
+  "errorMsg": {
+    "body": null,
+    "httpStatus": "BAD_REQUEST",
+    "errorMessages": [
+      "Username cannot starts with panda",
+      "Password must contain at least one number, one special character, one upper and lower case letter"
+    ],
+    "affectedFields": [
+      "password",
+      "username"
+    ],
+    "statusCode": 400
+  }
+}
