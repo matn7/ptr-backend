@@ -23,6 +23,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
@@ -34,8 +35,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.empty;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -146,7 +147,9 @@ public class DaysControllerJdbcTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(300)))
                 .andExpect(jsonPath("$.body", equalTo("Days Entry")))
-                .andExpect(jsonPath("$.rateDay", equalTo(MadeEnum.SEVENTY_FIVE.getValue())));
+                .andExpect(jsonPath("$.rateDay", equalTo(MadeEnum.SEVENTY_FIVE.getValue())))
+                .andExpect(jsonPath("$.postedOn", not(empty())))
+                .andExpect(jsonPath("$.userId").doesNotExist());
     }
 
     @Test
@@ -201,7 +204,9 @@ public class DaysControllerJdbcTest {
                 .andExpect(jsonPath("$.startDate[0]", is(2024)))
                 .andExpect(jsonPath("$.startDate[1]", is(3)))
                 .andExpect(jsonPath("$.startDate[2]", is(1)))
-                .andExpect(jsonPath("$.rateDay", equalTo(MadeEnum.SEVENTY_FIVE.getValue())));
+                .andExpect(jsonPath("$.rateDay", equalTo(MadeEnum.SEVENTY_FIVE.getValue())))
+                .andExpect(jsonPath("$.postedOn", not(empty())))
+                .andExpect(jsonPath("$.userId").doesNotExist());
     }
 
     @Test
@@ -227,7 +232,9 @@ public class DaysControllerJdbcTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError())
-                .andExpect(jsonPath("$.body", equalTo("Resource Not Found")));
+                .andExpect(jsonPath("$.body", equalTo("Resource Not Found")))
+                .andExpect(jsonPath("$.httpStatus", is("NOT_FOUND")))
+                .andExpect(jsonPath("$.statusCode", is(HttpStatus.NOT_FOUND.value())));
     }
 
     @Test
@@ -262,7 +269,9 @@ public class DaysControllerJdbcTest {
                 .andExpect(jsonPath("$.rateDay", equalTo(MadeEnum.FIFTY.getValue())))
                 .andExpect(jsonPath("$.startDate[0]", is(2024)))
                 .andExpect(jsonPath("$.startDate[1]", is(3)))
-                .andExpect(jsonPath("$.startDate[2]", is(2)));
+                .andExpect(jsonPath("$.startDate[2]", is(2)))
+                .andExpect(jsonPath("$.postedOn", not(empty())))
+                .andExpect(jsonPath("$.userId").doesNotExist());
 
         Optional<List<DaysEntity>> allUserDaysEntries = daysRepository.findByUserId(userEntity.get());
 
@@ -318,7 +327,9 @@ public class DaysControllerJdbcTest {
                 .andExpect(jsonPath("$.rateDay", equalTo(MadeEnum.TWENTY_FIVE.getValue())))
                 .andExpect(jsonPath("$.startDate[0]", is(2024)))
                 .andExpect(jsonPath("$.startDate[1]", is(3)))
-                .andExpect(jsonPath("$.startDate[2]", is(2)));
+                .andExpect(jsonPath("$.startDate[2]", is(2)))
+                .andExpect(jsonPath("$.postedOn", not(empty())))
+                .andExpect(jsonPath("$.userId").doesNotExist());
 
         Optional<DaysEntity> daysAfterUpdate = daysRepository.findById(validId);
         assertTrue(daysAfterUpdate.isPresent());
@@ -351,9 +362,17 @@ public class DaysControllerJdbcTest {
                         .header("Authorization", "Bearer ABC")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", equalTo(300)))
+                .andExpect(jsonPath("$.body", equalTo("Days Entry")))
+                .andExpect(jsonPath("$.rateDay", equalTo(MadeEnum.SEVENTY_FIVE.getValue())))
+                .andExpect(jsonPath("$.startDate[0]", is(2024)))
+                .andExpect(jsonPath("$.startDate[1]", is(3)))
+                .andExpect(jsonPath("$.startDate[2]", is(1)))
+                .andExpect(jsonPath("$.postedOn", not(empty())))
+                .andExpect(jsonPath("$.userId").doesNotExist());
 
-        Optional<DaysEntity> daysAfterDelete = daysRepository.findById(userEntity.get(), 1L);
+        Optional<DaysEntity> daysAfterDelete = daysRepository.findById(userEntity.get(), validId);
         assertTrue(daysAfterDelete.isEmpty());
     }
 
@@ -377,14 +396,10 @@ public class DaysControllerJdbcTest {
                         .header("Authorization", "Bearer ABC")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.body", equalTo("Resource Not Found")))
+                .andExpect(jsonPath("$.httpStatus", is("NOT_FOUND")))
+                .andExpect(jsonPath("$.statusCode", is(HttpStatus.NOT_FOUND.value())));
     }
 
-//    @AfterEach
-//    public void tearDownDays() {
-////        jdbc.execute(sqlDeleteUserEntity);
-//        jdbc.execute(sqlDeleteDays);
-//        jdbc.execute(sqlTruncateDays);
-//        jdbc.execute(sqlRestartSequenceDays);
-//    }
 }

@@ -1,24 +1,20 @@
 package com.pandatronik.backend.persistence.mapper;
 
 import com.pandatronik.backend.persistence.domain.core.Important3Entity;
-import com.pandatronik.backend.persistence.domain.core.ImportantEntity;
-import com.pandatronik.backend.persistence.model.Important3DTO;
-import com.pandatronik.backend.persistence.model.ImportantDTO;
+import com.pandatronik.backend.persistence.model.TaskDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface Important3Mapper extends EntityMapper<Important3DTO, Important3Entity> {
-
-    Important3Mapper INSTANCE = Mappers.getMapper(Important3Mapper.class);
+public interface Important3Mapper extends EntityMapper<TaskDTO, Important3Entity> {
 
     @Override
     @Mapping(target = "userId", ignore = true)
-    Important3DTO entityToDto(Important3Entity importantEntity);
+    TaskDTO entityToDto(Important3Entity importantEntity);
 
     @Override
     @Mapping(target = "userId", ignore = true)
-    Important3Entity dtoToEntity(Important3DTO importantDTO);
+    Important3Entity dtoToEntity(TaskDTO taskDTO);
 
 }

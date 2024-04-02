@@ -11,8 +11,6 @@ import org.mapstruct.factory.Mappers;
 @Mapper
 public interface ExtraordinaryMapper extends EntityMapper<ExtraordinaryDTO, ExtraordinaryEntity> {
 
-    ExtraordinaryMapper INSTANCE = Mappers.getMapper(ExtraordinaryMapper.class);
-
     @Override
     @Mapping(target = "userId", ignore = true)
     ExtraordinaryDTO entityToDto(ExtraordinaryEntity extraordinaryEntity);

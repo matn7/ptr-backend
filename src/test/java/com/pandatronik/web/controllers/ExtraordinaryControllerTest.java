@@ -2,12 +2,9 @@ package com.pandatronik.web.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pandatronik.backend.persistence.domain.UserEntity;
-import com.pandatronik.backend.persistence.model.TaskDTO;
-import com.pandatronik.backend.service.Important2Service;
-import com.pandatronik.backend.service.Important3Service;
-import com.pandatronik.backend.service.ImportantService;
+import com.pandatronik.backend.persistence.model.ExtraordinaryDTO;
+import com.pandatronik.backend.service.ExtraordinaryService;
 import com.pandatronik.backend.service.user.account.CustomUserDetailsService;
-import com.pandatronik.enums.MadeEnum;
 import com.pandatronik.security.JwtTokenProvider;
 import com.pandatronik.utils.AppConstants;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,7 +34,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @SpringBootTest
 @Transactional
-public class ImportantControllerTest {
+public class ExtraordinaryControllerTest {
+
+    // todo: Spy object test
 
     @Autowired
     MockMvc mockMvc;
@@ -49,13 +48,7 @@ public class ImportantControllerTest {
     CustomUserDetailsService customUserDetailsService;
 
     @MockBean
-    ImportantService importantService;
-
-    @MockBean
-    Important2Service important2Service;
-
-    @MockBean
-    Important3Service important3Service;
+    ExtraordinaryService extraordinaryService;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -63,55 +56,49 @@ public class ImportantControllerTest {
     @BeforeEach
     public void setUp() {
         UserEntity user = UserEntity.builder().id(20L).email("panda@pandatronik.com").build();
-        TaskDTO important = new TaskDTO();
-        important.setId(200L);
-        important.setTitle("Important Task Title");
-        important.setBody("Important Task Body");
-        important.setMade(MadeEnum.HUNDRED);
-        important.setStartDate(LocalDate.of(2024, 4, 28));
-        important.setPostedOn(LocalDateTime.now());
-        important.setUserId(user.getId());
+        ExtraordinaryDTO extraordinary = new ExtraordinaryDTO();
+        extraordinary.setId(200L);
+        extraordinary.setTitle("Extraordinary Title");
+        extraordinary.setBody("Extraordinary Body");
+        extraordinary.setStartDate(LocalDate.of(2024, 12, 24));
+        extraordinary.setPostedOn(LocalDateTime.now());
+        extraordinary.setUserId(user.getId());
 
         when(jwtTokenProvider.validateToken(anyString())).thenReturn(true);
         when(customUserDetailsService.loadUserById(anyLong())).thenReturn(user);
-        when(importantService.findById(anyString(), anyLong())).thenReturn(important);
-        when(important2Service.findById(anyString(), anyLong())).thenReturn(important);
-        when(important3Service.findById(anyString(), anyLong())).thenReturn(important);
+        when(extraordinaryService.findById(anyString(), anyLong())).thenReturn(extraordinary);
     }
 
     @Test
     public void findById() throws Exception {
         String username = "matek_1991";
-        int importantId = 1;
         long validId = 200L;
 
-        mockMvc.perform(get(AppConstants.BASE_URL + "/" + username + "/important/" + importantId + "/" + validId)
+        mockMvc.perform(get(AppConstants.BASE_URL + "/" + username + "/extraordinary/" + validId)
                         .header("Authorization", "Bearer ABC")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(200)))
-                .andExpect(jsonPath("$.title", equalTo("Important Task Title")))
-                .andExpect(jsonPath("$.body", equalTo("Important Task Body")))
-                .andExpect(jsonPath("$.made", equalTo(MadeEnum.HUNDRED.getValue())))
+                .andExpect(jsonPath("$.title", equalTo("Extraordinary Title")))
+                .andExpect(jsonPath("$.body", equalTo("Extraordinary Body")))
                 .andExpect(jsonPath("$.startDate[0]", is(2024)))
-                .andExpect(jsonPath("$.startDate[1]", is(4)))
-                .andExpect(jsonPath("$.startDate[2]", is(28)));
+                .andExpect(jsonPath("$.startDate[1]", is(12)))
+                .andExpect(jsonPath("$.startDate[2]", is(24)));
 
         verify(jwtTokenProvider, times(1)).validateToken(anyString());
         verify(customUserDetailsService, times(1)).loadUserById(anyLong());
-        verify(importantService, times(1)).findById(anyString(), anyLong());
+        verify(extraordinaryService, times(1)).findById(anyString(), anyLong());
     }
 
     @Test
     public void findByIdNotFound() throws Exception {
         String username = "matek_1991";
-        int importantId = 2;
-        long invalidId = 200L;
+        long invalidId = 201L;
 
-        when(important2Service.findById(anyString(), anyLong())).thenThrow(ResourceNotFoundException.class);
+        when(extraordinaryService.findById(anyString(), anyLong())).thenThrow(ResourceNotFoundException.class);
 
-        mockMvc.perform(get(AppConstants.BASE_URL + "/" + username + "/important/" + importantId + "/" + invalidId)
+        mockMvc.perform(get(AppConstants.BASE_URL + "/" + username + "/extraordinary/" + invalidId)
                         .header("Authorization", "Bearer ABC")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -122,53 +109,55 @@ public class ImportantControllerTest {
 
         verify(jwtTokenProvider, times(1)).validateToken(anyString());
         verify(customUserDetailsService, times(1)).loadUserById(anyLong());
-        verify(important2Service).findById(anyString(), anyLong());
+        verify(extraordinaryService).findById(anyString(), anyLong());
     }
 
     @Test
     public void findByDate() throws Exception {
         String username = "matek_1991";
-        int importantId = 3;
+        int year = 1945;
+        int month = 2;
+        int day = 19;
 
         UserEntity user = UserEntity.builder().id(20L).email("panda@pandatronik.com").build();
 
-        TaskDTO important = new TaskDTO();
-        important.setId(200L);
-        important.setTitle("Important Task Title - find by date");
-        important.setBody("Important Task Body - find by date");
-        important.setMade(MadeEnum.SEVENTY_FIVE);
-        important.setStartDate(LocalDate.of(2024, 5, 17));
-        important.setPostedOn(LocalDateTime.now());
-        important.setUserId(user.getId());
+        ExtraordinaryDTO extraordinary = new ExtraordinaryDTO();
+        extraordinary.setId(200L);
+        extraordinary.setTitle("Battle of Iwo Jima");
+        extraordinary.setBody("D-Day");
+        extraordinary.setStartDate(LocalDate.of(year, month, day));
+        extraordinary.setPostedOn(LocalDateTime.now());
+        extraordinary.setUserId(user.getId());
 
-        when(important3Service.findByDate(anyString(), anyInt(), anyInt(), anyInt())).thenReturn(important);
+        when(extraordinaryService.findByDate(anyString(), anyInt(), anyInt(), anyInt())).thenReturn(extraordinary);
 
-        mockMvc.perform(get(AppConstants.BASE_URL + "/" + username + "/important/" + importantId + "/2024/5/17")
+        mockMvc.perform(get(AppConstants.BASE_URL + "/" + username + "/extraordinary/" + year + "/" + month + "/" + day)
                         .header("Authorization", "Bearer ABC")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(200)))
-                .andExpect(jsonPath("$.title", equalTo("Important Task Title - find by date")))
-                .andExpect(jsonPath("$.body", equalTo("Important Task Body - find by date")))
-                .andExpect(jsonPath("$.made", equalTo(MadeEnum.SEVENTY_FIVE.getValue())))
-                .andExpect(jsonPath("$.startDate[0]", is(2024)))
-                .andExpect(jsonPath("$.startDate[1]", is(5)))
-                .andExpect(jsonPath("$.startDate[2]", is(17)));
+                .andExpect(jsonPath("$.title", equalTo("Battle of Iwo Jima")))
+                .andExpect(jsonPath("$.body", equalTo("D-Day")))
+                .andExpect(jsonPath("$.startDate[0]", is(year)))
+                .andExpect(jsonPath("$.startDate[1]", is(month)))
+                .andExpect(jsonPath("$.startDate[2]", is(day)));
 
         verify(jwtTokenProvider, times(1)).validateToken(anyString());
         verify(customUserDetailsService, times(1)).loadUserById(anyLong());
-        verify(important3Service).findByDate(anyString(), anyInt(), anyInt(), anyInt());
+        verify(extraordinaryService).findByDate(anyString(), anyInt(), anyInt(), anyInt());
     }
 
     @Test
     public void findByDateNotFound() throws Exception {
         String username = "matek_1991";
-        int importantId = 1;
+        int year = 1945;
+        int month = 2;
+        int day = 19;
 
-        when(importantService.findByDate(anyString(), anyInt(), anyInt(), anyInt())).thenThrow(ResourceNotFoundException.class);
+        when(extraordinaryService.findByDate(anyString(), anyInt(), anyInt(), anyInt())).thenThrow(ResourceNotFoundException.class);
 
-        mockMvc.perform(get(AppConstants.BASE_URL + "/" + username + "/important/" + importantId + "/2024/5/17")
+        mockMvc.perform(get(AppConstants.BASE_URL + "/" + username + "/extraordinary/" + year + "/" + month + "/" + day)
                         .header("Authorization", "Bearer ABC")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -179,81 +168,81 @@ public class ImportantControllerTest {
 
         verify(jwtTokenProvider, times(1)).validateToken(anyString());
         verify(customUserDetailsService, times(1)).loadUserById(anyLong());
-        verify(importantService, times(1)).findByDate(anyString(), anyInt(), anyInt(), anyInt());
+        verify(extraordinaryService, times(1)).findByDate(anyString(), anyInt(), anyInt(), anyInt());
     }
 
     @Test
     public void testSave() throws Exception {
         String username = "matek_1991";
-        int importantId = 2;
+        int year = 1945;
+        int month = 4;
+        int day = 1;
 
         UserEntity user = UserEntity.builder().id(20L).email("panda@pandatronik.com").build();
 
-        TaskDTO important = new TaskDTO();
-        important.setId(200L);
-        important.setTitle("Important Task Title - save");
-        important.setBody("Important Task Body - save");
-        important.setMade(MadeEnum.TWENTY_FIVE);
-        important.setStartDate(LocalDate.of(2025, 6, 22));
-        important.setPostedOn(LocalDateTime.now());
-        important.setUserId(user.getId());
+        ExtraordinaryDTO extraordinary = new ExtraordinaryDTO();
+        extraordinary.setId(200L);
+        extraordinary.setTitle("Battle of Okinawa");
+        extraordinary.setBody("D-Day");
+        extraordinary.setStartDate(LocalDate.of(year, month, day));
+        extraordinary.setPostedOn(LocalDateTime.now());
+        extraordinary.setUserId(user.getId());
 
-        when(important2Service.save(anyString(), any())).thenReturn(important);
+        when(extraordinaryService.save(anyString(), any())).thenReturn(extraordinary);
 
-        mockMvc.perform(post(AppConstants.BASE_URL + "/" + username + "/important/" + importantId)
+        mockMvc.perform(post(AppConstants.BASE_URL + "/" + username + "/extraordinary")
                         .header("Authorization", "Bearer ABC")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(important)))
+                        .content(objectMapper.writeValueAsString(extraordinary)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", equalTo(200)))
-                .andExpect(jsonPath("$.title", equalTo("Important Task Title - save")))
-                .andExpect(jsonPath("$.body", equalTo("Important Task Body - save")))
-                .andExpect(jsonPath("$.made", equalTo(MadeEnum.TWENTY_FIVE.getValue())))
-                .andExpect(jsonPath("$.startDate[0]", is(2025)))
-                .andExpect(jsonPath("$.startDate[1]", is(6)))
-                .andExpect(jsonPath("$.startDate[2]", is(22)));
+                .andExpect(jsonPath("$.title", equalTo("Battle of Okinawa")))
+                .andExpect(jsonPath("$.body", equalTo("D-Day")))
+                .andExpect(jsonPath("$.startDate[0]", is(year)))
+                .andExpect(jsonPath("$.startDate[1]", is(month)))
+                .andExpect(jsonPath("$.startDate[2]", is(day)));
 
         verify(jwtTokenProvider, times(1)).validateToken(anyString());
         verify(customUserDetailsService, times(1)).loadUserById(anyLong());
-        verify(important2Service, times(1)).save(anyString(), any());
+        verify(extraordinaryService, times(1)).save(anyString(), any());
     }
 
     @Test
     public void testUpdate() throws Exception {
         String username = "matek_1991";
-        int importantId = 3;
+        int year = 1944;
+        int month = 6;
+        int day = 16;
 
         UserEntity user = UserEntity.builder().id(20L).email("panda@pandatronik.com").build();
 
-        TaskDTO important = new TaskDTO();
-        important.setId(200L);
-        important.setTitle("Important Task Title - update");
-        important.setBody("Important Task Body - update");
-        important.setMade(MadeEnum.FIFTY);
-        important.setStartDate(LocalDate.of(2026, 11, 30));
-        important.setPostedOn(LocalDateTime.now());
-        important.setUserId(user.getId());
+        ExtraordinaryDTO extraordinary = new ExtraordinaryDTO();
+        extraordinary.setId(200L);
+        extraordinary.setTitle("Battle of Saipan");
+        extraordinary.setBody("D-Day");
+        extraordinary.setStartDate(LocalDate.of(year, month, day));
+        extraordinary.setPostedOn(LocalDateTime.now());
+        extraordinary.setUserId(user.getId());
 
-        when(important3Service.save(anyString(), any())).thenReturn(important);
+        when(extraordinaryService.save(anyString(), any())).thenReturn(extraordinary);
 
-        mockMvc.perform(put(AppConstants.BASE_URL + "/" + username + "/important/" + importantId)
+        mockMvc.perform(put(AppConstants.BASE_URL + "/" + username + "/extraordinary")
                         .header("Authorization", "Bearer ABC")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(important)))
+                        .content(objectMapper.writeValueAsString(extraordinary)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(200)))
-                .andExpect(jsonPath("$.title", equalTo("Important Task Title - update")))
-                .andExpect(jsonPath("$.body", equalTo("Important Task Body - update")))
-                .andExpect(jsonPath("$.made", equalTo(MadeEnum.FIFTY.getValue())))
-                .andExpect(jsonPath("$.startDate[0]", is(2026)))
-                .andExpect(jsonPath("$.startDate[1]", is(11)))
-                .andExpect(jsonPath("$.startDate[2]", is(30)));
+                .andExpect(jsonPath("$.title", equalTo("Battle of Saipan")))
+                .andExpect(jsonPath("$.body", equalTo("D-Day")))
+                .andExpect(jsonPath("$.startDate[0]", is(year)))
+                .andExpect(jsonPath("$.startDate[1]", is(month)))
+                .andExpect(jsonPath("$.startDate[2]", is(day)));
 
         verify(jwtTokenProvider, times(1)).validateToken(anyString());
         verify(customUserDetailsService, times(1)).loadUserById(anyLong());
-        verify(important3Service, times(1)).save(anyString(), any());
+        verify(extraordinaryService, times(1)).save(anyString(), any());
     }
 
 

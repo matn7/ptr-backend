@@ -3,6 +3,7 @@ package com.pandatronik.backend.persistence.repositories;
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.ImportantEntity;
 import com.pandatronik.backend.persistence.domain.core.LessImportant2Entity;
+import com.pandatronik.backend.persistence.domain.core.LessImportantEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -17,6 +18,9 @@ public interface LessImportant2Repository extends CrudRepository<LessImportant2E
 
     @Query("SELECT i FROM LessImportant2Entity i WHERE i.userId = :userId AND i.id = :id")
     Optional<LessImportant2Entity> findById(@Param("userId") UserEntity userId, @Param("id") Long id);
+
+    @Query("SELECT i FROM LessImportant2Entity i WHERE i.userId = :userId")
+    Optional<List<LessImportant2Entity>> findByUserId(@Param("userId") UserEntity userEntity);
 
     @Query("SELECT i FROM LessImportant2Entity i WHERE DAYOFMONTH(i.startDate) = :day AND " +
             "MONTH(i.startDate) = :month AND YEAR(i.startDate) = :year AND i.userId = :userId")

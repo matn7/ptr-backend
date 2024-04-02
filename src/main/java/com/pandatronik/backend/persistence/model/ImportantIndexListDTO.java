@@ -8,5 +8,5 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class ImportantIndexListDTO {
-    List<ImportantIndexDTO> importantIndexList;
+    List<IndexDTO> importantIndexList;
 }

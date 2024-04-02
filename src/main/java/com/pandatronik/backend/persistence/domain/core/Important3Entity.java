@@ -11,6 +11,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.enums.MadeEnum;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -36,21 +37,25 @@ public class Important3Entity implements Serializable {
     private Long id;
 
     @NotNull
+    @NotBlank
     @Size(min = 1, max = 40)
     private String title;
 
     @NotNull
+    @NotBlank
     @Size(min = 1, max = 255)
     private String body;
 
     @NotNull
     private MadeEnum made;
 
+    @NotNull
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @DateTimeFormat(pattern = "MM/dd/yyyy HH:mm:ss")
     private LocalDateTime postedOn;
 
+    @NotNull
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @DateTimeFormat(pattern = "yyyy/MM/dd")
@@ -59,4 +64,5 @@ public class Important3Entity implements Serializable {
     @ManyToOne
     @JsonIgnore
     private UserEntity userId;
+
 }
