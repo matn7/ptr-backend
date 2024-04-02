@@ -1,18 +1,14 @@
 package com.pandatronik.backend.service;
 
-import com.pandatronik.backend.persistence.model.DaysDTO;
-import com.pandatronik.backend.persistence.model.ExtraordinaryDTO;
-import com.pandatronik.backend.persistence.model.Important2DTO;
-import com.pandatronik.backend.persistence.model.Important3DTO;
-import com.pandatronik.backend.persistence.model.ImportantDTO;
-import com.pandatronik.backend.persistence.model.ImportantIndexDTO;
+import com.pandatronik.backend.persistence.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ImportantIndexService implements IndexService<ImportantIndexDTO> {
+public class ImportantIndexService implements IndexService<IndexDTO> {
 
     private final ExtraordinaryService extraordinaryService;
     private final DaysService daysService;
@@ -21,19 +17,19 @@ public class ImportantIndexService implements IndexService<ImportantIndexDTO> {
     private final Important3Service important3Service;
 
     @Override
-    public ImportantIndexDTO getData(String username, int year, int month) {
-        ImportantIndexDTO importantIndexDTO = new ImportantIndexDTO();
+    public IndexDTO getData(String username, int year, int month) {
+        IndexDTO importantIndexDTO = new IndexDTO();
         final List<ExtraordinaryDTO> extraordinaries = extraordinaryService.findByDate(username, year, month);
         final List<DaysDTO> days = daysService.findByDate(username, year, month);
-        final List<ImportantDTO> important = importantService.findByDate(username, year, month);
-        final List<Important2DTO> important2 = important2Service.findByDate(username, year, month);
-        final List<Important3DTO> important3 = important3Service.findByDate(username, year, month);
+        final List<TaskDTO> important = importantService.findByDate(username, year, month);
+        final List<TaskDTO> important2 = important2Service.findByDate(username, year, month);
+        final List<TaskDTO> important3 = important3Service.findByDate(username, year, month);
 
         importantIndexDTO.getExtraordinaryDTO().addAll(extraordinaries);
         importantIndexDTO.getDaysDTO().addAll(days);
-        importantIndexDTO.getImportantDTO().addAll(important);
-        importantIndexDTO.getImportant2DTO().addAll(important2);
-        importantIndexDTO.getImportant3DTO().addAll(important3);
+        importantIndexDTO.getTaskDTO().addAll(important);
+        importantIndexDTO.getTask2DTO().addAll(important2);
+        importantIndexDTO.getTask3DTO().addAll(important3);
 
         return importantIndexDTO;
     }

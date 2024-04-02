@@ -2,8 +2,6 @@ package com.pandatronik.web.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pandatronik.backend.persistence.domain.UserEntity;
-import com.pandatronik.backend.persistence.domain.core.DaysEntity;
-import com.pandatronik.backend.persistence.mapper.DaysMapperImpl;
 import com.pandatronik.backend.persistence.model.DaysDTO;
 import com.pandatronik.backend.persistence.repositories.DaysRepository;
 import com.pandatronik.backend.persistence.repositories.user.account.UserRepository;
@@ -11,50 +9,37 @@ import com.pandatronik.backend.service.DaysService;
 import com.pandatronik.backend.service.user.account.CustomUserDetailsService;
 import com.pandatronik.backend.service.user.account.UserService;
 import com.pandatronik.enums.MadeEnum;
-import com.pandatronik.exceptions.CustomResponseEntityExceptionHandler;
 import com.pandatronik.security.JwtAuthenticationFilter;
 import com.pandatronik.security.JwtTokenProvider;
 import com.pandatronik.utils.AppConstants;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Optional;
+import java.time.LocalDateTime;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.empty;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -156,7 +141,9 @@ public class DaysControllerTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError())
-                .andExpect(jsonPath("$.body", equalTo("Resource Not Found")));
+                .andExpect(jsonPath("$.body", equalTo("Resource Not Found")))
+                .andExpect(jsonPath("$.httpStatus", is("NOT_FOUND")))
+                .andExpect(jsonPath("$.statusCode", is(HttpStatus.NOT_FOUND.value())));
 
         verify(jwtTokenProvider, times(1)).validateToken(anyString());
         verify(customUserDetailsService, times(1)).loadUserById(anyLong());
@@ -203,7 +190,9 @@ public class DaysControllerTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError())
-                .andExpect(jsonPath("$.body", equalTo("Resource Not Found")));
+                .andExpect(jsonPath("$.body", equalTo("Resource Not Found")))
+                .andExpect(jsonPath("$.httpStatus", is("NOT_FOUND")))
+                .andExpect(jsonPath("$.statusCode", is(HttpStatus.NOT_FOUND.value())));
 
         verify(jwtTokenProvider, times(1)).validateToken(anyString());
         verify(customUserDetailsService, times(1)).loadUserById(anyLong());
@@ -219,6 +208,7 @@ public class DaysControllerTest {
         day.setBody("Some Day");
         day.setStartDate(LocalDate.of(1991, 10, 20));
         day.setRateDay(MadeEnum.SEVENTY_FIVE);
+        day.setPostedOn(LocalDateTime.now());
 
         when(daysService.save(anyString(), any())).thenReturn(day);
 
@@ -233,7 +223,9 @@ public class DaysControllerTest {
                 .andExpect(jsonPath("$.rateDay", equalTo(MadeEnum.SEVENTY_FIVE.getValue())))
                 .andExpect(jsonPath("$.startDate[0]", is(1991)))
                 .andExpect(jsonPath("$.startDate[1]", is(10)))
-                .andExpect(jsonPath("$.startDate[2]", is(20)));
+                .andExpect(jsonPath("$.startDate[2]", is(20)))
+                .andExpect(jsonPath("$.postedOn", not(empty())))
+                .andExpect(jsonPath("$.userId").doesNotExist());
 
         verify(jwtTokenProvider, times(1)).validateToken(anyString());
         verify(customUserDetailsService, times(1)).loadUserById(anyLong());
@@ -250,6 +242,7 @@ public class DaysControllerTest {
         day.setBody("Some Day");
         day.setStartDate(LocalDate.of(1991, 10, 20));
         day.setRateDay(MadeEnum.HUNDRED);
+        day.setPostedOn(LocalDateTime.now());
 
         when(daysService.save(anyString(), any())).thenReturn(day);
 
@@ -264,7 +257,9 @@ public class DaysControllerTest {
                 .andExpect(jsonPath("$.rateDay", equalTo(MadeEnum.HUNDRED.getValue())))
                 .andExpect(jsonPath("$.startDate[0]", is(1991)))
                 .andExpect(jsonPath("$.startDate[1]", is(10)))
-                .andExpect(jsonPath("$.startDate[2]", is(20)));
+                .andExpect(jsonPath("$.startDate[2]", is(20)))
+                .andExpect(jsonPath("$.postedOn", not(empty())))
+                .andExpect(jsonPath("$.userId").doesNotExist());
 
         verify(jwtTokenProvider, times(1)).validateToken(anyString());
         verify(customUserDetailsService, times(1)).loadUserById(anyLong());

@@ -1,6 +1,6 @@
 package com.pandatronik.web.controllers;
 
-import com.pandatronik.backend.persistence.model.LessImportantIndexDTO;
+import com.pandatronik.backend.persistence.model.IndexDTO;
 import com.pandatronik.backend.service.LessImportantIndexService;
 import com.pandatronik.utils.AppConstants;
 import lombok.AllArgsConstructor;
@@ -19,8 +19,8 @@ public class LessImportantIndexController {
     private final LessImportantIndexService lessImportantIndexService;
 
     @GetMapping("/{year}/{month}")
-    public LessImportantIndexDTO findByDate(@PathVariable("username") String username,
-                                            @PathVariable("year") int year, @PathVariable("month") int month) {
+    public IndexDTO findByDate(@PathVariable("username") String username,
+                               @PathVariable("year") int year, @PathVariable("month") int month) {
         return lessImportantIndexService.getData(username, year, month);
     }
 }

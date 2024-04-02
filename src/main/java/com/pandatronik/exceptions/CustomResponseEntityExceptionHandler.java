@@ -38,8 +38,19 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
 //    }
     
     @ExceptionHandler({ResourceNotFoundException.class})
-    public ResponseEntity<Object> handleNotFoundxception(Exception exception, WebRequest request) {
-        return new ResponseEntity<>(ExceptionResponse.builder().body("Resource Not Found").build(),
+    public ResponseEntity<Object> handleNotFoundException(Exception exception, WebRequest request) {
+        List<String> errorMessages = new ArrayList<>();
+        Set<String> affectedFields = new HashSet<>();
+        errorMessages.add("Resource Not Found");
+        ExceptionResponse responseModel = ExceptionResponse
+                .builder()
+                .body("Resource Not Found")
+                .errorMessages(errorMessages)
+                .httpStatus(HttpStatus.NOT_FOUND)
+                .statusCode(HttpStatus.NOT_FOUND.value())
+                .affectedFields(affectedFields)
+                .build();
+        return new ResponseEntity<>(responseModel,
                 new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 

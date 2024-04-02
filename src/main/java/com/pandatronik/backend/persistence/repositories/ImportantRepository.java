@@ -1,6 +1,7 @@
 package com.pandatronik.backend.persistence.repositories;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
+import com.pandatronik.backend.persistence.domain.core.Important2Entity;
 import com.pandatronik.backend.persistence.domain.core.ImportantEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -18,6 +19,9 @@ public interface ImportantRepository extends CrudRepository<ImportantEntity, Lon
     @Query("SELECT i FROM ImportantEntity i WHERE i.userId = :userId AND i.id = :id")
     Optional<ImportantEntity> findById(@Param("userId") UserEntity userId, @Param("id") Long id);
 
+    // all entries created by a single user
+    @Query("SELECT i FROM ImportantEntity i WHERE i.userId = :userId")
+    Optional<List<ImportantEntity>> findByUserId(@Param("userId") UserEntity userEntity);
 
     @Override
     @Query("SELECT i FROM ImportantEntity i WHERE DAYOFMONTH(i.startDate) = :day AND " +

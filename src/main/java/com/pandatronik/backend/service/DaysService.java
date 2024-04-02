@@ -2,22 +2,11 @@ package com.pandatronik.backend.service;
 
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.DaysEntity;
-import com.pandatronik.backend.persistence.domain.core.Important2Entity;
-import com.pandatronik.backend.persistence.mapper.DaysMapper;
 import com.pandatronik.backend.persistence.mapper.EntityMapper;
 import com.pandatronik.backend.persistence.model.DaysDTO;
-import com.pandatronik.backend.persistence.model.Important2DTO;
-import com.pandatronik.backend.persistence.repositories.DaysRepository;
 import com.pandatronik.backend.persistence.repositories.EntityRepository;
 import com.pandatronik.backend.service.user.account.UserService;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class DaysService extends ResourceService<DaysDTO, DaysEntity> {
