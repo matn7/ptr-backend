@@ -62,6 +62,30 @@ GRANT DELETE ON pandatronik_dev.* to 'ptrdevuser'@'localhost';
 GRANT UPDATE ON pandatronik_dev.* to 'ptrdevuser'@'localhost';
 ```
 
+**Test Database**
+
+- MySQL account. To not use root user. Only described for TEST
+
+```sql
+flush privileges;
+
+DROP user 'pandatronik-test-user'@'localhost';
+
+SHOW VARIABLES LIKE 'validate_password%';
+
+SET GLOBAL validate_password.length = 10;
+SET GLOBAL validate_password.number_count = 3;
+SET GLOBAL validate_password.policy = 2;
+SET GLOBAL validate_password.special_char_count = 0;
+
+CREATE USER 'ptrtestuser'@'localhost' IDENTIFIED BY '1yvS8lEnD5';
+
+GRANT SELECT ON pandatronik_test.* to 'ptrtestuser'@'localhost';
+GRANT INSERT ON pandatronik_test.* to 'ptrtestuser'@'localhost';
+GRANT DELETE ON pandatronik_test.* to 'ptrtestuser'@'localhost';
+GRANT UPDATE ON pandatronik_test.* to 'ptrtestuser'@'localhost';
+```
+
 - Activate dummy user
 
 ```sql

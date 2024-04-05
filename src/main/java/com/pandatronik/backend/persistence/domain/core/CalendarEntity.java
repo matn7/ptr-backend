@@ -1,16 +1,6 @@
 package com.pandatronik.backend.persistence.domain.core;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import java.io.Serializable;
-import java.util.Calendar;
 
 //@Entity
 //@Table(name = "calendar_entity")

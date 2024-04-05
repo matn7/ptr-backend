@@ -6,7 +6,10 @@ import com.pandatronik.backend.persistence.domain.UserRole;
 import com.pandatronik.configuration.ValidatorConfiguration;
 import com.pandatronik.enums.PlansEnum;
 import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
 import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -24,12 +27,16 @@ import static com.pandatronik.utils.ValidCredentials.VALID_USERNAME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@ContextConfiguration(loader = AnnotationConfigContextLoader.class,
-        classes = {ValidatorConfiguration.class})
 public class PasswordValidatorTest {
 
-    @Autowired
-    private Validator validator;
+    private static ValidatorFactory validatorFactory;
+    private static Validator validator;
+
+    @BeforeAll
+    public static void createValidator() {
+        validatorFactory = Validation.buildDefaultValidatorFactory();
+        validator = validatorFactory.getValidator();
+    }
 
     @Test
     public void testValidPassword() {

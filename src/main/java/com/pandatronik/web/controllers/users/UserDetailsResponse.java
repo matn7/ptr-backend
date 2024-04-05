@@ -2,9 +2,13 @@ package com.pandatronik.web.controllers.users;
 
 import com.pandatronik.backend.persistence.domain.Plan;
 import com.pandatronik.backend.persistence.domain.UserRole;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Set;
 
+@Getter
+@RequiredArgsConstructor
 public final class UserDetailsResponse {
     private final String email;
     private final String firstName;
@@ -14,17 +18,6 @@ public final class UserDetailsResponse {
     private final boolean enabled;
     private final Plan plan;
     private final Set<UserRole> userRoles;
-
-    public UserDetailsResponse(String email, String firstName, String lastName, String username,
-                               boolean enabled, Plan plan, Set<UserRole> userRoles) {
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.username = username;
-        this.enabled = enabled;
-        this.plan = plan;
-        this.userRoles = userRoles;
-    }
 
     public String getFirstName() {
         return firstName;

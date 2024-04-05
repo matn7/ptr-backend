@@ -12,17 +12,16 @@ public class UsernameValidator implements ConstraintValidator<UsernameConstraint
     static List<String> invalidUsernames = new ArrayList<>();
 
     static {
-        // todo add this to some text, properties file
         invalidUsernames.add("panda");
         invalidUsernames.add("panda2");
         invalidUsernames.add("username");
         invalidUsernames.add("password");
+        invalidUsernames.add("pandatronik");
     }
 
 
     @Override
     public boolean isValid(UserEntity userEntity, ConstraintValidatorContext constraintValidatorContext) {
-
         return !invalidUsernames.contains(userEntity.getUsername());
     }
 }

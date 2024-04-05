@@ -122,7 +122,7 @@ public class UserService {
 
     @Transactional
 	public void activateUser(long userId) {
-//		userRepository.activateUser(userId);
+		userRepository.activateUser(userId);
 		LOG.debug("User id {} activated successfully", userId);
 
 		Set<TokenEntity> activateToken = tokenRepository.findAllByUserId(userId);

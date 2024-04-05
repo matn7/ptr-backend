@@ -13,10 +13,6 @@ public class ImportantEntityUniqueValidator implements ConstraintValidator<Impor
 
     @Override
     public boolean isValid(ImportantEntity importantEntity, ConstraintValidatorContext constraintValidatorContext) {
-//        Optional<ImportantEntity> isRecordExists = importantService.findByDate(importantEntity.getUserProfileId(),
-//                importantEntity.getStartDate().getYear(), importantEntity.getStartDate().getMonthValue(),
-//                importantEntity.getStartDate().getDayOfMonth());
-//        return isRecordExists == null;
         return true;
     }
 }
