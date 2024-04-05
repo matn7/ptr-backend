@@ -1,11 +1,8 @@
 package com.pandatronik.web.controllers.statistics;
 
-import com.pandatronik.backend.persistence.domain.UserEntity;
-import com.pandatronik.backend.service.ImportantService;
 import com.pandatronik.backend.service.Important2Service;
 import com.pandatronik.backend.service.Important3Service;
-import com.pandatronik.backend.service.user.account.UserService;
-import com.pandatronik.exceptions.UserNotFoundException;
+import com.pandatronik.backend.service.ImportantService;
 import com.pandatronik.payload.StartEndRequest;
 import com.pandatronik.web.controllers.ErrorMessage;
 import lombok.AllArgsConstructor;
@@ -15,11 +12,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import static java.util.Objects.isNull;
+
 import static java.util.Objects.nonNull;
 
 @Component

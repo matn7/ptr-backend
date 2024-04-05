@@ -12,21 +12,12 @@ public class UserUtils {
 		throw new AssertionError("Non instantiable");
 	}
 
-	/**
-	 * Creates a user with basic attributes set.
-	 * 
-	 * @param username
-	 *            The username.
-	 * @param email
-	 *            The email.
-	 * @return A User entity
-	 */
 	public static UserEntity createBasicUser(String username, String email) {
 
 		UserEntity user = new UserEntity();
 		user.setUsername(username);
-		user.setPassword("secret123");
-		user.setConfirmPassword("secret123");
+		user.setPassword("Secret123!");
+		user.setConfirmPassword("Secret123!");
 		user.setEmail(email);
 		user.setFirstName("firstName");
 		user.setLastName("lastName");
@@ -47,17 +38,6 @@ public class UserUtils {
 		return user;
 	}
 
-	/**
-	 * Builds and returns the URL to reset the user password.
-	 * 
-	 * @param request
-	 *            The Http Servlet Request
-	 * @param userId
-	 *            The user id
-	 * @param token
-	 *            The token
-	 * @return the URL to reset the user password.
-	 */
 	public static String createPasswordResetUrl(HttpServletRequest request, long userId, String token) {
 		String passwordResetUrl = request.getScheme() + "://localhost:4200"
 				+ request.getContextPath() + ForgotMyPasswordResource.CHANGE_PASSWORD_PATH + "?id=" + userId

@@ -1,3 +1,9 @@
+###
+# START INSTRUCTION
+# - Run pandatronik using docker
+# - Run pandatronik using kubernetes
+###
+
 export DOCKER_HOST=unix:///home/mati/.docker/desktop/docker.sock
 
 docker network create pandatronik-net
@@ -5,7 +11,7 @@ docker network create pandatronik-net
 #docker run --name pandatronik-rest --network pandatronik-net -p 8080:8080 com.pandatronik.rest/pandatronik.rest:1.0-SNAPSHOT
 docker run --name pandatronik-rest --network pandatronik-net com.pandatronik.rest/pandatronik.rest:1.0-SNAPSHOT
 
-docker build -t pandatronik-ui:1.0-SNAPSHOT .
+docker build -t pandatronik-ui:1.2-SNAPSHOT .
 
 docker run --name pandatronik-ui --network pandatronik-net -d --rm -p 4200:4200 pandatronik-ui:1.0-SNAPSHOT
 
@@ -28,7 +34,7 @@ docker-compose down
 
 **pandatronik-backend**
 
-docker tag com.pandatronik.rest/pandatronik.rest:1.0-SNAPSHOT mateusznowak/kub-ptr-backend:latest
+docker tag com.pandatronik.rest/pandatronik.rest:1.2-SNAPSHOT mateusznowak/kub-ptr-backend:latest
 docker push mateusznowak/kub-ptr-backend:latest
 
 **pandatronik-mysql**
@@ -38,7 +44,7 @@ docker push mateusznowak/kub-ptr-mysql:latest
 
 **pandatronik-ui**
 
-docker tag pandatronik-ui:1.0-SNAPSHOT mateusznowak/kub-ptr-ui:latest
+docker tag pandatronik-ui:1.2-SNAPSHOT mateusznowak/kub-ptr-ui:latest
 docker push mateusznowak/kub-ptr-ui:latest
 
 
@@ -51,9 +57,31 @@ kubectl delete -f=ptr-backend-deployment.yaml -f=ptr-backend-service.yaml
 kubectl delete -f=ptr-mysql-deployment.yaml -f=ptr-mysql-service.yaml
 
 
+**verify**
+
+- `spring.datasource.url` points to kubernetes.
+- `data-kube-startup.sql` with plan and role initial data.
+- `spring.jpa.hibernate.ddl-auto=create` to create initial database structure, to be deleted when startup scripts ready.
+- login to mysql container and check databases.
+
+```
+$ docker exec -it 4df114cc4694 /bin/bash
+
+# mysql -u root -p
+
+mysql> show databases;
+mysql> use pandatronik_dev_docker;
+mysql> show tables;
+mysql> 
+```
+
+
+
+
 kubectl get pods
 kubectl logs <POD-NAME>
 
+###################################
 ###################################
 
 **Build docker image**

@@ -13,8 +13,6 @@ import com.pandatronik.backend.service.user.account.UserService;
 import com.pandatronik.enums.MadeEnum;
 import com.pandatronik.security.JwtTokenProvider;
 import com.pandatronik.utils.AppConstants;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +20,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -41,13 +38,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
-@TestPropertySource(locations="classpath:application-test.properties")
+@TestPropertySource(locations="classpath:application-test-mysql.properties")
 @SpringBootTest
 @Transactional
 public class DaysControllerJdbcTest {
@@ -70,23 +67,12 @@ public class DaysControllerJdbcTest {
     @MockBean
     UserService userService;
 
-    // Days scripts
     @Value("${sql.script.create.days}")
     private String sqlCreateDays;
 
     @Value("${sql.script.delete.days}")
     private String sqlDeleteDays;
 
-    @Value("${sql.script.truncate.days}")
-    private String sqlTruncateDays;
-
-    @Value("${sql.script.restart.sequence.days}")
-    private String sqlRestartSequenceDays;
-
-    @Value("${sql.script.check.sequences.days}")
-    private String sqlCheckSequencesDays;
-
-    // User entity scripts
     @Value("${sql.script.create.userEntity}")
     private String sqlCreateUserEntity;
 
@@ -98,6 +84,9 @@ public class DaysControllerJdbcTest {
 
     @Value("${sql.script.disable.fk.check}")
     private String sqlDisableFkCheck;
+
+    @Value("${sql.script.reset.auto.increment}")
+    private String sqlResetAutoIncrement;
 
     @MockBean
     JwtTokenProvider jwtTokenProvider;
@@ -117,10 +106,11 @@ public class DaysControllerJdbcTest {
         when(userService.findById(anyLong())).thenReturn(Optional.of(user));
 
         jdbc.execute(sqlDisableFkCheck);
-        jdbc.execute(sqlCreatePlan);
+        // todo, create plan in script
+//        jdbc.execute(sqlCreatePlan);
 
+        jdbc.execute(sqlResetAutoIncrement);
         jdbc.execute(sqlCreateUserEntity);
-//        jdbc.execute(sqlRestartSequenceDays);
         jdbc.execute(sqlCreateDays);
     }
 
@@ -264,7 +254,7 @@ public class DaysControllerJdbcTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(day)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id", equalTo(1)))
+                .andExpect(jsonPath("$.id", equalTo(301)))
                 .andExpect(jsonPath("$.body", equalTo("Saved day in JDBC Template Test")))
                 .andExpect(jsonPath("$.rateDay", equalTo(MadeEnum.FIFTY.getValue())))
                 .andExpect(jsonPath("$.startDate[0]", is(2024)))
@@ -285,7 +275,7 @@ public class DaysControllerJdbcTest {
     @Test
     public void testUpdate() throws Exception {
         String username = "matek_1991";
-        long validId = 1L;
+        long validId = 301L;
         Optional<UserEntity> userEntity = userRepository.findByUsername(username);
         assertTrue(userEntity.isPresent());
 
@@ -299,16 +289,14 @@ public class DaysControllerJdbcTest {
 
         daysService.save(username, day);
 
-        // in case run all tests, new valid id is 2L
         Optional<DaysEntity> days = daysRepository.findById(validId);
         if (days.isEmpty()) {
-            validId = 2L;
+            validId = 302L;
         }
         days = daysRepository.findById(validId);
         assertTrue(days.isPresent());
         assertEquals("Saved day in JDBC Template Update Test", days.get().getBody());
 
-        // Use the same ID as from day object
         DaysDTO dayUpdated = new DaysDTO();
         dayUpdated.setId(validId);
         dayUpdated.setBody("Saved day in JDBC Template Update Test -- EDITED");

@@ -52,7 +52,7 @@ public class UserEntity implements Serializable, UserDetails {
 
 	@NotNull
 	@NotBlank
-	@Size(min = 6, max = 60, message = "Password size must be between 6 and 20")
+	@Size(min = 6, max = 60, message = "Password size must be between 6 and 60")
 	@Column(name = "password")
 	private String password;
 	// Password is stored in DB table in such format (60 chars), that why max should be different in DTO:
@@ -94,7 +94,6 @@ public class UserEntity implements Serializable, UserDetails {
 			mappedBy = "user")
 	private Set<PasswordResetToken> passwordResetTokens = new HashSet<>();
 
-	// Tesks, Days
     @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
     private List<ImportantEntity> importantEntity;
 

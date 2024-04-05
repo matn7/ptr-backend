@@ -17,13 +17,12 @@ import static org.apache.commons.lang3.StringUtils.leftPad;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ImportantEntityValidator {
-    private static ValidatorFactory validatorFactory;
+public class ImportantEntityValidatorTest {
     private static Validator validator;
 
     @BeforeAll
     public static void createValidator() {
-        validatorFactory = Validation.buildDefaultValidatorFactory();
+        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
         validator = validatorFactory.getValidator();
     }
 
@@ -31,7 +30,7 @@ public class ImportantEntityValidator {
     public void shouldValidateCorrectImportantEntity() {
         ImportantEntity entity = ImportantEntityProvider.getValidImportantEntity().build();
         Set<ConstraintViolation<ImportantEntity>> violations = validator.validate(entity);
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
+        List<String> collect = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
         assertThat(collect).hasSize(0);
     }
 
@@ -40,7 +39,7 @@ public class ImportantEntityValidator {
     public void shouldValidateToLongTitle() {
         ImportantEntity entity = ImportantEntityProvider.getValidImportantEntity().withTitle(leftPad("a", 41)).build();
         Set<ConstraintViolation<ImportantEntity>> violations = validator.validate(entity);
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
+        List<String> collect = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
         assertThat(collect).hasSize(1);
         assertThat(collect).containsExactlyInAnyOrder("Title size must be between 1 and 40");
     }
@@ -51,10 +50,9 @@ public class ImportantEntityValidator {
 
         Set<ConstraintViolation<ImportantEntity>> violations = validator.validate(entity);
 
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
-        assertEquals(collect.get(0), "must not be blank");
+        List<String> collect = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
         assertThat(collect).hasSize(1);
-        assertThat(collect).containsExactlyInAnyOrder("must not be blank");
+        assertThat(collect).containsExactlyInAnyOrder("Title must not be blank");
     }
 
     @Test
@@ -63,9 +61,9 @@ public class ImportantEntityValidator {
 
         Set<ConstraintViolation<ImportantEntity>> violations = validator.validate(entity);
 
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
+        List<String> collect = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
         assertThat(collect).hasSize(2);
-        assertThat(collect).containsExactlyInAnyOrder("must not be null", "must not be blank");
+        assertThat(collect).containsExactlyInAnyOrder("Title must not be blank", "must not be null");
     }
 
     @Test
@@ -74,7 +72,7 @@ public class ImportantEntityValidator {
 
         Set<ConstraintViolation<ImportantEntity>> violations = validator.validate(entity);
 
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
+        List<String> collect = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
         assertThat(collect).hasSize(1);
         assertThat(collect).containsExactlyInAnyOrder("size must be between 1 and 255");
     }
@@ -85,9 +83,9 @@ public class ImportantEntityValidator {
 
         Set<ConstraintViolation<ImportantEntity>> violations = validator.validate(entity);
 
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
+        List<String> collect = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
         assertThat(collect).hasSize(2);
-        assertThat(collect).containsExactlyInAnyOrder("must not be null", "must not be blank");
+        assertThat(collect).containsExactlyInAnyOrder("must not be null", "Body must not be blank");
     }
 
     @Test
@@ -96,9 +94,9 @@ public class ImportantEntityValidator {
 
         Set<ConstraintViolation<ImportantEntity>> violations = validator.validate(entity);
 
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
+        List<String> collect = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
         assertThat(collect).hasSize(1);
-        assertThat(collect).containsExactlyInAnyOrder("must not be blank");
+        assertThat(collect).containsExactlyInAnyOrder("Body must not be blank");
     }
 
     @Test
@@ -107,7 +105,7 @@ public class ImportantEntityValidator {
 
         Set<ConstraintViolation<ImportantEntity>> violations = validator.validate(entity);
 
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
+        List<String> collect = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
         assertThat(collect).hasSize(1);
         assertThat(collect).containsExactlyInAnyOrder("must not be null");
     }
@@ -118,7 +116,7 @@ public class ImportantEntityValidator {
 
         Set<ConstraintViolation<ImportantEntity>> violations = validator.validate(entity);
 
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
+        List<String> collect = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
         assertThat(collect).hasSize(1);
         assertThat(collect).containsExactlyInAnyOrder("must not be null");
     }
@@ -129,7 +127,7 @@ public class ImportantEntityValidator {
 
         Set<ConstraintViolation<ImportantEntity>> violations = validator.validate(entity);
 
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
+        List<String> collect = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
         assertThat(collect).hasSize(1);
         assertThat(collect).containsExactlyInAnyOrder("must not be null");
     }

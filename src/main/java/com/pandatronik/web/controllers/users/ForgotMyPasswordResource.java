@@ -2,9 +2,9 @@ package com.pandatronik.web.controllers.users;
 
 import com.pandatronik.backend.persistence.domain.PasswordResetToken;
 import com.pandatronik.backend.persistence.domain.UserEntity;
-import com.pandatronik.backend.service.user.account.UserService;
 import com.pandatronik.backend.service.user.account.EmailService;
 import com.pandatronik.backend.service.user.account.PasswordResetTokenService;
+import com.pandatronik.backend.service.user.account.UserService;
 import com.pandatronik.payload.EmailRequest;
 import com.pandatronik.payload.LoginRequest;
 import com.pandatronik.utils.UserUtils;
@@ -24,6 +24,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
 import java.time.Clock;
 import java.time.LocalDateTime;
 

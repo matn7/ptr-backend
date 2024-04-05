@@ -11,8 +11,7 @@ public class PasswordValidator implements ConstraintValidator<PasswordConstraint
 
         String regex = "^(?=.*?\\p{Lu})(?=.*?\\p{Ll})(?=.*?\\d)(?=.*?[`~!@#$%^&*()\\-_=+\\\\|\\[{\\]};:'\",<.>/?]).*$";
 
-        boolean matches = Pattern.compile(regex).matcher(userEntity.getPassword()).matches();
-        return matches;
+        return Pattern.compile(regex).matcher(userEntity.getPassword()).matches();
     }
 
 

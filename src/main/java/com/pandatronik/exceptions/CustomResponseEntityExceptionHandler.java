@@ -7,6 +7,8 @@ import jakarta.validation.ConstraintViolationException;
 import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpHeaders;
@@ -30,6 +32,11 @@ import java.util.Set;
 @ControllerAdvice
 public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
+    private final MessageSource messageSource;
+    public CustomResponseEntityExceptionHandler(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
+
     private static final Logger LOG = LoggerFactory.getLogger(CustomResponseEntityExceptionHandler.class);
 
 //    @ExceptionHandler({ AuthenticationException.class })
@@ -41,10 +48,11 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     public ResponseEntity<Object> handleNotFoundException(Exception exception, WebRequest request) {
         List<String> errorMessages = new ArrayList<>();
         Set<String> affectedFields = new HashSet<>();
-        errorMessages.add("Resource Not Found");
+        String message = messageSource.getMessage("resource.not.found.message", null, null);
+        errorMessages.add(message);
         ExceptionResponse responseModel = ExceptionResponse
                 .builder()
-                .body("Resource Not Found")
+                .body(message)
                 .errorMessages(errorMessages)
                 .httpStatus(HttpStatus.NOT_FOUND)
                 .statusCode(HttpStatus.NOT_FOUND.value())

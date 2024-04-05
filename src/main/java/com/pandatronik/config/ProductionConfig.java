@@ -1,32 +1,25 @@
 package com.pandatronik.config;
 
 import com.pandatronik.backend.service.user.account.EmailService;
-import com.pandatronik.backend.service.user.account.SmtpEmailService;
-import org.h2.server.web.WebServlet;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import com.pandatronik.backend.service.user.account.MockEmailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @Profile("prod")
-//@PropertySource("file:///${user.home}/.pandatronik_properties/application-pandatronik-rest-prod.properties")
 public class ProductionConfig {
 
     private String stripeDevKey;
 
     @Bean
     public EmailService emailService() {
-        return new SmtpEmailService();
+        return new MockEmailService();
     }
 
 //    @Bean
-//    public ServletRegistrationBean h2ConsoleServletRegistration() {
-//        ServletRegistrationBean bean = new ServletRegistrationBean(new WebServlet());
-//        bean.addUrlMappings("/console/*");
-//        return bean;
+//    public EmailService emailService() {
+//        return new SmtpEmailService();
 //    }
 
     @Bean

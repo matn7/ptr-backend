@@ -1,19 +1,12 @@
 package com.pandatronik.web.controllers.statistics;
 
 import com.pandatronik.backend.service.DaysService;
-import com.pandatronik.payload.DateRequest;
-import com.pandatronik.web.controllers.ErrorMessage;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.*;
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import static java.util.Objects.nonNull;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Component
 @CrossOrigin(origins = "${angular.api.url}")

@@ -1,25 +1,29 @@
 package com.pandatronik.integration;
 
-import com.pandatronik.PandatronikRestApplication;
 import com.pandatronik.backend.persistence.domain.PasswordResetToken;
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.service.user.account.PasswordResetTokenService;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@SpringBootTest(classes = PandatronikRestApplication.class)
+@SpringBootTest
+@TestPropertySource(locations="classpath:application-test-mysql.properties")
 public class PasswordResetTokenServiceIntegrationTest extends AbstractServiceIntegrationTest {
+
+
     @Autowired
     private PasswordResetTokenService passwordResetTokenService;
 
     @Test
-    public void testCreateNewTokenForUserEmail() throws Exception {
+    public void testCreateNewTokenForUserEmail() {
 
-        UserEntity user = createUser("testName");
+        String randomAlphabetic = RandomStringUtils.randomAlphabetic(10);
+        UserEntity user = createUser(randomAlphabetic);
 
         PasswordResetToken passwordResetToken =
                 passwordResetTokenService.createPasswordResetTokenForEmail(user.getEmail());
@@ -28,8 +32,9 @@ public class PasswordResetTokenServiceIntegrationTest extends AbstractServiceInt
     }
 
     @Test
-    public void testFindByToken() throws Exception {
-        UserEntity user = createUser("testName");
+    public void testFindByToken() {
+        String randomAlphabetic = RandomStringUtils.randomAlphabetic(10);
+        UserEntity user = createUser(randomAlphabetic);
 
         PasswordResetToken passwordResetToken =
                 passwordResetTokenService.createPasswordResetTokenForEmail(user.getEmail());

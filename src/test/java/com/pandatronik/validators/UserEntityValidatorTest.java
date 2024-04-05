@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 import static org.apache.commons.lang3.StringUtils.leftPad;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UserEntityValidator {
+public class UserEntityValidatorTest {
     private static ValidatorFactory validatorFactory;
     private static Validator validator;
 
@@ -32,7 +32,7 @@ public class UserEntityValidator {
 
         Set<ConstraintViolation<UserEntity>> violations = validator.validate(entity);
 
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
+        List<String> collect = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
         assertThat(collect).hasSize(0);
     }
 
@@ -42,9 +42,8 @@ public class UserEntityValidator {
 
         Set<ConstraintViolation<UserEntity>> violations = validator.validate(entity);
 
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
-        assertThat(collect).hasSize(1);
-        assertThat(collect).containsExactlyInAnyOrder("size must be between 6 and 50");
+        List<String> collect = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
+        assertThat(collect).containsExactlyInAnyOrder("Username size must be between 6 and 20");
     }
 
     @Test
@@ -53,9 +52,9 @@ public class UserEntityValidator {
 
         Set<ConstraintViolation<UserEntity>> violations = validator.validate(entity);
 
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
+        List<String> collect = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
         assertThat(collect).hasSize(1);
-        assertThat(collect).containsExactlyInAnyOrder("size must be between 6 and 50");
+        assertThat(collect).containsExactlyInAnyOrder("Username size must be between 6 and 20");
     }
 
     @Test
@@ -64,31 +63,33 @@ public class UserEntityValidator {
 
         Set<ConstraintViolation<UserEntity>> violations = validator.validate(entity);
 
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
+        List<String> collect = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
         assertThat(collect).hasSize(1);
         assertThat(collect).containsExactlyInAnyOrder("must not be blank");
     }
 
     @Test
-    public void shouldValidateNullUsername() {
-        UserEntity entity = UserEntityProvider.getValidUserEntity().withUsername(null).build();
+    public void shouldValidateEmptyUsername() {
+        UserEntity entity = UserEntityProvider.getValidUserEntity().withUsername("").build();
 
         Set<ConstraintViolation<UserEntity>> violations = validator.validate(entity);
 
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
+        List<String> collect = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
         assertThat(collect).hasSize(2);
-        assertThat(collect).containsExactlyInAnyOrder("must not be blank", "must not be null");
+        assertThat(collect).containsExactlyInAnyOrder("must not be blank", "Username size must be between 6 and 20");
     }
 
     @Test
     public void shouldValidateToLongPassword() {
-        UserEntity entity = UserEntityProvider.getValidUserEntity().withPassword(leftPad("b", 25)).build();
+        UserEntity entity = UserEntityProvider.getValidUserEntity().withPassword(leftPad("b", 65)).build();
 
         Set<ConstraintViolation<UserEntity>> violations = validator.validate(entity);
 
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
-        assertThat(collect).hasSize(1);
-        assertThat(collect).containsExactlyInAnyOrder("size must be between 6 and 24");
+        List<String> collect = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
+        assertThat(collect).hasSize(2);
+        assertThat(collect).containsExactlyInAnyOrder(
+                "Password must contain at least one number, one special character, one upper and lower case letter",
+                "Password size must be between 6 and 60");
     }
 
     @Test
@@ -97,9 +98,9 @@ public class UserEntityValidator {
 
         Set<ConstraintViolation<UserEntity>> violations = validator.validate(entity);
 
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
-        assertThat(collect).hasSize(1);
-        assertThat(collect).containsExactlyInAnyOrder("size must be between 6 and 24");
+        List<String> collect = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
+        assertThat(collect).containsExactlyInAnyOrder("Password size must be between 6 and 60",
+                "Password must contain at least one number, one special character, one upper and lower case letter");
     }
 
     @Test
@@ -108,20 +109,21 @@ public class UserEntityValidator {
 
         Set<ConstraintViolation<UserEntity>> violations = validator.validate(entity);
 
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
-        assertThat(collect).hasSize(1);
-        assertThat(collect).containsExactlyInAnyOrder("must not be blank");
+        List<String> collect = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
+        assertThat(collect).containsExactlyInAnyOrder("must not be blank",
+                "Password must contain at least one number, one special character, one upper and lower case letter");
     }
 
     @Test
-    public void shouldValidateNullPassword() {
-        UserEntity entity = UserEntityProvider.getValidUserEntity().withPassword(null).build();
+    public void shouldValidateEmptyPassword() {
+        UserEntity entity = UserEntityProvider.getValidUserEntity().withPassword("").build();
 
         Set<ConstraintViolation<UserEntity>> violations = validator.validate(entity);
 
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
-        assertThat(collect).hasSize(2);
-        assertThat(collect).containsExactlyInAnyOrder("must not be blank", "must not be null");
+        List<String> collect = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
+        assertThat(collect).hasSize(3);
+        assertThat(collect).containsExactlyInAnyOrder("must not be blank", "Password size must be between 6 and 60",
+                "Password must contain at least one number, one special character, one upper and lower case letter");
     }
 
     @Test
@@ -130,9 +132,9 @@ public class UserEntityValidator {
 
         Set<ConstraintViolation<UserEntity>> violations = validator.validate(entity);
 
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
+        List<String> collect = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
         assertThat(collect).hasSize(1);
-        assertThat(collect).containsExactlyInAnyOrder("This not an valid email address");
+        assertThat(collect).containsExactlyInAnyOrder("Email address invalid");
     }
 
     @Test
@@ -141,9 +143,9 @@ public class UserEntityValidator {
 
         Set<ConstraintViolation<UserEntity>> violations = validator.validate(entity);
 
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
+        List<String> collect = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
         assertThat(collect).hasSize(1);
-        assertThat(collect).containsExactlyInAnyOrder("This not an valid email address");
+        assertThat(collect).containsExactlyInAnyOrder("Email address invalid");
     }
 
     @Test
@@ -153,7 +155,7 @@ public class UserEntityValidator {
 
         Set<ConstraintViolation<UserEntity>> violations = validator.validate(entity);
 
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
+        List<String> collect = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
         assertThat(collect).hasSize(1);
         assertThat(collect).containsExactlyInAnyOrder("This not an valid email address");
     }
@@ -164,7 +166,7 @@ public class UserEntityValidator {
 
         Set<ConstraintViolation<UserEntity>> violations = validator.validate(entity);
 
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
+        List<String> collect = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
         assertThat(collect).hasSize(1);
         assertThat(collect).containsExactlyInAnyOrder("must not be null");
     }
@@ -175,9 +177,9 @@ public class UserEntityValidator {
 
         Set<ConstraintViolation<UserEntity>> violations = validator.validate(entity);
 
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
+        List<String> collect = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
         assertThat(collect).hasSize(1);
-        assertThat(collect).containsExactlyInAnyOrder("size must be between 0 and 50");
+        assertThat(collect).containsExactlyInAnyOrder("FirstName size must be between 1 and 20");
     }
 
     @Test
@@ -186,7 +188,7 @@ public class UserEntityValidator {
 
         Set<ConstraintViolation<UserEntity>> violations = validator.validate(entity);
 
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
+        List<String> collect = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
         assertThat(collect).hasSize(2);
         assertThat(collect).containsExactlyInAnyOrder("must not be null", "must not be blank");
     }
@@ -197,7 +199,7 @@ public class UserEntityValidator {
 
         Set<ConstraintViolation<UserEntity>> violations = validator.validate(entity);
 
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
+        List<String> collect = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
         assertThat(collect).hasSize(1);
         assertThat(collect).containsExactlyInAnyOrder("must not be blank");
     }
@@ -208,9 +210,9 @@ public class UserEntityValidator {
 
         Set<ConstraintViolation<UserEntity>> violations = validator.validate(entity);
 
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
+        List<String> collect = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
         assertThat(collect).hasSize(1);
-        assertThat(collect).containsExactlyInAnyOrder("size must be between 0 and 50");
+        assertThat(collect).containsExactlyInAnyOrder("LastName size must be between 1 and 20");
     }
 
     @Test
@@ -219,7 +221,7 @@ public class UserEntityValidator {
 
         Set<ConstraintViolation<UserEntity>> violations = validator.validate(entity);
 
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
+        List<String> collect = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
         assertThat(collect).hasSize(2);
         assertThat(collect).containsExactlyInAnyOrder("must not be null", "must not be blank");
     }
@@ -230,7 +232,7 @@ public class UserEntityValidator {
 
         Set<ConstraintViolation<UserEntity>> violations = validator.validate(entity);
 
-        List<String> collect = violations.stream().map(val -> val.getMessage()).collect(Collectors.toList());
+        List<String> collect = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.toList());
         assertThat(collect).hasSize(1);
         assertThat(collect).containsExactlyInAnyOrder("must not be blank");
     }

@@ -11,6 +11,14 @@ CREATE DATABASE pandatronik_dev;
 USE pandatronik_dev;
 ```
 
+**Create Test database**
+
+```sql
+CREATE DATABASE pandatronik_test;
+
+USE pandatronik_test;
+```
+
 **Prepare schema**
 
 - Modify application.properties.
