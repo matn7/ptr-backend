@@ -55,7 +55,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @AutoConfigureMockMvc
-@TestPropertySource(locations="classpath:application-test.properties")
+@TestPropertySource(locations="classpath:application-test-mysql.properties")
 @SpringBootTest
 @Transactional
 public class ExtraordinaryControllerJdbcTest {
@@ -99,6 +99,15 @@ public class ExtraordinaryControllerJdbcTest {
     @Value("${sql.script.create.extraordinary}")
     private String sqlCreateExtraordinary;
 
+    @Value("${sql.script.extraordinary.reset.auto.increment}")
+    private String sqlExtraordinaryResetAutoIncrement;
+
+    @Value("${sql.script.userEntity.reset.auto.increment}")
+    private String sqlUserEntityResetAutoIncrement;
+
+    @Value("${sql.script.delete.userEntity}")
+    private String sqlDeleteUserEntity;
+
     public static final MediaType APPLICATION_JSON_UTF8 = MediaType.APPLICATION_JSON;
 
     @BeforeEach
@@ -109,10 +118,18 @@ public class ExtraordinaryControllerJdbcTest {
         when(customUserDetailsService.loadUserById(anyLong())).thenReturn(user);
         when(userService.findById(anyLong())).thenReturn(Optional.of(user));
 
+        // Disable ref-integrity check, reset auto-increment
         jdbc.execute(sqlDisableFkCheck);
-        jdbc.execute(sqlCreatePlan);
+        jdbc.execute(sqlUserEntityResetAutoIncrement);
+        jdbc.execute(sqlExtraordinaryResetAutoIncrement);
 
+//        jdbc.execute(sqlCreatePlan);
+
+        // Create new test user for every test case
+        jdbc.execute(sqlDeleteUserEntity);
         jdbc.execute(sqlCreateUserEntity);
+
+        // Create test data
         jdbc.execute(sqlCreateExtraordinary);
     }
 
@@ -263,7 +280,7 @@ public class ExtraordinaryControllerJdbcTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(extraordinary)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id", equalTo(1)))
+                .andExpect(jsonPath("$.id", equalTo(301)))
                 .andExpect(jsonPath("$.body", equalTo("Paratroopers landing in Holland")))
                 .andExpect(jsonPath("$.title", equalTo("Operation Market Garden")))
                 .andExpect(jsonPath("$.startDate[0]", is(year)))
@@ -285,7 +302,7 @@ public class ExtraordinaryControllerJdbcTest {
         int year = 1944;
         int month = 9;
         int day = 17;
-        long validId = 1L;
+        long validId = 301L;
 
         Optional<UserEntity> userEntity = userRepository.findByUsername(username);
         assertTrue(userEntity.isPresent());
@@ -303,7 +320,7 @@ public class ExtraordinaryControllerJdbcTest {
         // in case run all tests, new valid id is 2L
         Optional<ExtraordinaryEntity> extraordinaryEntity = extraordinaryRepository.findById(validId);
         if (extraordinaryEntity.isEmpty()) {
-            validId = 2L;
+            validId = 302L;
         }
         extraordinaryEntity = extraordinaryRepository.findById(validId);
         assertTrue(extraordinaryEntity.isPresent());

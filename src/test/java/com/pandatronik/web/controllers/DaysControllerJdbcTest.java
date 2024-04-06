@@ -13,6 +13,8 @@ import com.pandatronik.backend.service.user.account.UserService;
 import com.pandatronik.enums.MadeEnum;
 import com.pandatronik.security.JwtTokenProvider;
 import com.pandatronik.utils.AppConstants;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -76,7 +79,7 @@ public class DaysControllerJdbcTest {
     @Value("${sql.script.create.userEntity}")
     private String sqlCreateUserEntity;
 
-    @Value("${sql.script.create.userEntity}")
+    @Value("${sql.script.delete.userEntity}")
     private String sqlDeleteUserEntity;
 
     @Value("${sql.script.create.plan}")
@@ -85,8 +88,11 @@ public class DaysControllerJdbcTest {
     @Value("${sql.script.disable.fk.check}")
     private String sqlDisableFkCheck;
 
-    @Value("${sql.script.reset.auto.increment}")
-    private String sqlResetAutoIncrement;
+    @Value("${sql.script.userEntity.reset.auto.increment}")
+    private String sqlUserEntityResetAutoIncrement;
+
+    @Value("${sql.script.days.reset.auto.increment}")
+    private String sqlDaysResetAutoIncrement;
 
     @MockBean
     JwtTokenProvider jwtTokenProvider;
@@ -101,17 +107,29 @@ public class DaysControllerJdbcTest {
     public void setUpDays() {
         UserEntity user = UserEntity.builder().email("panda@pandatronik.com").build();
 
+        // todo: write test if user is deleted all its entries are also deleted
+
         when(jwtTokenProvider.validateToken(anyString())).thenReturn(true);
         when(customUserDetailsService.loadUserById(anyLong())).thenReturn(user);
         when(userService.findById(anyLong())).thenReturn(Optional.of(user));
 
+        // Disable ref-integrity check, reset auto-increment
         jdbc.execute(sqlDisableFkCheck);
+        jdbc.execute(sqlUserEntityResetAutoIncrement);
+        jdbc.execute(sqlDaysResetAutoIncrement);
+
+        // Create new test user for every test case
+        jdbc.execute(sqlDeleteUserEntity);
+        jdbc.execute(sqlCreateUserEntity);
         // todo, create plan in script
 //        jdbc.execute(sqlCreatePlan);
-
-        jdbc.execute(sqlResetAutoIncrement);
-        jdbc.execute(sqlCreateUserEntity);
+        // Create test data
         jdbc.execute(sqlCreateDays);
+    }
+
+    @AfterEach
+    public void cleanUp() {
+        jdbc.execute(sqlDeleteUserEntity);
     }
 
     @Test
@@ -163,7 +181,9 @@ public class DaysControllerJdbcTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError())
-                .andExpect(jsonPath("$.body", equalTo("Resource Not Found")));
+                .andExpect(jsonPath("$.body", equalTo("Resource Not Found")))
+                .andExpect(jsonPath("$.httpStatus", is("NOT_FOUND")))
+                .andExpect(jsonPath("$.statusCode", is(HttpStatus.NOT_FOUND.value())));
     }
 
     @Test

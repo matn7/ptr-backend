@@ -51,7 +51,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc
-@TestPropertySource(locations="classpath:application-test.properties")
+@TestPropertySource(locations="classpath:application-test-mysql.properties")
 @SpringBootTest
 @Transactional
 public class ImportantControllerJdbcTest {
@@ -102,9 +102,14 @@ public class ImportantControllerJdbcTest {
     @Value("${sql.script.create.plan}")
     private String sqlCreatePlan;
 
-    // User Entity
     @Value("${sql.script.create.userEntity}")
     private String sqlCreateUserEntity;
+
+    @Value("${sql.script.delete.userEntity}")
+    private String sqlDeleteUserEntity;
+
+    @Value("${sql.script.userEntity.reset.auto.increment}")
+    private String sqlUserEntityResetAutoIncrement;
 
     @Value("${sql.script.create.important1}")
     private String sqlCreateImportant;
@@ -114,6 +119,15 @@ public class ImportantControllerJdbcTest {
 
     @Value("${sql.script.create.important3}")
     private String sqlCreateImportant3;
+
+    @Value("${sql.script.important.reset.auto.increment}")
+    private String sqlImportantResetAutoIncrement;
+
+    @Value("${sql.script.important.2.reset.auto.increment}")
+    private String sqlImportant2ResetAutoIncrement;
+
+    @Value("${sql.script.important.3.reset.auto.increment}")
+    private String sqlImportant3ResetAutoIncrement;
 
     public static final MediaType APPLICATION_JSON_UTF8 = MediaType.APPLICATION_JSON;
 
@@ -125,10 +139,18 @@ public class ImportantControllerJdbcTest {
         when(customUserDetailsService.loadUserById(anyLong())).thenReturn(user);
         when(userService.findById(anyLong())).thenReturn(Optional.of(user));
 
+        // Disable ref-integrity check, reset auto-increment
         jdbc.execute(sqlDisableFkCheck);
-        jdbc.execute(sqlCreatePlan);
+        jdbc.execute(sqlUserEntityResetAutoIncrement);
+        jdbc.execute(sqlImportantResetAutoIncrement);
+        jdbc.execute(sqlImportant2ResetAutoIncrement);
+        jdbc.execute(sqlImportant3ResetAutoIncrement);
 
+        // Create new test user for every test case
+        jdbc.execute(sqlDeleteUserEntity);
         jdbc.execute(sqlCreateUserEntity);
+
+        // Create test data
         jdbc.execute(sqlCreateImportant);
         jdbc.execute(sqlCreateImportant2);
         jdbc.execute(sqlCreateImportant3);
@@ -283,7 +305,7 @@ public class ImportantControllerJdbcTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(task)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id", equalTo(1)))
+                .andExpect(jsonPath("$.id", equalTo(301)))
                 .andExpect(jsonPath("$.body", equalTo("Saved Task - Body")))
                 .andExpect(jsonPath("$.title", equalTo("Saved Task - Title")))
                 .andExpect(jsonPath("$.made", equalTo(MadeEnum.HUNDRED.getValue())))
@@ -304,7 +326,7 @@ public class ImportantControllerJdbcTest {
     public void testUpdate() throws Exception {
         String username = "matek_1991";
         int importantId = 3;
-        long validId = 1L;
+        long validId = 301L;
 
         Optional<UserEntity> userEntity = userRepository.findByUsername(username);
         assertTrue(userEntity.isPresent());

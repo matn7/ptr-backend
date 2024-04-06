@@ -28,6 +28,9 @@ public class UserRepositoryIntegrationTest extends AbstractIntegrationTest {
     @Autowired
     private JdbcTemplate jdbc;
 
+    @Value("${sql.script.disable.save.updates}")
+    private String disableSaveUpdates;
+
     @Value("${sql.script.disable.fk.check}")
     private String disableForeignKeyCheck;
 
@@ -37,6 +40,7 @@ public class UserRepositoryIntegrationTest extends AbstractIntegrationTest {
     @BeforeEach
     public void setup() {
         jdbc.execute(disableForeignKeyCheck);
+        jdbc.execute(disableSaveUpdates);
         jdbc.execute(deleteUser);
     }
 
@@ -94,7 +98,8 @@ public class UserRepositoryIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testGetUserByEmail() {
-        UserEntity user = createUser("testName");
+        String username = RandomStringUtils.randomAlphabetic(10);
+        UserEntity user = createUser(username);
 
         UserEntity newlyFoundUser = userRepository.findByEmail(user.getEmail());
         assertNotNull(newlyFoundUser);
