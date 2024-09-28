@@ -112,7 +112,7 @@ public class DaysControllerTest {
 
     @Test
     public void findById() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         long validId = 200L;
 
         mockMvc.perform(get(AppConstants.BASE_URL + "/" + username + "/days/" + validId)
@@ -131,7 +131,7 @@ public class DaysControllerTest {
 
     @Test
     public void findByIdNotFound() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         long invalidId = 200L;
 
         when(daysService.findById(anyString(), anyLong())).thenThrow(ResourceNotFoundException.class);
@@ -152,7 +152,7 @@ public class DaysControllerTest {
 
     @Test
     public void findByDate() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         long validId = 200L;
 
         DaysDTO day = new DaysDTO();
@@ -182,7 +182,7 @@ public class DaysControllerTest {
 
     @Test
     public void findByDateNotFound() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         when(daysService.findByDate(anyString(), anyInt(), anyInt(), anyInt())).thenThrow(ResourceNotFoundException.class);
 
         mockMvc.perform(get(AppConstants.BASE_URL + "/" + username + "/days/1991/10/20")
@@ -201,7 +201,7 @@ public class DaysControllerTest {
 
     @Test
     public void testSave() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
 
         DaysDTO day = new DaysDTO();
         day.setId(200L);
@@ -235,7 +235,7 @@ public class DaysControllerTest {
     // test save (error)
     @Test
     public void testUpdate() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
 
         DaysDTO day = new DaysDTO();
         day.setId(200L);

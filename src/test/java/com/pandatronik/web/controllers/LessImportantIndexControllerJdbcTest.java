@@ -114,7 +114,7 @@ public class LessImportantIndexControllerJdbcTest {
 
     @Test
     public void findByDate() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         int year = 2024;
         int month = 3;
 

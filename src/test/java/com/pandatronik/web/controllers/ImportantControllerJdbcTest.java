@@ -158,7 +158,7 @@ public class ImportantControllerJdbcTest {
 
     @Test
     public void findById() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         long validId = 300L;
         int importantId = 1;
 
@@ -192,7 +192,7 @@ public class ImportantControllerJdbcTest {
 
     @Test
     public void findByIdNotFound() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         int importantId = 2;
         long invalidId = 301L;
 
@@ -219,7 +219,7 @@ public class ImportantControllerJdbcTest {
 
     @Test
     public void findByDate() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         int importantId = 3;
         int year = 2024;
         int month = 3;
@@ -255,7 +255,7 @@ public class ImportantControllerJdbcTest {
 
     @Test
     public void findByDateNotFound() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         int importantId = 1;
         int year = 1924;
         int month = 11;
@@ -284,7 +284,7 @@ public class ImportantControllerJdbcTest {
 
     @Test
     public void testSave() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         int importantId = 2;
 
         Optional<UserEntity> userEntity = userRepository.findByUsername(username);
@@ -324,7 +324,7 @@ public class ImportantControllerJdbcTest {
 
     @Test
     public void testUpdate() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         int importantId = 3;
         long validId = 301L;
 
@@ -391,7 +391,7 @@ public class ImportantControllerJdbcTest {
 
     @Test
     public void testDelete() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         int importantId = 1;
         long validId = 300L;
 
@@ -427,7 +427,7 @@ public class ImportantControllerJdbcTest {
 
     @Test
     public void testDeleteNotFound() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         int importantId = 2;
         long invalidId = 301L;
 

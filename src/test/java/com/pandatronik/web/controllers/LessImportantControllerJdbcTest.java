@@ -128,7 +128,7 @@ public class LessImportantControllerJdbcTest {
 
     @Test
     public void findById() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         long validId = 300L;
         int lessImportantId = 1;
 
@@ -162,7 +162,7 @@ public class LessImportantControllerJdbcTest {
 
     @Test
     public void findByIdNotFound() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         int lessImportantId = 2;
         long invalidId = 301L;
 
@@ -189,7 +189,7 @@ public class LessImportantControllerJdbcTest {
 
     @Test
     public void findByDate() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         int lessImportantId = 3;
         int year = 2024;
         int month = 3;
@@ -225,7 +225,7 @@ public class LessImportantControllerJdbcTest {
 
     @Test
     public void findByDateNotFound() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         int lessImportantId = 1;
         int year = 1924;
         int month = 11;
@@ -254,7 +254,7 @@ public class LessImportantControllerJdbcTest {
 
     @Test
     public void testSave() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         int lessImportantId = 2;
 
         Optional<UserEntity> userEntity = userRepository.findByUsername(username);
@@ -294,7 +294,7 @@ public class LessImportantControllerJdbcTest {
 
     @Test
     public void testUpdate() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         int lessImportantId = 3;
         long validId = 1L;
 
@@ -361,7 +361,7 @@ public class LessImportantControllerJdbcTest {
 
     @Test
     public void testDelete() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         int lessImportantId = 1;
         long validId = 300L;
 
@@ -397,7 +397,7 @@ public class LessImportantControllerJdbcTest {
 
     @Test
     public void testDeleteNotFound() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         int lessImportantId = 2;
         long invalidId = 301L;
 

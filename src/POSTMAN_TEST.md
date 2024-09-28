@@ -10,12 +10,12 @@
 
 ```json
 {
-    "username": "matek_1991",
-    "password": "M@tekSzmatek1!",
-    "confirmPassword": "M@tekSzmatek1",
-    "email": "mateusz.nowak@pandatronik.com",
-    "firstName": "Mateusz",
-    "lastName": "Nowak"
+    "username": "Username",
+    "password": "Password",
+    "confirmPassword": "Password",
+    "email": "username@pandatronik.com",
+    "firstName": "Name",
+    "lastName": "LastName"
 }
 ```
 
@@ -31,8 +31,8 @@
 
 ```json
 {
-    "username": "matek_1991", 
-    "password": "M@tekSzmatek1!"
+    "username": "Name", 
+    "password": "Password"
 }
 ```
 
