@@ -138,7 +138,6 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     @ExceptionHandler({DataIntegrityViolationException.class})
     protected ResponseEntity<Object> handleDataIntegrityException(Exception exception, WebRequest request) {
         LOG.info("Duplicate username");
-        // Duplicate entry 'matek_1991'
         List<String> errorMessages = new ArrayList<>();
         Set<String> affectedFields = new HashSet<>();
         errorMessages.add("Username already exists");
@@ -157,7 +156,6 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     @ExceptionHandler({AuthenticationFailedException.class})
     protected ResponseEntity<Object> handleRegistrationEmailException(Exception exception, WebRequest request) {
         LOG.info("Failure during registration process");
-        // Duplicate entry 'matek_1991'
         List<String> errorMessages = new ArrayList<>();
         Set<String> affectedFields = new HashSet<>();
         errorMessages.add("Internal pandatronik error during registration process!");

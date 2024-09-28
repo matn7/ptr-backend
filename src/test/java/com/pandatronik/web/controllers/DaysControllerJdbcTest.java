@@ -134,7 +134,7 @@ public class DaysControllerJdbcTest {
 
     @Test
     public void findById() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         long validId = 300L;
 
         Optional<UserEntity> userEntity = userRepository.findByUsername(username);
@@ -162,7 +162,7 @@ public class DaysControllerJdbcTest {
 
     @Test
     public void findByIdNotFound() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         long invalidId = 301L;
 
         Optional<UserEntity> userEntity = userRepository.findByUsername(username);
@@ -188,7 +188,7 @@ public class DaysControllerJdbcTest {
 
     @Test
     public void findByDate() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         int year = 2024;
         int month = 3;
         int day = 1;
@@ -221,7 +221,7 @@ public class DaysControllerJdbcTest {
 
     @Test
     public void findByDateNotFound() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         int year = 1924;
         int month = 11;
         int day = 21;
@@ -249,7 +249,7 @@ public class DaysControllerJdbcTest {
 
     @Test
     public void testSave() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         Optional<UserEntity> userEntity = userRepository.findByUsername(username);
         assertTrue(userEntity.isPresent());
 
@@ -294,7 +294,7 @@ public class DaysControllerJdbcTest {
 
     @Test
     public void testUpdate() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         long validId = 301L;
         Optional<UserEntity> userEntity = userRepository.findByUsername(username);
         assertTrue(userEntity.isPresent());
@@ -352,7 +352,7 @@ public class DaysControllerJdbcTest {
 
     @Test
     public void testDelete() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         long validId = 300L;
 
         Optional<UserEntity> userEntity = userRepository.findByUsername(username);
@@ -386,7 +386,7 @@ public class DaysControllerJdbcTest {
 
     @Test
     public void testDeleteNotFound() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         long invalidId = 301L;
 
         Optional<UserEntity> userEntity = userRepository.findByUsername(username);

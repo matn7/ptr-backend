@@ -135,7 +135,7 @@ public class ExtraordinaryControllerJdbcTest {
 
     @Test
     public void findById() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         long validId = 300L;
         int year = 1944;
         int month = 6;
@@ -170,7 +170,7 @@ public class ExtraordinaryControllerJdbcTest {
 
     @Test
     public void findByIdNotFound() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         long invalidId = 301L;
 
         Optional<UserEntity> userEntity = userRepository.findByUsername(username);
@@ -196,7 +196,7 @@ public class ExtraordinaryControllerJdbcTest {
 
     @Test
     public void findByDate() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         int year = 1944;
         int month = 6;
         int day = 6;
@@ -230,7 +230,7 @@ public class ExtraordinaryControllerJdbcTest {
 
     @Test
     public void findByDateNotFound() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         int year = 1944;
         int month = 6;
         int day = 7;
@@ -258,7 +258,7 @@ public class ExtraordinaryControllerJdbcTest {
 
     @Test
     public void testSave() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         int year = 1944;
         int month = 9;
         int day = 17;
@@ -298,7 +298,7 @@ public class ExtraordinaryControllerJdbcTest {
 
     @Test
     public void testUpdate() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         int year = 1944;
         int month = 9;
         int day = 17;
@@ -363,7 +363,7 @@ public class ExtraordinaryControllerJdbcTest {
 
     @Test
     public void testDelete() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         long validId = 300L;
         int year = 1944;
         int month = 6;
@@ -400,7 +400,7 @@ public class ExtraordinaryControllerJdbcTest {
 
     @Test
     public void testDeleteNotFound() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         long invalidId = 301L;
 
         Optional<UserEntity> userEntity = userRepository.findByUsername(username);

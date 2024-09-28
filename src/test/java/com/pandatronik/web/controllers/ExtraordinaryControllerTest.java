@@ -73,7 +73,7 @@ public class ExtraordinaryControllerTest {
 
     @Test
     public void findById() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         long validId = 200L;
 
         mockMvc.perform(get(AppConstants.BASE_URL + "/" + username + "/extraordinary/" + validId)
@@ -95,7 +95,7 @@ public class ExtraordinaryControllerTest {
 
     @Test
     public void findByIdNotFound() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         long invalidId = 201L;
 
         when(extraordinaryService.findById(anyString(), anyLong())).thenThrow(ResourceNotFoundException.class);
@@ -116,7 +116,7 @@ public class ExtraordinaryControllerTest {
 
     @Test
     public void findByDate() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         int year = 1945;
         int month = 2;
         int day = 19;
@@ -152,7 +152,7 @@ public class ExtraordinaryControllerTest {
 
     @Test
     public void findByDateNotFound() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         int year = 1945;
         int month = 2;
         int day = 19;
@@ -175,7 +175,7 @@ public class ExtraordinaryControllerTest {
 
     @Test
     public void testSave() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         int year = 1945;
         int month = 4;
         int day = 1;
@@ -212,7 +212,7 @@ public class ExtraordinaryControllerTest {
 
     @Test
     public void testUpdate() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         int year = 1944;
         int month = 6;
         int day = 16;

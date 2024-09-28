@@ -81,7 +81,7 @@ public class LessImportantControllerTest {
 
     @Test
     public void findById() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         int lessImportantId = 1;
         long validId = 200L;
 
@@ -107,7 +107,7 @@ public class LessImportantControllerTest {
 
     @Test
     public void findByIdNotFound() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         int importantId = 2;
         long invalidId = 200L;
 
@@ -129,7 +129,7 @@ public class LessImportantControllerTest {
 
     @Test
     public void findByDate() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         int lessImportantId = 3;
 
         UserEntity user = UserEntity.builder().id(20L).email("panda@pandatronik.com").build();
@@ -165,7 +165,7 @@ public class LessImportantControllerTest {
 
     @Test
     public void findByDateNotFound() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         int lessImportantId = 1;
 
         when(lessImportantService.findByDate(anyString(), anyInt(), anyInt(), anyInt())).thenThrow(ResourceNotFoundException.class);
@@ -186,7 +186,7 @@ public class LessImportantControllerTest {
 
     @Test
     public void testSave() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         int lessImportantId = 2;
 
         UserEntity user = UserEntity.builder().id(20L).email("panda@pandatronik.com").build();
@@ -223,7 +223,7 @@ public class LessImportantControllerTest {
 
     @Test
     public void testUpdate() throws Exception {
-        String username = "matek_1991";
+        String username = "user_123";
         int lessImportantId = 3;
 
         UserEntity user = UserEntity.builder().id(20L).email("panda@pandatronik.com").build();
