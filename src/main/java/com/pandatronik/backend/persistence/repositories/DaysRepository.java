@@ -24,6 +24,8 @@ public interface DaysRepository extends CrudRepository<DaysEntity, Long>, Entity
     @Query("SELECT d FROM DaysEntity d WHERE d.userId = :userId")
     Optional<List<DaysEntity>> findByUserId(@Param("userId") UserEntity userEntity);
 
+    // YEAR and other methods are bad for performance
+    // todo: change to use db optimizations
     @Query("SELECT NEW com.pandatronik.backend.persistence.model.DaysDTO(d.id, d.body, d.rateDay, d.postedOn, d.startDate, u.id) " +
             "FROM UserEntity u " +
             "LEFT JOIN u.daysEntity d " +
