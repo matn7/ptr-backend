@@ -3,7 +3,7 @@ package com.pandatronik.web.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.DaysEntity;
-import com.pandatronik.backend.persistence.mapper.DaysMapperImpl;
+import com.pandatronik.backend.persistence.mapper.DaysMapper;
 import com.pandatronik.backend.persistence.model.DaysDTO;
 import com.pandatronik.backend.persistence.repositories.DaysRepository;
 import com.pandatronik.backend.persistence.repositories.user.account.UserRepository;
@@ -14,7 +14,6 @@ import com.pandatronik.enums.MadeEnum;
 import com.pandatronik.security.JwtTokenProvider;
 import com.pandatronik.utils.AppConstants;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -142,7 +140,6 @@ public class DaysControllerJdbcTest {
         assertTrue(userEntity.isPresent());
 
         Optional<DaysEntity> days = daysRepository.findById(userEntity.get(), validId);
-        daysService = new DaysService(userService, daysRepository, new DaysMapperImpl());
 
         assertTrue(days.isPresent());
 
@@ -170,7 +167,6 @@ public class DaysControllerJdbcTest {
         assertTrue(userEntity.isPresent());
 
         Optional<DaysEntity> days = daysRepository.findById(userEntity.get(), invalidId);
-        daysService = new DaysService(userService, daysRepository, new DaysMapperImpl());
 
         assertTrue(days.isEmpty());
 
@@ -198,7 +194,6 @@ public class DaysControllerJdbcTest {
         assertTrue(userEntity.isPresent());
 
         Optional<DaysEntity> days = daysRepository.findByDate(userEntity.get(), day, month, year);
-        daysService = new DaysService(userService, daysRepository, new DaysMapperImpl());
 
         assertTrue(days.isPresent());
 
@@ -231,7 +226,6 @@ public class DaysControllerJdbcTest {
         assertTrue(userEntity.isPresent());
 
         Optional<DaysEntity> days = daysRepository.findByDate(userEntity.get(), day, month, year);
-        daysService = new DaysService(userService, daysRepository, new DaysMapperImpl());
 
         assertTrue(days.isEmpty());
 
@@ -360,7 +354,6 @@ public class DaysControllerJdbcTest {
         assertTrue(userEntity.isPresent());
 
         Optional<DaysEntity> days = daysRepository.findById(userEntity.get(), validId);
-        daysService = new DaysService(userService, daysRepository, new DaysMapperImpl());
 
         assertTrue(days.isPresent());
 
@@ -394,7 +387,6 @@ public class DaysControllerJdbcTest {
         assertTrue(userEntity.isPresent());
 
         Optional<DaysEntity> days = daysRepository.findById(userEntity.get(), invalidId);
-        daysService = new DaysService(userService, daysRepository, new DaysMapperImpl());
 
         assertTrue(days.isEmpty());
 

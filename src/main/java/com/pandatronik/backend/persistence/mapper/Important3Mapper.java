@@ -2,19 +2,37 @@ package com.pandatronik.backend.persistence.mapper;
 
 import com.pandatronik.backend.persistence.domain.core.Important3Entity;
 import com.pandatronik.backend.persistence.model.TaskDTO;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 
-@Mapper
-public interface Important3Mapper extends EntityMapper<TaskDTO, Important3Entity> {
+@Component
+public class Important3Mapper implements EntityMapper<TaskDTO, Important3Entity> {
 
     @Override
-    @Mapping(target = "userId", ignore = true)
-    TaskDTO entityToDto(Important3Entity importantEntity);
+    public TaskDTO entityToDto(Important3Entity importantEntity) {
+        TaskDTO taskDTO = new TaskDTO();
+
+        taskDTO.setId( importantEntity.getId() );
+        taskDTO.setBody( importantEntity.getBody() );
+        taskDTO.setPostedOn( importantEntity.getPostedOn() );
+        taskDTO.setStartDate( importantEntity.getStartDate() );
+        taskDTO.setTitle( importantEntity.getTitle() );
+        taskDTO.setMade( importantEntity.getMade() );
+
+        return taskDTO;
+    }
 
     @Override
-    @Mapping(target = "userId", ignore = true)
-    Important3Entity dtoToEntity(TaskDTO taskDTO);
+    public Important3Entity dtoToEntity(TaskDTO taskDTO) {
+        Important3Entity important3Entity = new Important3Entity();
+
+        important3Entity.setId( taskDTO.getId() );
+        important3Entity.setTitle( taskDTO.getTitle() );
+        important3Entity.setBody( taskDTO.getBody() );
+        important3Entity.setMade( taskDTO.getMade() );
+        important3Entity.setPostedOn( taskDTO.getPostedOn() );
+        important3Entity.setStartDate( taskDTO.getStartDate() );
+
+        return important3Entity;
+    }
 
 }

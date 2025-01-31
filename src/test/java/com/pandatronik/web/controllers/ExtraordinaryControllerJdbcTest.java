@@ -3,25 +3,12 @@ package com.pandatronik.web.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.ExtraordinaryEntity;
-import com.pandatronik.backend.persistence.domain.core.Important2Entity;
-import com.pandatronik.backend.persistence.domain.core.Important3Entity;
-import com.pandatronik.backend.persistence.domain.core.ImportantEntity;
-import com.pandatronik.backend.persistence.mapper.ExtraordinaryMapperImpl;
-import com.pandatronik.backend.persistence.mapper.Important2MapperImpl;
-import com.pandatronik.backend.persistence.mapper.Important3MapperImpl;
-import com.pandatronik.backend.persistence.mapper.ImportantMapperImpl;
 import com.pandatronik.backend.persistence.model.ExtraordinaryDTO;
-import com.pandatronik.backend.persistence.model.TaskDTO;
 import com.pandatronik.backend.persistence.repositories.ExtraordinaryRepository;
-import com.pandatronik.backend.persistence.repositories.ImportantRepository;
 import com.pandatronik.backend.persistence.repositories.user.account.UserRepository;
 import com.pandatronik.backend.service.ExtraordinaryService;
-import com.pandatronik.backend.service.Important2Service;
-import com.pandatronik.backend.service.Important3Service;
-import com.pandatronik.backend.service.ImportantService;
 import com.pandatronik.backend.service.user.account.CustomUserDetailsService;
 import com.pandatronik.backend.service.user.account.UserService;
-import com.pandatronik.enums.MadeEnum;
 import com.pandatronik.security.JwtTokenProvider;
 import com.pandatronik.utils.AppConstants;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,7 +39,6 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @AutoConfigureMockMvc
 @TestPropertySource(locations="classpath:application-test-mysql.properties")
@@ -146,7 +132,6 @@ public class ExtraordinaryControllerJdbcTest {
         assertTrue(userEntity.isPresent());
 
         Optional<ExtraordinaryEntity> extraordinary = extraordinaryRepository.findById(userEntity.get(), validId);
-        extraordinaryService = new ExtraordinaryService(userService, extraordinaryRepository, new ExtraordinaryMapperImpl());
 
         assertTrue(extraordinary.isPresent());
 
@@ -178,7 +163,6 @@ public class ExtraordinaryControllerJdbcTest {
         assertTrue(userEntity.isPresent());
 
         Optional<ExtraordinaryEntity> extraordinary = extraordinaryRepository.findById(userEntity.get(), invalidId);
-        extraordinaryService = new ExtraordinaryService(userService, extraordinaryRepository, new ExtraordinaryMapperImpl());
 
         assertTrue(extraordinary.isEmpty());
 
@@ -206,7 +190,6 @@ public class ExtraordinaryControllerJdbcTest {
         assertTrue(userEntity.isPresent());
 
         Optional<ExtraordinaryEntity> extraordinary = extraordinaryRepository.findByDate(userEntity.get(), day, month, year);
-        extraordinaryService = new ExtraordinaryService(userService, extraordinaryRepository, new ExtraordinaryMapperImpl());
 
         assertTrue(extraordinary.isPresent());
 
@@ -240,7 +223,6 @@ public class ExtraordinaryControllerJdbcTest {
         assertTrue(userEntity.isPresent());
 
         Optional<ExtraordinaryEntity> extraordinary = extraordinaryRepository.findByDate(userEntity.get(), day, month, year);
-        extraordinaryService = new ExtraordinaryService(userService, extraordinaryRepository, new ExtraordinaryMapperImpl());
 
         assertTrue(extraordinary.isEmpty());
 
@@ -374,7 +356,6 @@ public class ExtraordinaryControllerJdbcTest {
         assertTrue(userEntity.isPresent());
 
         Optional<ExtraordinaryEntity> extraordinary = extraordinaryRepository.findById(userEntity.get(), validId);
-        extraordinaryService = new ExtraordinaryService(userService, extraordinaryRepository, new ExtraordinaryMapperImpl());
 
         assertTrue(extraordinary.isPresent());
 
@@ -408,7 +389,6 @@ public class ExtraordinaryControllerJdbcTest {
         assertTrue(userEntity.isPresent());
 
         Optional<ExtraordinaryEntity> extraordinary = extraordinaryRepository.findById(userEntity.get(), invalidId);
-        extraordinaryService = new ExtraordinaryService(userService, extraordinaryRepository, new ExtraordinaryMapperImpl());
 
         assertTrue(extraordinary.isEmpty());
         when(userService.findByUserName(username)).thenReturn(userEntity.get());

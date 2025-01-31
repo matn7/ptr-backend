@@ -2,18 +2,37 @@ package com.pandatronik.backend.persistence.mapper;
 
 import com.pandatronik.backend.persistence.domain.core.LessImportantEntity;
 import com.pandatronik.backend.persistence.model.TaskDTO;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.springframework.stereotype.Component;
 
-@Mapper
-public interface LessImportantMapper extends EntityMapper<TaskDTO, LessImportantEntity>  {
-
-    @Override
-    @Mapping(target = "userId", ignore = true)
-    TaskDTO entityToDto(LessImportantEntity lessImportantEntity);
+@Component
+public class LessImportantMapper implements EntityMapper<TaskDTO, LessImportantEntity>  {
 
     @Override
-    @Mapping(target = "userId", ignore = true)
-    LessImportantEntity dtoToEntity(TaskDTO lessImportantDTO);
+    public TaskDTO entityToDto(LessImportantEntity lessImportantEntity) {
+        TaskDTO taskDTO = new TaskDTO();
+
+        taskDTO.setId( lessImportantEntity.getId() );
+        taskDTO.setBody( lessImportantEntity.getBody() );
+        taskDTO.setPostedOn( lessImportantEntity.getPostedOn() );
+        taskDTO.setStartDate( lessImportantEntity.getStartDate() );
+        taskDTO.setTitle( lessImportantEntity.getTitle() );
+        taskDTO.setMade( lessImportantEntity.getMade() );
+
+        return taskDTO;
+    }
+
+    @Override
+    public LessImportantEntity dtoToEntity(TaskDTO lessImportantDTO) {
+        LessImportantEntity lessImportantEntity = new LessImportantEntity();
+
+        lessImportantEntity.setId( lessImportantDTO.getId() );
+        lessImportantEntity.setTitle( lessImportantDTO.getTitle() );
+        lessImportantEntity.setBody( lessImportantDTO.getBody() );
+        lessImportantEntity.setMade( lessImportantDTO.getMade() );
+        lessImportantEntity.setPostedOn( lessImportantDTO.getPostedOn() );
+        lessImportantEntity.setStartDate( lessImportantDTO.getStartDate() );
+
+        return lessImportantEntity;
+    }
 
 }

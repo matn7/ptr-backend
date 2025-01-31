@@ -18,7 +18,6 @@ public class ImportantService extends ResourceService<TaskDTO, ImportantEntity> 
         super(userService, entityRepository, entityMapper);
     }
 
-    // Handle UserEntity to Long mapper in Mapstruct
     public TaskDTO save(String username, TaskDTO taskDTO) {
         UserEntity userEntity = userService.findByUserName(username);
         long userId = userEntity.getId();

@@ -4,6 +4,7 @@ import com.pandatronik.backend.service.ResourceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -13,34 +14,38 @@ public abstract class Resource<DTO, Entity> {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public DTO findById(@PathVariable("username") String username, @PathVariable("id") Long id) {
-        return resourceService.findById(username, id);
+    public ResponseEntity<DTO> findById(@PathVariable("username") String username, @PathVariable("id") Long id) {
+        DTO dto = resourceService.findById(username, id);
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
     @GetMapping("/{year}/{month}/{day}")
     @ResponseStatus(HttpStatus.OK)
-    public DTO findByDate(@PathVariable("username") String username,
+    public ResponseEntity<DTO> findByDate(@PathVariable("username") String username,
             @PathVariable("year") int year, @PathVariable("month") int month, @PathVariable("day") int day) {
-        return resourceService.findByDate(username, year, month, day);
+        DTO dto = resourceService.findByDate(username, year, month, day);
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public DTO save(@PathVariable("username") String username, @Valid @RequestBody DTO dto) {
-        return resourceService.save(username, dto);
+    public ResponseEntity<DTO> save(@PathVariable("username") String username, @Valid @RequestBody DTO dto) {
+        DTO createDto = resourceService.save(username, dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createDto);
     }
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public DTO update(@PathVariable("username") String username, @Valid @RequestBody DTO dto) {
-        return resourceService.save(username, dto);
+    public ResponseEntity<DTO> update(@PathVariable("username") String username, @Valid @RequestBody DTO dto) {
+        DTO updateDto = resourceService.save(username, dto);
+        return ResponseEntity.status(HttpStatus.OK).body(updateDto);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public DTO delete(@PathVariable("username") String username, @PathVariable("id") Long id) {
+    public ResponseEntity<DTO> delete(@PathVariable("username") String username, @PathVariable("id") Long id) {
         DTO delete = resourceService.delete(username, id);
-        return delete;
+        return ResponseEntity.status(HttpStatus.OK).body(delete);
     }
 
 }

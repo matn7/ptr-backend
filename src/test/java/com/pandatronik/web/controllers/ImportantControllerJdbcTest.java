@@ -5,9 +5,9 @@ import com.pandatronik.backend.persistence.domain.UserEntity;
 import com.pandatronik.backend.persistence.domain.core.Important2Entity;
 import com.pandatronik.backend.persistence.domain.core.Important3Entity;
 import com.pandatronik.backend.persistence.domain.core.ImportantEntity;
-import com.pandatronik.backend.persistence.mapper.Important2MapperImpl;
-import com.pandatronik.backend.persistence.mapper.Important3MapperImpl;
-import com.pandatronik.backend.persistence.mapper.ImportantMapperImpl;
+import com.pandatronik.backend.persistence.mapper.Important2Mapper;
+import com.pandatronik.backend.persistence.mapper.Important3Mapper;
+import com.pandatronik.backend.persistence.mapper.ImportantMapper;
 import com.pandatronik.backend.persistence.model.TaskDTO;
 import com.pandatronik.backend.persistence.repositories.Important2Repository;
 import com.pandatronik.backend.persistence.repositories.Important3Repository;
@@ -167,7 +167,6 @@ public class ImportantControllerJdbcTest {
         assertTrue(userEntity.isPresent());
 
         Optional<ImportantEntity> important = importantRepository.findById(userEntity.get(), validId);
-        importantService = new ImportantService(userService, importantRepository, new ImportantMapperImpl());
 
         assertTrue(important.isPresent());
 
@@ -201,7 +200,6 @@ public class ImportantControllerJdbcTest {
         assertTrue(userEntity.isPresent());
 
         Optional<Important2Entity> important2 = important2Repository.findById(userEntity.get(), invalidId);
-        important2Service = new Important2Service(userService, important2Repository, new Important2MapperImpl());
 
         assertTrue(important2.isEmpty());
 
@@ -230,7 +228,6 @@ public class ImportantControllerJdbcTest {
         assertTrue(userEntity.isPresent());
 
         Optional<Important3Entity> important3 = important3Repository.findByDate(userEntity.get(), day, month, year);
-        important3Service = new Important3Service(userService, important3Repository, new Important3MapperImpl());
 
         assertTrue(important3.isPresent());
 
@@ -266,7 +263,6 @@ public class ImportantControllerJdbcTest {
         assertTrue(userEntity.isPresent());
 
         Optional<ImportantEntity> important = importantRepository.findByDate(userEntity.get(), day, month, year);
-        importantService = new ImportantService(userService, importantRepository, new ImportantMapperImpl());
 
         assertTrue(important.isEmpty());
 
@@ -400,7 +396,6 @@ public class ImportantControllerJdbcTest {
         assertTrue(userEntity.isPresent());
 
         Optional<ImportantEntity> important = importantRepository.findById(userEntity.get(), validId);
-        importantService = new ImportantService(userService, importantRepository, new ImportantMapperImpl());
 
         assertTrue(important.isPresent());
 
@@ -436,7 +431,6 @@ public class ImportantControllerJdbcTest {
         assertTrue(userEntity.isPresent());
 
         Optional<Important2Entity> important = important2Repository.findById(userEntity.get(), invalidId);
-        important2Service = new Important2Service(userService, important2Repository, new Important2MapperImpl());
 
         assertTrue(important.isEmpty());
         when(userService.findByUserName(username)).thenReturn(userEntity.get());

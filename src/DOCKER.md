@@ -67,7 +67,8 @@ kubectl delete -f=ptr-mysql-deployment.yaml -f=ptr-mysql-service.yaml
 ```
 $ docker exec -it 4df114cc4694 /bin/bash
 
-# mysql -u root -p
+# mysql -u root -p  # password
+
 
 mysql> show databases;
 mysql> use pandatronik_dev_docker;

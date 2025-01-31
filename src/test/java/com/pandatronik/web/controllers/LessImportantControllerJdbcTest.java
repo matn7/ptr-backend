@@ -2,12 +2,20 @@ package com.pandatronik.web.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pandatronik.backend.persistence.domain.UserEntity;
-import com.pandatronik.backend.persistence.domain.core.*;
-import com.pandatronik.backend.persistence.mapper.*;
+import com.pandatronik.backend.persistence.domain.core.LessImportant2Entity;
+import com.pandatronik.backend.persistence.domain.core.LessImportant3Entity;
+import com.pandatronik.backend.persistence.domain.core.LessImportantEntity;
+import com.pandatronik.backend.persistence.mapper.LessImportant2Mapper;
+import com.pandatronik.backend.persistence.mapper.LessImportant3Mapper;
+import com.pandatronik.backend.persistence.mapper.LessImportantMapper;
 import com.pandatronik.backend.persistence.model.TaskDTO;
-import com.pandatronik.backend.persistence.repositories.*;
+import com.pandatronik.backend.persistence.repositories.LessImportant2Repository;
+import com.pandatronik.backend.persistence.repositories.LessImportant3Repository;
+import com.pandatronik.backend.persistence.repositories.LessImportantRepository;
 import com.pandatronik.backend.persistence.repositories.user.account.UserRepository;
-import com.pandatronik.backend.service.*;
+import com.pandatronik.backend.service.LessImportant2Service;
+import com.pandatronik.backend.service.LessImportant3Service;
+import com.pandatronik.backend.service.LessImportantService;
 import com.pandatronik.backend.service.user.account.CustomUserDetailsService;
 import com.pandatronik.backend.service.user.account.UserService;
 import com.pandatronik.enums.MadeEnum;
@@ -137,7 +145,6 @@ public class LessImportantControllerJdbcTest {
         assertTrue(userEntity.isPresent());
 
         Optional<LessImportantEntity> important = lessImportantRepository.findById(userEntity.get(), validId);
-        lessImportantService = new LessImportantService(userService, lessImportantRepository, new LessImportantMapperImpl());
 
         assertTrue(important.isPresent());
 
@@ -171,7 +178,6 @@ public class LessImportantControllerJdbcTest {
         assertTrue(userEntity.isPresent());
 
         Optional<LessImportant2Entity> lessImportant2 = lessImportant2Repository.findById(userEntity.get(), invalidId);
-        lessImportant2Service = new LessImportant2Service(userService, lessImportant2Repository, new LessImportant2MapperImpl());
 
         assertTrue(lessImportant2.isEmpty());
 
@@ -200,7 +206,6 @@ public class LessImportantControllerJdbcTest {
         assertTrue(userEntity.isPresent());
 
         Optional<LessImportant3Entity> lessImportant3 = lessImportant3Repository.findByDate(userEntity.get(), day, month, year);
-        lessImportant3Service = new LessImportant3Service(userService, lessImportant3Repository, new LessImportant3MapperImpl());
 
         assertTrue(lessImportant3.isPresent());
 
@@ -236,7 +241,6 @@ public class LessImportantControllerJdbcTest {
         assertTrue(userEntity.isPresent());
 
         Optional<LessImportantEntity> lessImportant = lessImportantRepository.findByDate(userEntity.get(), day, month, year);
-        lessImportantService = new LessImportantService(userService, lessImportantRepository, new LessImportantMapperImpl());
 
         assertTrue(lessImportant.isEmpty());
 
@@ -370,7 +374,6 @@ public class LessImportantControllerJdbcTest {
         assertTrue(userEntity.isPresent());
 
         Optional<LessImportantEntity> lessImportant = lessImportantRepository.findById(userEntity.get(), validId);
-        lessImportantService = new LessImportantService(userService, lessImportantRepository, new LessImportantMapperImpl());
 
         assertTrue(lessImportant.isPresent());
 
@@ -406,7 +409,6 @@ public class LessImportantControllerJdbcTest {
         assertTrue(userEntity.isPresent());
 
         Optional<LessImportant2Entity> lessImportant2 = lessImportant2Repository.findById(userEntity.get(), invalidId);
-        lessImportant2Service = new LessImportant2Service(userService, lessImportant2Repository, new LessImportant2MapperImpl());
 
         assertTrue(lessImportant2.isEmpty());
         when(userService.findByUserName(username)).thenReturn(userEntity.get());
